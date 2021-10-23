@@ -1,8 +1,14 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+
+:root{
+ --primary-color:rgb(33, 7, 126) !important;
 }
 
-a {
-  color: #00B7FF;
+.bg-m-primary{
+  background-color: var(--primary-color);
+}
+
+
+*{
+  margin:0;
+  padding: 0;
 }

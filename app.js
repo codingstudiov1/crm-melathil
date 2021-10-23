@@ -12,10 +12,10 @@ var adminRouter=require('./routes/admin');
 var app = express();
 
 // view engine setup
+app.use(expressLayouts);
+// app.set('layout','layouts/layout');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use(expressLayouts);
-app.set('layout','layouts/layout');
 
 app.use(logger('dev'));
 app.use(express.json());
