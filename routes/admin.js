@@ -31,4 +31,8 @@ router.get("/home", (req, res, next) => {
   res.render("admin/home", viewData);
 });
 
+router.get("/requests", (req, res, next) => {
+  res.render("admin/requests", viewData);
+});
+
 module.exports = router;
