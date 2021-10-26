@@ -15,9 +15,12 @@
 
 <body>
     <%- include partials/loader.ejs %>
-        <%- include partials/index-navbar.ejs %>
-            <%- body %>
-
+        <main>
+            <%- include partials/navbar/index-navbar.ejs %>
+                <%- body %>
+        </main>
+        <% include partials/footer.ejs %>
+            <% include partials/alerts/success-alert-modal.ejs %>
                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
                     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
                 <script src="/bootstrap/js/bootstrap.js"></script>

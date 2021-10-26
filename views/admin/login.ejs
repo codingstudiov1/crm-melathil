@@ -1,12 +1,15 @@
-<div class="container">
+<div class="container mt-3">
     <div class="row">
         <div class="col-md-4">
-            <div class="card">
+            <div class="card mt-3 shadow">
                 <div class="card-body">
                     <div class="form-group">
                         <h3>Admin Login</h3>
                     </div>
-                    <form id="formAdminLogin">
+                    <div>
+                        <p class="text-danger" id="textError"></p>
+                    </div>
+                    <form id="formAdminLogin" method="post">
                         <div class="form-group mt-3">
                             <label class="mb-2" for="username">Username</label>
                             <input type="text" name="username" id="username" class="form-control">

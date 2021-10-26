@@ -3,6 +3,13 @@
 }
 body {
   font-family: "Source Sans Pro", sans-serif !important;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+main {
+  min-height: 100%;
+  flex: 1;
 }
 .bg-m-primary {
   background-color: var(--primary-color);
@@ -22,15 +29,26 @@ body {
 }
 
 #loader {
-background-color: rgba(255,255,255,0.95);
-width: 100vw;
-height: 100vh;
+  background-color: rgba(255, 255, 255, 0.95);
+  width: 100vw;
+  height: 100vh;
   position: fixed;
-z-index: 1000;
+  z-index: 1000;
 }
 #loader img {
   position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+footer {
+  padding: 2rem 1rem;
+  background-color: var(--primary-color);
+  margin-top: 2rem;
+  color: white;
+}
+.footer-content{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
