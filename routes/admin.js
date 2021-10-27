@@ -34,5 +34,10 @@ router.get("/home", (req, res, next) => {
 router.get("/requests", (req, res, next) => {
   res.render("admin/requests", viewData);
 });
-
+router.get("/employees/requests", (req, res, next) => {
+  helpers.getPendingRequests().then((result) => {
+    viewData.pendingRequests = result;
+    res.render("admin/pending-requests", viewData);
+  });
+});
 module.exports = router;

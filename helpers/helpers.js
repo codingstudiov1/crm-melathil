@@ -1,6 +1,6 @@
 const Promise = require("promise");
 const bcrypt = require("bcryptjs");
-const instantHelper = require('../helpers/instant-helers');
+const instantHelper = require("../helpers/instant-helers");
 // Models
 const Admin = require("../models/admin-model");
 const Users = require("../models/user-model");
@@ -34,18 +34,23 @@ module.exports = {
       });
     });
   },
-  
+
   createUser: (userData) => {
     return new Promise((resolve, reject) => {
-      instantHelper.checkDuplicateMobileNumber(userData.phone)
+      instantHelper
+        .checkDuplicateMobileNumber(userData.phone)
         .then((result) => {
           return instantHelper.checkDuplicateEmail(userData.email);
         })
-        .then(() => {
+        .then(async () => {
+          console.log(userData);
+          let employeeId = await instantHelper.generateMemberId();
+          userData.employeeId=employeeId;
+          console.log(userData.employeeId);
           const user = new Users(userData);
           user.save().then((result) => {
             if (result) {
-              resolve({result});
+              resolve({ result });
             } else {
               reject({
                 status: false,
@@ -58,6 +63,17 @@ module.exports = {
         .catch((error) => {
           reject(error);
         });
+    });
+  },
+  getPendingRequests: () => {
+    return new Promise((resolve, reject) => {
+      Users.find({
+        activeStatus: {
+          $ne: true,
+        },
+      }).then((resonse) => {
+        resolve(resonse);
+      });
     });
   },
 };

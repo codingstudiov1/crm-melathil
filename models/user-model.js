@@ -3,6 +3,7 @@ const { USER_COLLECTION } = require("../config/collections");
 
 const userSchema = mongoose.Schema(
   {
+    employeeId: Number,
     firstName: String,
     lastName: String,
     address: String,
