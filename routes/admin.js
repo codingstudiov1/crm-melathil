@@ -14,7 +14,7 @@ router.post("/register", function (req, res, next) {
   });
 });
 router.get("/login", (req, res, next) => {
-  res.render("admin/login", viewData);
+  res.render("admin/login");
 });
 router.post("/login", (req, res, next) => {
   let credentials = req.body;

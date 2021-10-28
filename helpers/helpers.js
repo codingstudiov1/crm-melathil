@@ -45,7 +45,7 @@ module.exports = {
         .then(async () => {
           console.log(userData);
           let employeeId = await instantHelper.generateMemberId();
-          userData.employeeId=employeeId;
+          userData.employeeId = employeeId;
           console.log(userData.employeeId);
           const user = new Users(userData);
           user.save().then((result) => {
@@ -63,6 +63,61 @@ module.exports = {
         .catch((error) => {
           reject(error);
         });
+    });
+  },
+  getUserLogin: (userInfo) => {
+    return new Promise((resolve, reject) => {
+      Users.findOne({
+        $or: [{ phone: userInfo.username }, { email: userInfo.username }],
+      }).then(async (result) => {
+        console.log(result);
+        if (result) {
+          if (!result.status && result?.rejected) {
+            reject({
+              status: false,
+              message: "No employees registered with the given..",
+            });
+          } else if (result?.status && result?.resigned) {
+            reject({
+              status: false,
+              message: "Currently you have no permission to access the website",
+            });
+          } else if (!result?.status) {
+            reject({
+              status: false,
+              message: "Your verification is pending..Kindly wait for a while",
+            });
+          } else if (result.status && !result?.rejected && !result?.resigned) {
+            const state = await bcrypt.compare(
+              userInfo.password,
+              result.password
+            );
+            if (!state) {
+              reject({
+                status: false,
+                message: "Invalid password..",
+              });
+            } else {
+              delete result.password;
+              resolve({
+                status: true,
+                message: "Authentication succesful",
+                user: result,
+              });
+            }
+          } else {
+            reject({
+              status: false,
+              message: "Invalid operation detected",
+            });
+          }
+        } else {
+          reject({
+            status: false,
+            message: "No employees registered with the given..",
+          });
+        }
+      });
     });
   },
   getPendingRequests: () => {
