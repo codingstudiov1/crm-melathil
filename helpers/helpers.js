@@ -4,6 +4,7 @@ const instantHelper = require("../helpers/instant-helers");
 // Models
 const Admin = require("../models/admin-model");
 const Users = require("../models/user-model");
+const { db } = require("../models/admin-model");
 
 module.exports = {
   createAdmin: async (adminData) => {
@@ -123,11 +124,48 @@ module.exports = {
   getPendingRequests: () => {
     return new Promise((resolve, reject) => {
       Users.find({
-        activeStatus: {
+        active: {
           $ne: true,
         },
+        rejected:{
+          $ne:true
+        },
+        resigned:{
+          $ne:true
+        }
       }).then((resonse) => {
         resolve(resonse);
+      });
+    });
+  },
+  getActiveEmployees:()=>{
+    return new Promise((resolve,reject)=>{
+      Users.find({
+        active:true,
+        rejected:{
+          $ne:true
+        },
+        resigned:{
+          $ne:true
+        }
+      }).then((result)=>{
+        resolve(result)
+      })
+    })
+  },
+  approveEmployee: (id) => {
+    return new Promise((resolve, reject) => {
+      Users.updateOne({ employeeId: id }, { active: true }).then((user) => {
+        console.log(user);
+        resolve();
+      });
+    });
+  },
+  rejectEmployee: (id) => {
+    return new Promise((resolve, reject) => {
+      Users.updateOne({ employeeId: id }, { rejected: true }).then((user) => {
+        console.log(user);
+        resolve();
       });
     });
   },

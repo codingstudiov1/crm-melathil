@@ -1,6 +1,6 @@
 const Promise = require("promise");
 const bcrypt = require("bcryptjs");
-const collections=require('../config/collections')
+const collections = require("../config/collections");
 
 // Models
 const Admin = require("../models/admin-model");
@@ -14,17 +14,17 @@ module.exports = {
       max: 999999,
       integer: true,
     };
-    var id = rn(options);
+    var id = "" + rn(options).toString();
+    console.log(id);
     return new Promise((resolve, reject) => {
-      
-        Users.findOne({ memberId: id })
-        .then((result) => {
-          if (result) {
-            this.generateMemberId();
-          } else {
-            resolve(id);
-          }
-        });
+      Users.findOne({ employeeId: id }).then((result) => {
+        console.log(result);
+        if (result) {
+          this.generateMemberId();
+        } else {
+          resolve(id);
+        }
+      });
     });
   },
   checkDuplicateMobileNumber: (number) => {

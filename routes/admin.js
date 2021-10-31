@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 const viewData = { layout: "admin-layout" };
 const helpers = require("../helpers/helpers");
+const adminController = require("../controllers/admin");
 
 router.get("/register", (req, res, next) => {
   res.render("admin/register", viewData);
@@ -38,6 +39,16 @@ router.get("/employees/requests", (req, res, next) => {
   helpers.getPendingRequests().then((result) => {
     viewData.pendingRequests = result;
     res.render("admin/pending-requests", viewData);
+  });
+});
+
+router.get("/employees/active",adminController.activeEmployees);
+router.get("/employees/requests/reject/:id", adminController.rejectEmployee);
+router.get("/employees/requests/approve/:id", (req, res, next) => {
+  let id = req.params.id;
+  helpers.approveEmployee(id).then(() => {
+    // res.json({ status: true, message: "Approved" });
+    res.redirect("/admin/employees/requests");
   });
 });
 module.exports = router;

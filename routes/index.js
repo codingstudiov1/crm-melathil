@@ -41,4 +41,5 @@ router.post("/register", (req, res, next) => {
       res.status(401).json(error);
     });
 });
+
 module.exports = router;
