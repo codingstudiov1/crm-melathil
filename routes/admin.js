@@ -42,7 +42,7 @@ router.get("/employees/requests", (req, res, next) => {
   });
 });
 
-router.get("/employees/active",adminController.activeEmployees);
+router.get("/employees/active", adminController.activeEmployees);
 router.get("/employees/requests/reject/:id", adminController.rejectEmployee);
 router.get("/employees/requests/approve/:id", (req, res, next) => {
   let id = req.params.id;
@@ -51,4 +51,17 @@ router.get("/employees/requests/approve/:id", (req, res, next) => {
     res.redirect("/admin/employees/requests");
   });
 });
+
+// Routes for clients
+router.get("/clients/", adminController.allClinets);
+router.get("/clients/create", adminController.loadCreateClient);
+router.get("/clients/delete:id");
+router.get("/clients/modify:id");
+router.get("/clients/client-types", adminController.loadClientTypes);
+router.get(
+  "/clients/client-types/create",
+  adminController.loadClientTypeCreate
+);
+router.post("/clients/client-types/create");
+
 module.exports = router;
