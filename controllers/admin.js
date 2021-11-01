@@ -33,8 +33,20 @@ module.exports.processCreateClient = function (req, res, next) {
   console.log(custData);
 };
 module.exports.loadClientTypeCreate = function (req, res, next) {
+  viewData.title = "CREATE CLIENT TYPE";
+  viewData.clientType = {};
+  viewData.formAction = "/admin/clients/client-types/create";
   res.render("clients/client-type-create_edit", viewData);
 };
-module.exports.loadClientTypes = function (req, res, next) {
+module.exports.processClientTypeCreate = function (req, res, next) {
+  let data = req.body;
+  // console.log(data)
+  clientHelper.createClientType(data).then(() => {
+    res.redirect("/admin/clients/client-types");
+  });
+};
+module.exports.loadClientTypes =async  function (req, res, next) {
+  viewData.title = "Client Types";
+  viewData.clientType = await clientHelper.getAllClientTypes();
   res.render("clients/client-types", viewData);
 };
