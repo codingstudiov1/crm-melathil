@@ -60,5 +60,8 @@ router.get("/clients/modify:id");
 router.get("/clients/client-types", adminController.loadClientTypes);
 router.get("/clients/client-types/create", adminController.loadClientTypeCreate);
 router.post("/clients/client-types/create", adminController.processClientTypeCreate);
+router.get("/clients/client-types/modify/:id", adminController.loadClientTypeModify);
+router.post("/clients/client-types/modify/:id", adminController.processClientTypeModify);
+router.get("/clients/client-types/delete/:id", adminController.processClientTypeDelete);
 
 module.exports = router;

@@ -45,8 +45,30 @@ module.exports.processClientTypeCreate = function (req, res, next) {
     res.redirect("/admin/clients/client-types");
   });
 };
-module.exports.loadClientTypes =async  function (req, res, next) {
+module.exports.loadClientTypes = async function (req, res, next) {
   viewData.title = "Client Types";
   viewData.clientType = await clientHelper.getAllClientTypes();
   res.render("clients/client-types", viewData);
+};
+module.exports.loadClientTypeModify = async (req, res, next) => {
+  let id = req.params.id;
+  clientHelper.loadClientType(id).then((result) => {
+    viewData.title = "Modify Client Types";
+    viewData.clientType = result;
+    viewData.formAction = "/admin/clients/client-types/modify/" + id;
+    res.render("clients/client-type-create_edit", viewData);
+  });
+};
+module.exports.processClientTypeModify = async (req, res, next) => {
+  let id = req.params.id;
+  let data=req.body;
+  clientHelper.updateClientType(id,data).then((result) => {
+    res.redirect("/admin/clients/client-types");
+  });
+};
+module.exports.processClientTypeDelete = async (req, res, next) => {
+  let id = req.params.id;
+  clientHelper.deleteClientType(id).then(() => {
+    res.redirect("/admin/clients/client-types");
+  });
 };
