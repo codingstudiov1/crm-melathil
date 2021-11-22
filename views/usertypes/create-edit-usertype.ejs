@@ -1,0 +1,72 @@
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1><%= title %></h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>
+          <li class="breadcrumb-item active"><%= title %></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <form action="/admin/usertypes/create" method="post">
+              <div class="form-group mt-3">
+                <label for="name">Name</label>
+                <input
+                  type="text"
+                  name="usertype"
+                  id="name"
+                  class="form-control"
+                />
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <input
+                      type="checkbox"
+                      name="view_clients"
+                      id="view_clients"
+                    />
+                    <label for="view_clients">View Clients</label>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <input
+                      type="checkbox"
+                      name="modify_client_details"
+                      id="modify_client_details"
+                    />
+                    <label for="modify_client_details">Modify Client</label>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <input
+                      type="checkbox"
+                      name="create_clients"
+                      id="create_clients"
+                    />
+                    <label for="create_clients">Create Clients</label>
+                  </div>
+                </div>
+              </div>
+
+              <button class="btn btn-primary" type="submit">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

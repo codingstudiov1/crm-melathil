@@ -1,3 +1,4 @@
+const axios = require('axios');
 $(document).ready(function () {
   setTimeout(function () {
     $("#loader").hide();
@@ -105,4 +106,16 @@ $(document).ready(function () {
       },
     });
   });
+
+  $("#formCreateClient").on("submit", function (event) {
+    event.preventDefault();
+    let formData = new FormData(document.querySelector("#formCreateClient"));
+    console.log(formData);
+  });
 });
+
+axios.get("https://dummy.restapiexample.com/api/v1/employees").then((result)=>{
+  console.log(result);
+}).catch((error)=>{
+  console.log(error);
+})

@@ -1,5 +1,6 @@
 const helpers = require("../helpers/helpers");
 const clientHelper = require("../helpers/clients-helper");
+const adminHelper = require("../helpers/admin-helper");
 const viewData = { layout: "admin-layout" };
 // Reject Employee Controller
 module.exports.rejectEmployee = (req, res, next) => {
@@ -23,9 +24,11 @@ module.exports.allClinets = function (req, res, next) {
     res.render("clients/view-clients", viewData);
   });
 };
-module.exports.loadCreateClient = function (req, res, next) {
+module.exports.loadCreateClient = async function (req, res, next) {
+  viewData.clientTypes = await clientHelper.getAllClientTypes();
   viewData.title = "Create client";
   viewData.formId = "formCreateClient";
+  viewData.clientData = {};
   res.render("clients/create_edit", viewData);
 };
 module.exports.processCreateClient = function (req, res, next) {
@@ -61,8 +64,8 @@ module.exports.loadClientTypeModify = async (req, res, next) => {
 };
 module.exports.processClientTypeModify = async (req, res, next) => {
   let id = req.params.id;
-  let data=req.body;
-  clientHelper.updateClientType(id,data).then((result) => {
+  let data = req.body;
+  clientHelper.updateClientType(id, data).then((result) => {
     res.redirect("/admin/clients/client-types");
   });
 };
@@ -71,4 +74,32 @@ module.exports.processClientTypeDelete = async (req, res, next) => {
   clientHelper.deleteClientType(id).then(() => {
     res.redirect("/admin/clients/client-types");
   });
+};
+module.exports.loadUserTypes = (req, res, next) => {
+  adminHelper.getAllUserTypes().then((result) => {
+    viewData.userTypes = result;
+    viewData.title = "User Types";
+    res.render("usertypes/user-types", viewData);
+  });
+};
+module.exports.loadUserTypesCreate = (req, res, next) => {
+  viewData.title = "Create usertype";
+  res.render("usertypes/create-edit-usertype", viewData);
+};
+module.exports.processUserTypesCreate = (req, res, next) => {
+  const { usertype, ...rest } = req.body;
+  let data = {
+    usertype,
+    permissions: rest,
+  };
+  adminHelper
+    .createNewUserType(data)
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((error) => {
+      res.status(304).json(error);
+    });
+  // viewData.title = "Create usertype";
+  // res.render("usertypes/create-edit-usertype", viewData);
 };

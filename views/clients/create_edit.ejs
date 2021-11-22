@@ -49,6 +49,9 @@
                                 <label for="type">Clent type</label>
                                 <select name="type" id="type" class="form-control">
                                     <option value="">Select </option>
+                                    <% clientTypes.forEach(element => { %>
+                                     <option value="<%= element._id %> "><%= element.typeName %> </option>
+                                    <% }) %>
                                 </select>
                             </div>
 
