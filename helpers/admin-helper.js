@@ -15,11 +15,23 @@ module.exports = {
       if (!userExist) {
         let userType = new UserTypes(userData);
         userType.save().then((result) => {
-          console.log(result);
+          resolve(result);
         });
       } else {
         reject({ status: false, message: "User type already exist" });
       }
+    });
+  },
+  getUserType: (typeId) => {
+    return new Promise((resolve, reject) => {
+      UserTypes.findById(typeId).then((typeData) => {
+        if (typeData?.permissions) {
+          Object.keys(typeData.permissions).forEach(function (key) {
+            typeData.permissions[key] = "checked";
+          });
+        }
+        resolve(typeData);
+      });
     });
   },
 };

@@ -82,6 +82,7 @@ router.get(
 // permissions
 router.get("/usertypes", adminController.loadUserTypes);
 router.get("/usertypes/create", adminController.loadUserTypesCreate);
+router.get("/usertypes/modify/:typeId", adminController.loadUserTypesModify);
 router.post("/usertypes/create", adminController.processUserTypesCreate);
 router.get("/usertype/:type/permissions");
 

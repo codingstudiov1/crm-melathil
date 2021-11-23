@@ -2,6 +2,11 @@ const helpers = require("../helpers/helpers");
 const clientHelper = require("../helpers/clients-helper");
 const adminHelper = require("../helpers/admin-helper");
 const viewData = { layout: "admin-layout" };
+
+// module.exports.checkUserPermissions= (req,res,next)=>{
+//   const userId = req.params.user;
+// }
+
 // Reject Employee Controller
 module.exports.rejectEmployee = (req, res, next) => {
   let id = req.params.id;
@@ -83,7 +88,18 @@ module.exports.loadUserTypes = (req, res, next) => {
   });
 };
 module.exports.loadUserTypesCreate = (req, res, next) => {
+  viewData.typeData = {};
+  viewData.hide = "";
   viewData.title = "Create usertype";
+  viewData.formAction = "/admin/usertypes/create";
+  res.render("usertypes/create-edit-usertype", viewData);
+};
+module.exports.loadUserTypesModify = async (req, res, next) => {
+  const typeId = req.params.typeId;
+  viewData.hide = "readonly";
+  viewData.typeData = await adminHelper.getUserType(typeId);
+  viewData.title = "Modify usertype";
+  viewData.formAction = "/admin/usertypes/modify/" + typeId;
   res.render("usertypes/create-edit-usertype", viewData);
 };
 module.exports.processUserTypesCreate = (req, res, next) => {
@@ -95,11 +111,9 @@ module.exports.processUserTypesCreate = (req, res, next) => {
   adminHelper
     .createNewUserType(data)
     .then((result) => {
-      res.status(200).json(result);
+      res.redirect("/admin/usertype");
     })
     .catch((error) => {
       res.status(304).json(error);
     });
-  // viewData.title = "Create usertype";
-  // res.render("usertypes/create-edit-usertype", viewData);
 };

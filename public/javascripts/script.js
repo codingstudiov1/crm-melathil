@@ -1,4 +1,3 @@
-const axios = require('axios');
 $(document).ready(function () {
   setTimeout(function () {
     $("#loader").hide();
@@ -112,10 +111,21 @@ $(document).ready(function () {
     let formData = new FormData(document.querySelector("#formCreateClient"));
     console.log(formData);
   });
+  // $("#formCreateUsertype").on("submit", function (evt) {
+  //   evt.preventDefault();
+  //   const formData = new FormData(
+  //     document.querySelector("#formCreateUsertype")
+  //   );
+  //   $.ajax({
+  //     url: "/admin/usertypes/create",
+  //     method: "post",
+  //     data: formData,
+  //     success: (response) => {
+  //       console.log(response);
+  //     },
+  //     error: (err) => {
+  //       console.log(err);
+  //     },
+  //   });
+  // });
 });
-
-axios.get("https://dummy.restapiexample.com/api/v1/employees").then((result)=>{
-  console.log(result);
-}).catch((error)=>{
-  console.log(error);
-})
