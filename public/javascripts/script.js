@@ -23,31 +23,33 @@ $(document).ready(function () {
 
   $("#formRegisterEmployee").on("submit", function (evt) {
     evt.preventDefault();
-    $("#loader").show();
-    let data = $(this).serialize();
-    console.log(data);
-    $.ajax({
-      url: "/register",
-      method: "post",
-      data: data,
-      success: (response) => {
-        $("#loader").hide();
-        document.querySelector("#successModalBody").innerHTML =
-          response.message;
-        success.show();
-        document
-          .querySelector("#btnClose")
-          .addEventListener("click", function () {
-            window.location.replace("/");
-          });
-      },
-      error: (error) => {
-        $("#loader").hide();
-        document.querySelector("#successModalBody").innerHTML =
-          error.responseJSON.message;
-        success.show();
-      },
-    });
+    if ($("#formRegisterEmployee").valid()) {
+      $("#loader").show();
+      let data = $(this).serialize();
+      console.log(data);
+      $.ajax({
+        url: "/register",
+        method: "post",
+        data: data,
+        success: (response) => {
+          $("#loader").hide();
+          document.querySelector("#successModalBody").innerHTML =
+            response.message;
+          success.show();
+          document
+            .querySelector("#btnClose")
+            .addEventListener("click", function () {
+              window.location.replace("/");
+            });
+        },
+        error: (error) => {
+          $("#loader").hide();
+          document.querySelector("#successModalBody").innerHTML =
+            error.responseJSON.message;
+          success.show();
+        },
+      });
+    }
   });
   $("#formAdminLogin").on("submit", function (evt) {
     evt.preventDefault();
@@ -106,11 +108,12 @@ $(document).ready(function () {
     });
   });
 
-  $("#formCreateClient").on("submit", function (event) {
-    event.preventDefault();
+  $("#formCreateClient").on("submit", function (evt) {
+    evt.preventDefault();
     let formData = new FormData(document.querySelector("#formCreateClient"));
     console.log(formData);
   });
+
   // $("#formCreateUsertype").on("submit", function (evt) {
   //   evt.preventDefault();
   //   const formData = new FormData(

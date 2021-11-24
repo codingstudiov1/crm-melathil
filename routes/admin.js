@@ -57,6 +57,10 @@ router.get("/clients/", adminController.allClinets);
 router.get("/clients/create", adminController.loadCreateClient);
 router.get("/clients/delete:id");
 router.get("/clients/modify:id");
+router.post("/clients/create", adminController.processCreateClient);
+
+
+
 router.get("/clients/client-types", adminController.loadClientTypes);
 router.get(
   "/clients/client-types/create",
@@ -83,9 +87,8 @@ router.get(
 router.get("/usertypes", adminController.loadUserTypes);
 router.get("/usertypes/create", adminController.loadUserTypesCreate);
 router.get("/usertypes/modify/:typeId", adminController.loadUserTypesModify);
+router.get("/usertypes/delete/:typeId", adminController.processUserTypesDelete);
 router.post("/usertypes/create", adminController.processUserTypesCreate);
 router.post("/usertypes/modify/:typeId", adminController.processUserTypesModify);
-router.get("/usertypes/delete/:typeId", adminController.processUserTypesDelete);
-router.get("/usertype/:type/permissions");
 
 module.exports = router;
