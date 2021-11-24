@@ -13,7 +13,8 @@ const userSchema = mongoose.Schema(
     gender: String,
     active:Boolean,
     rejected:Boolean,
-    resigned:Boolean
+    resigned:Boolean,
+    password:String,
   },
   {
     collection: USER_COLLECTION,
