@@ -5,7 +5,7 @@ const helpers = require("../helpers/helpers");
 const adminController = require("../controllers/admin");
 
 router.get("/register", (req, res, next) => {
-  res.render("admin/register", viewData);
+  res.render("admin/register");
 });
 // Admin registration
 router.post("/register", function (req, res, next) {
@@ -84,6 +84,8 @@ router.get("/usertypes", adminController.loadUserTypes);
 router.get("/usertypes/create", adminController.loadUserTypesCreate);
 router.get("/usertypes/modify/:typeId", adminController.loadUserTypesModify);
 router.post("/usertypes/create", adminController.processUserTypesCreate);
+router.post("/usertypes/modify/:typeId", adminController.processUserTypesModify);
+router.get("/usertypes/delete/:typeId", adminController.processUserTypesDelete);
 router.get("/usertype/:type/permissions");
 
 module.exports = router;

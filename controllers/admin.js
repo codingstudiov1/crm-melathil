@@ -111,7 +111,34 @@ module.exports.processUserTypesCreate = (req, res, next) => {
   adminHelper
     .createNewUserType(data)
     .then((result) => {
-      res.redirect("/admin/usertype");
+      res.redirect("/admin/usertypes");
+    })
+    .catch((error) => {
+      res.status(304).json(error);
+    });
+};
+module.exports.processUserTypesModify = (req, res, next) => {
+  const userTypeId = req.params.typeId;
+  const { usertype, ...rest } = req.body;
+  let data = {
+    usertype,
+    permissions: rest,
+  };
+  adminHelper
+    .modifyUserType(userTypeId, data)
+    .then(() => {
+      res.redirect("/admin/usertypes");
+    })
+    .catch((error) => {
+      res.status(304).json(error);
+    });
+};
+module.exports.processUserTypesDelete = (req, res, next) => {
+  const userTypeId = req.params.typeId;
+  adminHelper
+    .deleteUserType(userTypeId)
+    .then(() => {
+      res.redirect("/admin/usertypes");
     })
     .catch((error) => {
       res.status(304).json(error);

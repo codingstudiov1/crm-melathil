@@ -22,6 +22,20 @@ module.exports = {
       }
     });
   },
+  modifyUserType: (id, userData) => {
+    return new Promise((resolve, reject) => {
+      UserTypes.findByIdAndUpdate(id, userData).then(() => {
+        resolve();
+      });
+    });
+  },
+  deleteUserType: (id) => {
+    return new Promise((resolve, reject) => {
+      UserTypes.findByIdAndDelete(id).then(() => {
+        resolve();
+      });
+    });
+  },
   getUserType: (typeId) => {
     return new Promise((resolve, reject) => {
       UserTypes.findById(typeId).then((typeData) => {

@@ -26,7 +26,7 @@
             <form action="<%= formAction %>" method="post">
               <div class="form-group mt-3">
                 <label for="name">Name</label>
-                <input type="text" name="usertype" id="name" class="form-control" <%= hide %>  value="<%= typeData.usertype %> "/>
+                <input type="text" name="usertype" id="name" class="form-control"  value="<%= typeData.usertype %>"/>
               </div>
               <div class="row small">
                 <div class="col-12">
@@ -46,7 +46,7 @@
                     </div>
                     <div class="col-md-4">
                       <div class="form-group">
-                        <input <%= typeData?.permissions?.modify_clients %> type="checkbox" name="modify_client_details" id="modify_client_details" />
+                        <input <%= typeData?.permissions?.modify_client_details %> type="checkbox" name="modify_client_details" id="modify_client_details" />
                         <label for="modify_client_details">Modify Client</label>
                       </div>
                     </div>
