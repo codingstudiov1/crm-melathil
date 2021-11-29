@@ -1,10 +1,12 @@
 const Promise = require("promise");
 const bcrypt = require("bcryptjs");
 const instantHelper = require("../helpers/instant-helers");
+const Constants = require('../config/strings');
 // Models
 const Admin = require("../models/admin-model");
 const Users = require("../models/user-model");
 const { db } = require("../models/admin-model");
+const { ACTIVE_STATUS, REJECT_STATUS, PENDING_STATUS } = require("../config/strings");
 
 module.exports = {
   createAdmin: async (adminData) => {
@@ -44,10 +46,9 @@ module.exports = {
           return instantHelper.checkDuplicateEmail(userData.email);
         })
         .then(async () => {
-          console.log(userData);
           let employeeId = await instantHelper.generateMemberId();
           userData.employeeId = employeeId;
-          console.log(userData.employeeId);
+          userData.status = Constants.PENDING_STATUS
           const user = new Users(userData);
           user.save().then((result) => {
             if (result) {
@@ -71,47 +72,56 @@ module.exports = {
       Users.findOne({
         $or: [{ phone: userInfo.username }, { email: userInfo.username }],
       }).then(async (result) => {
-        console.log(result);
         if (result) {
-          if (!result.status && result?.rejected) {
-            reject({
-              status: false,
-              message: "No employees registered with the given..",
-            });
-          } else if (result?.status && result?.resigned) {
-            reject({
-              status: false,
-              message: "Currently you have no permission to access the website",
-            });
-          } else if (!result?.status) {
-            reject({
-              status: false,
-              message: "Your verification is pending..Kindly wait for a while",
-            });
-          } else if (result.status && !result?.rejected && !result?.resigned) {
-            const state = await bcrypt.compare(
-              userInfo.password,
-              result.password
-            );
-            if (!state) {
+
+          switch (result.status) {
+            case Constants.PENDING_STATUS: {
               reject({
                 status: false,
-                message: "Invalid password..",
-              });
-            } else {
-              delete result.password;
-              resolve({
-                status: true,
-                message: "Authentication succesful",
-                user: result,
+                message: "Your verification is pending..Kindly wait for a while",
               });
             }
-          } else {
-            reject({
-              status: false,
-              message: "Invalid operation detected",
-            });
+            case Constants.REJECT_STATUS: {
+              reject({
+                status: false,
+                message: "No employees registered with the given..",
+              });
+
+            }
+            case Constants.RESIGN_STATUS: {
+              reject({
+                status: false,
+                message: "Currently you have no permission to access the website",
+              });
+            }
+            case Constants.ACTIVE_STATUS: {
+              const state = await bcrypt.compare(
+                userInfo.password,
+                result.password
+              );
+              if (!state) {
+                reject({
+                  status: false,
+                  message: "Invalid password..",
+                });
+              } else {
+                delete result.password;
+                resolve({
+                  status: true,
+                  message: "Authentication succesful",
+                  user: result,
+                });
+              }
+            }
+            default: {
+              reject({
+                status: false,
+                message: "Invalid operation detected",
+              });
+            }
           }
+
+
         } else {
           reject({
             status: false,
@@ -124,38 +134,24 @@ module.exports = {
   getPendingRequests: () => {
     return new Promise((resolve, reject) => {
       Users.find({
-        active: {
-          $ne: true,
-        },
-        rejected:{
-          $ne:true
-        },
-        resigned:{
-          $ne:true
-        }
+        status: PENDING_STATUS,
       }).then((resonse) => {
         resolve(resonse);
       });
     });
   },
-  getActiveEmployees:()=>{
-    return new Promise((resolve,reject)=>{
+  getActiveEmployees: () => {
+    return new Promise((resolve, reject) => {
       Users.find({
-        active:true,
-        rejected:{
-          $ne:true
-        },
-        resigned:{
-          $ne:true
-        }
-      }).then((result)=>{
+        status: ACTIVE_STATUS,
+      }).then((result) => {
         resolve(result)
       })
     })
   },
   approveEmployee: (id) => {
     return new Promise((resolve, reject) => {
-      Users.updateOne({ employeeId: id }, { active: true }).then((user) => {
+      Users.updateOne({ employeeId: id }, { status: ACTIVE_STATUS }).then((user) => {
         console.log(user);
         resolve();
       });
@@ -163,7 +159,7 @@ module.exports = {
   },
   rejectEmployee: (id) => {
     return new Promise((resolve, reject) => {
-      Users.updateOne({ employeeId: id }, { rejected: true }).then((user) => {
+      Users.updateOne({ employeeId: id }, { status: REJECT_STATUS }).then((user) => {
         console.log(user);
         resolve();
       });

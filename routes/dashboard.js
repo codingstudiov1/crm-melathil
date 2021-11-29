@@ -1,8 +1,8 @@
 var express = require("express");
 var router = express.Router();
-const viewData = { layout: "admin-layout" };
+const viewData = { layout: "dashboard-layout" };
 const helpers = require("../helpers/helpers");
-const adminController = require("../controllers/admin");
+const dashboardController = require("../controllers/dashboard");
 
 router.get("/register", (req, res, next) => {
   res.render("admin/register", viewData);
@@ -42,23 +42,27 @@ router.get("/employees/requests", (req, res, next) => {
   });
 });
 
-router.get("/employees/active", adminController.activeEmployees);
-router.get("/employees/requests/reject/:id", adminController.rejectEmployee);
+router.get("/employees/active", dashboardController.activeEmployees);
+router.get("/employees/requests/reject/:id", dashboardController.rejectEmployee);
 router.get("/employees/requests/approve/:id", (req, res, next) => {
   let id = req.params.id;
   helpers.approveEmployee(id).then(() => {
     // res.json({ status: true, message: "Approved" });
-    res.redirect("/admin/employees/requests");
+    res.redirect("/dashboard/employees/requests");
   });
 });
 
 // Routes for clients
-router.get("/clients/", adminController.allClinets);
-router.get("/clients/create", adminController.loadCreateClient);
+router.get("/clients/", dashboardController.allClinets);
+router.get("/clients/create", dashboardController.loadCreateClient);
 router.get("/clients/delete:id");
 router.get("/clients/modify:id");
-router.get("/clients/client-types", adminController.loadClientTypes);
-router.get("/clients/client-types/create", adminController.loadClientTypeCreate);
-router.post("/clients/client-types/create", adminController.processClientTypeCreate);
+router.get("/clients/client-types", dashboardController.loadClientTypes);
+router.get("/clients/client-types/create", dashboardController.loadClientTypeCreate);
+router.post("/clients/client-types/create", dashboardController.processClientTypeCreate);
+
+
+// Routes for emloyees
+router.get('/enquiries', dashboardController.loadEnquiries);
 
 module.exports = router;

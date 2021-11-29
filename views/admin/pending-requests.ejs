@@ -1,38 +1,38 @@
 <section class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>Pending Requests</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>
-                    <li class="breadcrumb-item active">Pending Requests</li>
-                </ol>
-            </div>
-        </div>
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Pending Requests</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>
+          <li class="breadcrumb-item active">Pending Requests</li>
+        </ol>
+      </div>
     </div>
+  </div>
 </section>
 <section class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <% pendingRequests.forEach(element=> { %>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h3><%= element.firstName %>  <%= element.lastName %> </h3>
-                            <h6><%= element.employeeId %></h6>
-                            <h6><%= element.phone %> </h6>
-                            <h6><%= element.email %> </h6>
-                            <h6><%= element.gender %> </h6>
-                            <div class="d-flex justify-content-start">
-                                <a href="/admin/employees/requests/approve/<%= element.employeeId %> " class="btn btn-sm btn-success mr-2">Approve</a>
-                                <a href="/admin/employees/requests/reject/<%= element.employeeId %> " class="btn btn-sm btn-danger mr-2"> Reject</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <% }) %>
+  <div class="container-fluid">
+    <div class="row">
+      <% pendingRequests.forEach(element=> { %>
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h3><%= element.firstName %> <%= element.lastName %> </h3>
+            <h6><%= element.employeeId %></h6>
+            <h6><%= element.phone %> </h6>
+            <h6><%= element.email %> </h6>
+            <h6><%= element.gender %> </h6>
+            <div class="d-flex justify-content-start">
+              <a href="/dashboard/employees/requests/approve/<%= element.employeeId %> " class="btn btn-sm btn-success mr-2">Approve</a>
+              <a href="/dashboard/employees/requests/reject/<%= element.employeeId %> " class="btn btn-sm btn-danger mr-2"> Reject</a>
+            </div>
+          </div>
         </div>
+      </div>
+      <% }) %>
     </div>
+  </div>
 </section>

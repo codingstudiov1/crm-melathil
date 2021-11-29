@@ -11,9 +11,7 @@ const userSchema = mongoose.Schema(
     email: String,
     dob: Date,
     gender: String,
-    active:Boolean,
-    rejected:Boolean,
-    resigned:Boolean
+    status:String,
   },
   {
     collection: USER_COLLECTION,
