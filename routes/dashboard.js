@@ -63,7 +63,7 @@ router.post("/clients/client-types/create", dashboardController.processClientTyp
 
 
 // Routes for emloyees
-router.get('/enquiries', dashboardController.loadEnquiries);
+
 router.post(
   "/clients/client-types/create",
   dashboardController.processClientTypeCreate
@@ -88,5 +88,13 @@ router.get("/usertypes/modify/:typeId", dashboardController.loadUserTypesModify)
 router.get("/usertypes/delete/:typeId", dashboardController.processUserTypesDelete);
 router.post("/usertypes/create", dashboardController.processUserTypesCreate);
 router.post("/usertypes/modify/:typeId", dashboardController.processUserTypesModify);
+
+
+router.get('/enquiries', dashboardController.loadEnquiries);
+router.get('/enquiries/create', dashboardController.loadCreateEnquiries);
+
+
+
+
 
 module.exports = router;

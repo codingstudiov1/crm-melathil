@@ -1,6 +1,8 @@
 const helpers = require("../helpers/helpers");
 const clientHelper = require("../helpers/clients-helper");
 const enquiriesHelper = require("../helpers/enquiries-helper");
+const strings = require("../config/strings");
+const { CLIENT_STATUS, CLIENT_TEMPARATURE } = require("../config/strings");
 const viewData = { layout: "dashboard-layout" };
 // Reject Employee Controller
 module.exports.rejectEmployee = (req, res, next) => {
@@ -53,18 +55,6 @@ module.exports.loadClientTypes = async function (req, res, next) {
   viewData.clientType = await clientHelper.getAllClientTypes();
   res.render("clients/client-types", viewData);
 };
-
-module.exports.loadEnquiries = (req, res, next) => {
-  viewData.title = "Enquiries";
-  req.session.userSession = {
-
-  }
-  let userSession = req.session.userSession;
-  enquiriesHelper.getEnquiries(userSession._id).then((result) => {
-    console.log(result);
-    res.render('enquiries/view-enquiries', viewData);
-  })
-}
 module.exports.loadClientTypeModify = async (req, res, next) => {
   let id = req.params.id;
   clientHelper.loadClientType(id).then((result) => {
@@ -151,3 +141,22 @@ module.exports.processUserTypesDelete = (req, res, next) => {
       res.status(304).json(error);
     });
 };
+module.exports.loadEnquiries = (req, res, next) => {
+  viewData.title = "Enquiries";
+  req.session.userSession = {
+
+  }
+  let userSession = req.session.userSession;
+  enquiriesHelper.getEnquiries(userSession._id).then((result) => {
+    console.log(result);
+    viewData.enquiries = result;
+    res.render('enquiries/view-enquiries', viewData);
+  })
+}
+module.exports.loadCreateEnquiries = (req, res, next) => {
+  viewData.title = "Create Enquiry"
+  viewData.action = "/dashboard/enquiries/create";
+  viewData.status = CLIENT_STATUS;
+  viewData.temp = CLIENT_TEMPARATURE;
+  res.render('enquiries/add_edit_enquiries', viewData);
+}

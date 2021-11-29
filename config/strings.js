@@ -7,5 +7,22 @@ module.exports = {
   PENDING_STATUS: 'pending',
   RESIGN_STATUS: 'resigned',
   BLOCK_STATUS: 'blocked',
-  sessionSecret : 'melathilhardwares'  
+  sessionSecret: 'melathilhardwares',
+  CLIENT_STATUS: [
+    "Approached",
+    "Called",
+    "Borchure Send",
+    "Visited Company",
+    "Site Visited",
+    "Products Selected",
+    "Selection Changed",
+    "Quotation Prepared",
+    "Billed",
+    "Delivered"
+  ],
+  CLIENT_TEMPARATURE: [
+    "HOT",
+    "WARM",
+    "COLD"
+  ]
 };

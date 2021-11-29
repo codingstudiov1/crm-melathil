@@ -20,7 +20,7 @@
 <section>
   <div class="content">
     <div class="container">
-      <a class="btn btn-primary mb-3" href="/admin/clients/client-types/create">Create new</a>
+      <a class="btn btn-primary mb-3" href="/dashboard/enquiries/create">Create new</a>
       <div class="row">
         <div class="col-md-8">
           <div class="table-responsive">
@@ -35,7 +35,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <% clientType.forEach((element,index)=> { %>
+                    <% enquiries.forEach((element,index)=> { %>
                     <tr>
                       <td>
                         <%= index+1 %>
@@ -43,9 +43,9 @@
                       <td>
                         <%= element.typeName %>
                       </td>
-                      <td><a class="text-primary" onclick="return confirm('Are you sure to modify')" href="/admin/clients/client-types/modify/<%= element._id %> ">Edit</a>
+                      <td><a class="text-primary" onclick="return confirm('Are you sure to modify')" href="/dashboard/clients/client-types/modify/<%= element._id %> ">Edit</a>
                       </td>
-                      <td><a class="text-danger" onclick="return confirm('Are you sure to delete')" href="/admin/clients/client-types/delete/<%= element._id %> ">Delete</a>
+                      <td><a class="text-danger" onclick="return confirm('Are you sure to delete')" href="/dashboard/clients/client-types/delete/<%= element._id %> ">Delete</a>
                       </td>
 
                     </tr>
