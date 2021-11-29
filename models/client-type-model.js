@@ -11,4 +11,4 @@ const clientTypeSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Client-types", clientTypeSchema);
+module.exports = mongoose.model("Client_types", clientTypeSchema);

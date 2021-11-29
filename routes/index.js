@@ -14,6 +14,7 @@ router.post("/login", (req, res, next) => {
   helper
     .getUserLogin(data)
     .then((response) => {
+      req.session.employeeSession = response.user;
       res.status(200).json(response);
     })
     .catch((error) => {
@@ -27,7 +28,7 @@ router.post("/register", (req, res, next) => {
   let userData = req.body;
   helper
     .createUser(userData)
-    .then((result) => {
+    .then(() => {
       res.status(200).json({
         message:
           "Employee " +

@@ -7,4 +7,5 @@ module.exports = {
   PENDING_STATUS: 'pending',
   RESIGN_STATUS: 'resigned',
   BLOCK_STATUS: 'blocked',
+  sessionSecret : 'melathilhardwares'  
 };

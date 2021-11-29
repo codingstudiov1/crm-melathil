@@ -12,6 +12,7 @@ const userSchema = mongoose.Schema(
     dob: Date,
     gender: String,
     status:String,
+    password:String,
   },
   {
     collection: USER_COLLECTION,

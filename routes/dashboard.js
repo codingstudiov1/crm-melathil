@@ -5,7 +5,7 @@ const helpers = require("../helpers/helpers");
 const dashboardController = require("../controllers/dashboard");
 
 router.get("/register", (req, res, next) => {
-  res.render("admin/register", viewData);
+  res.render("admin/register");
 });
 // Admin registration
 router.post("/register", function (req, res, next) {
@@ -64,5 +64,29 @@ router.post("/clients/client-types/create", dashboardController.processClientTyp
 
 // Routes for emloyees
 router.get('/enquiries', dashboardController.loadEnquiries);
+router.post(
+  "/clients/client-types/create",
+  dashboardController.processClientTypeCreate
+);
+router.get(
+  "/clients/client-types/modify/:id",
+  dashboardController.loadClientTypeModify
+);
+router.post(
+  "/clients/client-types/modify/:id",
+  dashboardController.processClientTypeModify
+);
+router.get(
+  "/clients/client-types/delete/:id",
+  dashboardController.processClientTypeDelete
+);
+
+// permissions
+router.get("/usertypes", dashboardController.loadUserTypes);
+router.get("/usertypes/create", dashboardController.loadUserTypesCreate);
+router.get("/usertypes/modify/:typeId", dashboardController.loadUserTypesModify);
+router.get("/usertypes/delete/:typeId", dashboardController.processUserTypesDelete);
+router.post("/usertypes/create", dashboardController.processUserTypesCreate);
+router.post("/usertypes/modify/:typeId", dashboardController.processUserTypesModify);
 
 module.exports = router;

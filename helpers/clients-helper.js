@@ -37,9 +37,30 @@ module.exports = {
   },
   getAllClientTypes: () => {
     return new Promise(function (resolve, reject) {
-      ClientTypes.find().then((result)=>{
+      ClientTypes.find().then((result) => {
         resolve(result);
-      })
+      });
+    });
+  },
+  loadClientType: (id) => {
+    return new Promise((resolve, reject) => {
+      ClientTypes.findById(id).then((result) => {
+        resolve(result);
+      });
+    });
+  },
+  updateClientType: (id, data) => {
+    return new Promise((resolve, reject) => {
+      ClientTypes.findByIdAndUpdate(id, data).then((result) => {
+        resolve(result);
+      });
+    });
+  },
+  deleteClientType: (id) => {
+    return new Promise((resolve, reject) => {
+      ClientTypes.findByIdAndDelete(id).then((result) => {
+        resolve(result);
+      });
     });
   },
 };
