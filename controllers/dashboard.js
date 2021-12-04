@@ -153,10 +153,16 @@ module.exports.loadEnquiries = (req, res, next) => {
     res.render('enquiries/view-enquiries', viewData);
   })
 }
-module.exports.loadCreateEnquiries = (req, res, next) => {
+module.exports.loadCreateEnquiries = async (req, res, next) => {
+  viewData.clients = await clientHelper.getAllClients();
   viewData.title = "Create Enquiry"
   viewData.action = "/dashboard/enquiries/create";
   viewData.status = CLIENT_STATUS;
   viewData.temp = CLIENT_TEMPARATURE;
   res.render('enquiries/add_edit_enquiries', viewData);
+}
+module.exports.processCreateEnquiry = (req, res, next) => {
+  let enquiryData = req.body;
+  enquiryData.user = "61abaf9b672ec701ca4a58b1";
+  enquiriesHelper.createEnquiry(enquiryData).then(resp=>res.redirect('/dashboard/enquiries'))
 }

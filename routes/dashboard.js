@@ -92,7 +92,7 @@ router.post("/usertypes/modify/:typeId", dashboardController.processUserTypesMod
 
 router.get('/enquiries', dashboardController.loadEnquiries);
 router.get('/enquiries/create', dashboardController.loadCreateEnquiries);
-
+router.post('/enquiries/create',dashboardController.processCreateEnquiry)
 
 
 
