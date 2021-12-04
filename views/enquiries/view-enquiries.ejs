@@ -30,6 +30,7 @@
                   <thead>
                     <tr>
                       <th>Serial</th>
+                      <th>Date</th>
                       <th>Name</th>
                       <th colspan="2">Operaton</th>
                     </tr>
@@ -41,7 +42,13 @@
                         <%= index+1 %>
                       </td>
                       <td>
-                        <%= element.typeName %>
+                        <%= element.date %> 
+                      </td>
+                      <td>
+                        <%= element.title %>
+                      </td>
+                      <td>
+                        <a class="text-primary" href="/dashboard/enquiries/view/<%= element._id %> ">View Details</a>
                       </td>
                       <td><a class="text-primary" onclick="return confirm('Are you sure to modify')" href="/dashboard/clients/client-types/modify/<%= element._id %> ">Edit</a>
                       </td>

@@ -9,8 +9,8 @@ const clientSchema = new mongoose.Schema(
     phone: String,
     email: String,
     designation: String,
-    createDate: Date,
-    type:String
+    createDate: { type: Date, default: Date.now },
+    type: String
   },
   {
     collection: CLIENTS_COLLECTION,

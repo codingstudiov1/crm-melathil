@@ -55,6 +55,7 @@ router.get("/employees/requests/approve/:id", (req, res, next) => {
 // Routes for clients
 router.get("/clients/", dashboardController.allClinets);
 router.get("/clients/create", dashboardController.loadCreateClient);
+router.post("/clients/create", dashboardController.processCreateClient);
 router.get("/clients/delete:id");
 router.get("/clients/modify:id");
 router.get("/clients/client-types", dashboardController.loadClientTypes);

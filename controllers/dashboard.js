@@ -30,12 +30,13 @@ module.exports.loadCreateClient = async function (req, res, next) {
   viewData.clientTypes = await clientHelper.getAllClientTypes();
   viewData.title = "Create client";
   viewData.formId = "formCreateClient";
+  viewData.action = "/dashboard/clients/create"
   viewData.clientData = {};
   res.render("clients/create_edit", viewData);
 };
 module.exports.processCreateClient = function (req, res, next) {
   let custData = req.body;
-  console.log(custData);
+  clientHelper.createClient(custData).then(result => res.redirect('/dashboard/clients'))
 };
 module.exports.loadClientTypeCreate = function (req, res, next) {
   viewData.title = "CREATE CLIENT TYPE";
@@ -144,11 +145,21 @@ module.exports.processUserTypesDelete = (req, res, next) => {
 module.exports.loadEnquiries = (req, res, next) => {
   viewData.title = "Enquiries";
   req.session.userSession = {
-
+    "_id": "61abaf9b672ec701ca4a58b1",
+    "employeeId": "685868",
+    "firstName": "Sreevidhya",
+    "lastName": "S",
+    "address": "Ezhamkulam",
+    "phone": "9961413300",
+    "email": "e2@melathilgroup.com",
+    "dob": Date("1990-01-01T00:00:00.000Z"),
+    "gender": "Female",
+    "status": "active",
+    "password": "1234567",
+    "__v": 0
   }
   let userSession = req.session.userSession;
   enquiriesHelper.getEnquiries(userSession._id).then((result) => {
-    console.log(result);
     viewData.enquiries = result;
     res.render('enquiries/view-enquiries', viewData);
   })
@@ -164,5 +175,5 @@ module.exports.loadCreateEnquiries = async (req, res, next) => {
 module.exports.processCreateEnquiry = (req, res, next) => {
   let enquiryData = req.body;
   enquiryData.user = "61abaf9b672ec701ca4a58b1";
-  enquiriesHelper.createEnquiry(enquiryData).then(resp=>res.redirect('/dashboard/enquiries'))
+  enquiriesHelper.createEnquiry(enquiryData).then(resp => res.redirect('/dashboard/enquiries'))
 }

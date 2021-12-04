@@ -31,6 +31,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 db.createConnection();
+// db.createLogConnection();
 
 app.use(logger("dev"));
 app.use(express.json());

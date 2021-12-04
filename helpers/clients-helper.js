@@ -63,4 +63,10 @@ module.exports = {
       });
     });
   },
+  createClient: (clientData) => {
+    return new Promise((resolve, reject) => {
+      const client = new Clients(clientData);
+      client.save().then(resp => resolve(resp));
+    })
+  }
 };
