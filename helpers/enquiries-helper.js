@@ -4,6 +4,7 @@ const instantHelper = require("../helpers/instant-helers");
 const Constants = require('../config/strings');
 const Enquiries = require('../models/enquiries-model')
 const DateFormat = require('date-format');
+const mongoose = require("mongoose");
 
 
 module.exports = {
@@ -11,9 +12,9 @@ module.exports = {
         return new Promise((resolve, reject) => {
             Enquiries.find({ employee: userId }).then((resp) => {
                 if (resp) {
-                    resp.forEach((element,index) => {
+                    resp.forEach((element, index) => {
                         if (element?.date) {
-                            resp[index].date = DateFormat("dd-mm-yyyy",resp[index].date);
+                            resp[index].date = DateFormat("dd-mm-yyyy", resp[index].date);
                         }
                     });
                 }
@@ -27,6 +28,7 @@ module.exports = {
             enquiry = {
                 title: enqData.title,
                 employee: enqData.user,
+                client: enqData.client,
                 associate: enqData.associated,
                 date: enqData.date,
                 details: [
@@ -41,6 +43,31 @@ module.exports = {
             console.log(enquiry);
             const enq = new Enquiries(enquiry);
             enq.save().then(resp => resolve(resp));
+        })
+    },
+    viewEnquiryDetails: (id) => {
+        return new Promise((resolve, reject) => {
+            Enquiries.aggregate(
+                [
+                    {
+                        '$match': {
+                            '_id': mongoose.Types.ObjectId(id),
+                        }
+                    }, {
+                        '$lookup': {
+                            'from': 'clients',
+                            'localField': 'client',
+                            'foreignField': '_id',
+                            'as': 'client'
+                        }
+                    }, {
+                        '$unwind': '$client'
+                    }
+                ]
+            )
+                .then(response => {
+                    resolve(response[0]);
+                })
         })
     }
 }

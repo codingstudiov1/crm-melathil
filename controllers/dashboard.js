@@ -204,3 +204,13 @@ module.exports.processCreateEnquiry = (req, res, next) => {
   enquiryData.user = "61abaf9b672ec701ca4a58b1";
   enquiriesHelper.createEnquiry(enquiryData).then(resp => res.redirect('/dashboard/enquiries'))
 }
+module.exports.loadViewEnquiries = (req, res, next) => {
+  let enqId = req.params.id;
+
+  enquiriesHelper.viewEnquiryDetails(enqId).then(resp => {
+    console.log(resp)
+    viewData.title = 'Enquiry Details ';
+    viewData.enq = resp;
+    res.render('enquiries/view_enuiry_details', viewData);
+  });
+}

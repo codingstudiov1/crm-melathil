@@ -5,6 +5,7 @@ const enquirySchema = mongoose.Schema({
     title: String,
     addedDate: { type: Date, default: Date.now },
     date: Date,
+    client: { type: mongoose.Schema.Types.ObjectId },
     employee: { type: mongoose.Schema.Types.ObjectId },
     associate: [mongoose.Schema.Types.ObjectId],
     details: [{

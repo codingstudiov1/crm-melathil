@@ -1,0 +1,75 @@
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>
+          <%= title %>
+        </h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>
+          <li class="breadcrumb-item active">
+            <%= title %>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+<section>
+
+  <section>
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-body">
+            <h3>Title : <%= enq.title %> </h3>
+            <h6>Client : <%= enq.client.name %> </h6>
+            <h6>Phone number : <%= enq.client.phone %> </h6>
+            <h6>Address : <%= enq.client.address %> </h6>
+            <h6>Designation : <%= enq.client.designation %> </h6>
+            <h6>Type : <%= enq.client.type %> </h6>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="h3">Details</div>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Sl. No</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Temparature</th>
+                    <th>Remarks</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% enq.details.forEach((element,index) => { %>
+                  <tr>
+                    <td><%= index+1 %> </td>
+                    <td><%= element.date %> </td>
+                    <td><%= element.status %> </td>
+                    <td><%= element.temparature %> </td>
+                    <td><%= element.remarks %> </td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <a href="/dashboard/enquiries/update/<%= enq._id %>" class="btn btn-primary"> Post update</a>
+      </div>
+    </div>
+  </section>

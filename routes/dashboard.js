@@ -56,9 +56,9 @@ router.get("/employees/requests/approve/:id", (req, res, next) => {
 router.get("/clients/", dashboardController.allClinets);
 router.get("/clients/create", dashboardController.loadCreateClient);
 router.post("/clients/create", dashboardController.processCreateClient);
-router.get("/clients/delete/:id",dashboardController.processDeleteClient);
-router.get("/clients/edit/:id",dashboardController.loadEditClient);
-router.post("/clients/edit/:id",dashboardController.processEditClient);
+router.get("/clients/delete/:id", dashboardController.processDeleteClient);
+router.get("/clients/edit/:id", dashboardController.loadEditClient);
+router.post("/clients/edit/:id", dashboardController.processEditClient);
 router.get("/clients/client-types", dashboardController.loadClientTypes);
 router.get("/clients/client-types/create", dashboardController.loadClientTypeCreate);
 router.post("/clients/client-types/create", dashboardController.processClientTypeCreate);
@@ -94,9 +94,9 @@ router.post("/usertypes/modify/:typeId", dashboardController.processUserTypesMod
 
 router.get('/enquiries', dashboardController.loadEnquiries);
 router.get('/enquiries/create', dashboardController.loadCreateEnquiries);
-router.post('/enquiries/create',dashboardController.processCreateEnquiry)
-
-
+router.post('/enquiries/create', dashboardController.processCreateEnquiry)
+router.get('/enquiries/view/:id', dashboardController.loadViewEnquiries)
+router.get('/enquiries/update/:id', (req, res) => res.send('under work'));
 
 
 module.exports = router;
