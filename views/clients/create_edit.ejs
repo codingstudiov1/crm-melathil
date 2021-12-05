@@ -27,30 +27,34 @@
 
               <div class="form-group mt-3">
                 <label for="name">Name</label>
-                <input type="text" name="name" id="name" class="form-control">
+                <input type="text" name="name" id="name" class="form-control" value="<%= clientData.name %>">
               </div>
               <div class="form-group mt-3">
                 <label for="address">Address</label>
-                <textarea name="address" id="address" rows="3" class="form-control"></textarea>
+                <textarea name="address" id="address" rows="3" class="form-control"><%= clientData.address %></textarea>
               </div>
               <div class="form-group mt-3">
                 <label for="email">E-mail</label>
-                <input type="email" name="email" id="email" class="form-control">
+                <input type="email" name="email" id="email" class="form-control" value="<%= clientData.email %>">
               </div>
               <div class="form-group mt-3">
                 <label for="phone">Phone</label>
-                <input type="number" name="phone" id="phone" class="form-control">
+                <input type="number" name="phone" id="phone" class="form-control" value="<%= clientData.phone %>">
               </div>
               <div class="form-group mt-3">
                 <label for="designation">Designation</label>
-                <input type="text" name="designation" id="designation" class="form-control">
+                <input type="text" name="designation" id="designation" class="form-control" value="<%= clientData.designation %>">
               </div>
               <div class="form-group mt-3">
                 <label for="type">Clent type</label>
                 <select name="type" id="type" class="form-control">
                   <option value="">Select </option>
                   <% clientTypes.forEach(element => { %>
-                  <option value="<%= element._id %> "><%= element.typeName %> </option>
+                  <% if (element._id==clientData.type) { %>
+                    <option selected value="<%= element._id %>"><%= element.typeName %> </option>
+                    <% } else { %>
+                      <option value="<%= element._id %>"><%= element.typeName %> </option>
+                  <% } %>
                   <% }) %>
                 </select>
               </div>

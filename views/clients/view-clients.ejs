@@ -1,31 +1,52 @@
 <section class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1></h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>
-                    <li class="breadcrumb-item active"><%= title %> </li>
-                </ol>
-            </div>
-        </div>
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>
+            <%= title %> 
+        </h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>
+          <li class="breadcrumb-item active"><%= title %> </li>
+        </ol>
+      </div>
     </div>
+  </div>
 </section>
 <section class="content">
-    <div class="container-fluid">
-       <div class="table-responsive">
-           <table class="table">
-               <tbody>
-                   <% clients.forEach((element,index) => { %>
-                        <tr>
-                            <td><%= index+1 %> </td>
-                            <td><%= element.name %> </td>
-                        </tr>
-                   <% }) %>
-               </tbody>
-           </table>
-       </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table id="example1" class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Sl No</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th colspan="2">Operations</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% clients.forEach((element,index) => { %>
+                  <tr>
+                    <td><%= index+1 %> </td>
+                    <td><%= element.name %> </td>
+                    <td><%= element.phone %> </td>
+                    <td><a href="/dashboard/clients/edit/<%= element._id %>">Edit</a></td>
+                    <td><a onclick="return confirm('Are you sure to delete <%= element.name %>')" href="/dashboard/clients/delete/<%= element._id %>">Delete</a></td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </section>

@@ -38,6 +38,33 @@ module.exports.processCreateClient = function (req, res, next) {
   let custData = req.body;
   clientHelper.createClient(custData).then(result => res.redirect('/dashboard/clients'))
 };
+module.exports.loadEditClient = async (req, res, next) => {
+  let clientId = req.params.id;
+  viewData.title = "Modify Client Details";
+  viewData.formId = "formEditClient"
+  viewData.action = "/dashboard/clients/edit/" + clientId;
+  viewData.clientData = await clientHelper.getClientDetails(clientId);
+  viewData.clientTypes = await clientHelper.getAllClientTypes();
+  res.render("clients/create_edit", viewData);
+}
+module.exports.processEditClient = async (req, res, next) => {
+  let clientId = req.params.id;
+  let data = req.body;
+  clientHelper.modifyClient(clientId, data).then(() => res.redirect('/dashboard/clients'));
+}
+module.exports.processDeleteClient = async (req, res, next) => {
+  let clientId = req.params.id;
+  clientHelper.deleteClient(clientId).then(() => res.redirect('/dashboard/clients'));
+}
+module.exports.loadEditClient = async (req, res, next) => {
+  let clientId = req.params.id;
+  viewData.title = "Modify Client Details";
+  viewData.formId = "formEditClient"
+  viewData.action = "/dashboard/clients/edit/" + clientId;
+  viewData.clientData = await clientHelper.getClientDetails(clientId);
+  viewData.clientTypes = await clientHelper.getAllClientTypes();
+  res.render("clients/create_edit", viewData);
+}
 module.exports.loadClientTypeCreate = function (req, res, next) {
   viewData.title = "CREATE CLIENT TYPE";
   viewData.clientType = {};

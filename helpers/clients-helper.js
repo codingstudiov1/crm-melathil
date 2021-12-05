@@ -13,12 +13,19 @@ module.exports = {
       });
     });
   },
-  createClient: (info) => {
+  getClientDetails: (id) => {
     return new Promise(function (resolve, reject) {
-      const clients = new Clients(info);
-      clients.save().then((result) => {
-        resolve(result);
-      });
+      Clients.findById(id).then((result) => resolve(result));
+    });
+  },
+  modifyClient: (id, clientData) => {
+    return new Promise(function (resolve, reject) {
+      Clients.findByIdAndUpdate(id, clientData).then((resp) => resolve(resp));
+    });
+  },
+  deleteClient: (id) => {
+    return new Promise(function (resolve, reject) {
+      Clients.findByIdAndDelete(id).then((resp) => resolve(resp));
     });
   },
   createClientType: (data) => {
