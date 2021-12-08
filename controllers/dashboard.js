@@ -171,20 +171,20 @@ module.exports.processUserTypesDelete = (req, res, next) => {
 };
 module.exports.loadEnquiries = (req, res, next) => {
   viewData.title = "Enquiries";
-  // req.session.userSession = {
-  //   "_id" : "61b05f9ca579348f49088687",
-  //   "employeeId" : "449641",
-  //   "firstName" : "Sreevidhya",
-  //   "lastName" : "S",
-  //   "address" : "Ezhamkulam",
-  //   "phone" : "9961413300",
-  //   "email" : "e2@melathilgroup.com",
-  //   "dob" : Date("1985-01-01T00:00:00.000Z"),
-  //   "gender" : "Female",
-  //   "status" : "active",
-  //   "password" : "1234567",
-  //   "__v" : 0
-  // }
+  req.session.userSession = {
+    "_id" : "61b05f9ca579348f49088687",
+    "employeeId" : "449641",
+    "firstName" : "Sreevidhya",
+    "lastName" : "S",
+    "address" : "Ezhamkulam",
+    "phone" : "9961413300",
+    "email" : "e2@melathilgroup.com",
+    "dob" : Date("1985-01-01T00:00:00.000Z"),
+    "gender" : "Female",
+    "status" : "active",
+    "password" : "1234567",
+    "__v" : 0
+  }
   let userSession = req.session.userSession;
   enquiriesHelper.getEnquiries(userSession._id).then((result) => {
     viewData.enquiries = result;

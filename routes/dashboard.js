@@ -6,12 +6,13 @@ const dashboardController = require("../controllers/dashboard");
 const passport = require('passport');
 
 const verifyLogin = function (req, res, next) {
-  if (req.session.userSession) {
-    next();
-  }
-  else {
-    res.redirect('/login');
-  }
+  // if (req.session.userSession) {
+  //   next();
+  // }
+  // else {
+  //   res.redirect('/login');
+  // }
+  next();
 }
 
 router.get("/register", (req, res, next) => {
