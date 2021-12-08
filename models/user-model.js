@@ -11,8 +11,9 @@ const userSchema = mongoose.Schema(
     email: String,
     dob: Date,
     gender: String,
-    status:String,
-    password:String,
+    status: String,
+    password: String,
+    usertype: mongoose.Schema.Types.ObjectId,
   },
   {
     collection: USER_COLLECTION,

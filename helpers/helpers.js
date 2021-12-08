@@ -5,8 +5,9 @@ const Constants = require('../config/strings');
 // Models
 const Admin = require("../models/admin-model");
 const Users = require("../models/user-model");
-const { db } = require("../models/admin-model");
 const { ACTIVE_STATUS, REJECT_STATUS, PENDING_STATUS } = require("../config/strings");
+const collections = require("../config/collections");
+const strings = require("../config/strings");
 
 module.exports = {
   createAdmin: async (adminData) => {
@@ -47,6 +48,7 @@ module.exports = {
         })
         .then(async () => {
           let employeeId = await instantHelper.generateMemberId();
+          userData.password = await bcrypt.hash(userData.password, 10);
           userData.employeeId = employeeId;
           userData.status = Constants.PENDING_STATUS
           const user = new Users(userData);
@@ -69,66 +71,101 @@ module.exports = {
   },
   getUserLogin: (userInfo) => {
     return new Promise((resolve, reject) => {
-      Users.findOne({
-        $or: [{ phone: userInfo.username }, { email: userInfo.username }],
-      }).then(async (result) => {
-        if (result) {
+      Users
+        .aggregate(
+          [
+            {
+              '$lookup': {
+                'from': collections.USER_TYPE_COLLECTION,
+                'localField': 'usertype',
+                'foreignField': '_id',
+                'as': 'usertype'
+              }
+            }, {
+              '$unwind': '$usertype'
+            }, {
+              '$match': {
+                '$or': [
+                  {
+                    'email': userInfo.username
+                  }, {
+                    'phone': userInfo.username
+                  }, {
+                    'employeeId': userInfo.username
+                  }
+                ]
+              }
+            }
+          ]
+        )
+        // .findOne({
+        //   $or: [{ phone: userInfo.username }, { email: userInfo.username }],
+        // })
 
-          switch (result.status) {
-            case Constants.PENDING_STATUS: {
-              reject({
-                status: false,
-                message: "Your verification is pending..Kindly wait for a while",
-              });
-            }
-            case Constants.REJECT_STATUS: {
-              reject({
-                status: false,
-                message: "No employees registered with the given..",
-              });
 
-            }
-            case Constants.RESIGN_STATUS: {
-              reject({
-                status: false,
-                message: "Currently you have no permission to access the website",
-              });
-            }
-            case Constants.ACTIVE_STATUS: {
-              const state = await bcrypt.compare(
-                userInfo.password,
-                result.password
-              );
-              if (!state) {
+
+
+
+
+
+        .then(async (result) => {
+          if (result[0]) {
+
+            switch (result[0].status) {
+              case Constants.PENDING_STATUS: {
                 reject({
                   status: false,
-                  message: "Invalid password..",
+                  message: "Your verification is pending..Kindly wait for a while",
                 });
-              } else {
-                delete result.password;
-                resolve({
-                  status: true,
-                  message: "Authentication succesful",
-                  user: result,
+              }
+              case Constants.REJECT_STATUS: {
+                reject({
+                  status: false,
+                  message: "No employees registered with the given..",
+                });
+
+              }
+              case Constants.RESIGN_STATUS: {
+                reject({
+                  status: false,
+                  message: "Currently you have no permission to access the website",
+                });
+              }
+              case Constants.ACTIVE_STATUS: {
+                const state = await bcrypt.compare(
+                  userInfo.password,
+                  result[0].password
+                );
+                if (!state) {
+                  reject({
+                    status: false,
+                    message: "Invalid password..",
+                  });
+                } else {
+                  delete result[0].password;
+                  resolve({
+                    status: true,
+                    message: "Authentication succesful",
+                    user: result[0],
+                  });
+                }
+              }
+              default: {
+                reject({
+                  status: false,
+                  message: "Invalid operation detected",
                 });
               }
             }
-            default: {
-              reject({
-                status: false,
-                message: "Invalid operation detected",
-              });
-            }
+
+
+          } else {
+            reject({
+              status: false,
+              message: "No employees registered with the given..",
+            });
           }
-
-
-        } else {
-          reject({
-            status: false,
-            message: "No employees registered with the given..",
-          });
-        }
-      });
+        });
     });
   },
   getPendingRequests: () => {
@@ -142,11 +179,36 @@ module.exports = {
   },
   getActiveEmployees: () => {
     return new Promise((resolve, reject) => {
-      Users.find({
-        status: ACTIVE_STATUS,
-      }).then((result) => {
-        resolve(result)
-      })
+
+
+      Users.aggregate(
+        [
+          {
+            '$lookup': {
+              'from': collections.USER_TYPE_COLLECTION,
+              'localField': 'usertype',
+              'foreignField': '_id',
+              'as': 'usertype'
+            }
+          }, {
+            '$unwind': '$usertype'
+          }, {
+            '$match': {
+              'status': strings.ACTIVE_STATUS,
+              'usertype.usertype': {
+                '$ne': 'admin'
+              }
+            }
+          }
+        ]
+      ).then((resp) => resolve(resp))
+
+
+      //   Users.find({
+      //     status: ACTIVE_STATUS,
+      //   }).then((result) => {
+      //     resolve(result)
+      //   })
     })
   },
   approveEmployee: (id) => {

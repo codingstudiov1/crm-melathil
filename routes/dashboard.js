@@ -40,21 +40,22 @@ router.post("/login", (req, res, next) => {
       res.status(401).json(error);
     });
 });
-router.get("/home",verifyLogin, (req, res, next) => {
+router.get('/logout', dashboardController.processLogout);
+router.get("/home", verifyLogin, (req, res, next) => {
   res.render("admin/home", viewData);
 });
 
-router.get("/requests",verifyLogin, (req, res, next) => {
+router.get("/requests", verifyLogin, (req, res, next) => {
   res.render("admin/requests", viewData);
 });
-router.get("/employees/requests",verifyLogin, (req, res, next) => {
+router.get("/employees/requests", verifyLogin, (req, res, next) => {
   helpers.getPendingRequests().then((result) => {
     viewData.pendingRequests = result;
     res.render("admin/pending-requests", viewData);
   });
 });
 
-router.get("/employees/active",verifyLogin, dashboardController.activeEmployees);
+router.get("/employees/active", verifyLogin, dashboardController.activeEmployees);
 router.get("/employees/requests/reject/:id", dashboardController.rejectEmployee);
 router.get("/employees/requests/approve/:id", (req, res, next) => {
   let id = req.params.id;
@@ -65,50 +66,50 @@ router.get("/employees/requests/approve/:id", (req, res, next) => {
 });
 
 // Routes for clients
-router.get("/clients/",verifyLogin, dashboardController.allClinets);
-router.get("/clients/create",verifyLogin, dashboardController.loadCreateClient);
-router.post("/clients/create",verifyLogin, dashboardController.processCreateClient);
-router.get("/clients/delete/:id",verifyLogin, dashboardController.processDeleteClient);
-router.get("/clients/edit/:id",verifyLogin, dashboardController.loadEditClient);
-router.post("/clients/edit/:id",verifyLogin, dashboardController.processEditClient);
-router.get("/clients/client-types",verifyLogin, dashboardController.loadClientTypes);
-router.get("/clients/client-types/create",verifyLogin, dashboardController.loadClientTypeCreate);
-router.post("/clients/client-types/create",verifyLogin, dashboardController.processClientTypeCreate);
+router.get("/clients/", verifyLogin, dashboardController.allClinets);
+router.get("/clients/create", verifyLogin, dashboardController.loadCreateClient);
+router.post("/clients/create", verifyLogin, dashboardController.processCreateClient);
+router.get("/clients/delete/:id", verifyLogin, dashboardController.processDeleteClient);
+router.get("/clients/edit/:id", verifyLogin, dashboardController.loadEditClient);
+router.post("/clients/edit/:id", verifyLogin, dashboardController.processEditClient);
+router.get("/clients/client-types", verifyLogin, dashboardController.loadClientTypes);
+router.get("/clients/client-types/create", verifyLogin, dashboardController.loadClientTypeCreate);
+router.post("/clients/client-types/create", verifyLogin, dashboardController.processClientTypeCreate);
 
 
 // Routes for emloyees
 
 router.post(
-  "/clients/client-types/create",verifyLogin,
+  "/clients/client-types/create", verifyLogin,
   dashboardController.processClientTypeCreate
 );
 router.get(
-  "/clients/client-types/modify/:id",verifyLogin,
+  "/clients/client-types/modify/:id", verifyLogin,
   dashboardController.loadClientTypeModify
 );
 router.post(
-  "/clients/client-types/modify/:id",verifyLogin,
+  "/clients/client-types/modify/:id", verifyLogin,
   dashboardController.processClientTypeModify
 );
 router.get(
-  "/clients/client-types/delete/:id",verifyLogin,
+  "/clients/client-types/delete/:id", verifyLogin,
   dashboardController.processClientTypeDelete
 );
 
 // permissions
-router.get("/usertypes",verifyLogin, dashboardController.loadUserTypes);
-router.get("/usertypes/create",verifyLogin, dashboardController.loadUserTypesCreate);
-router.get("/usertypes/modify/:typeId",verifyLogin, dashboardController.loadUserTypesModify);
-router.get("/usertypes/delete/:typeId",verifyLogin, dashboardController.processUserTypesDelete);
-router.post("/usertypes/create",verifyLogin, dashboardController.processUserTypesCreate);
-router.post("/usertypes/modify/:typeId",verifyLogin, dashboardController.processUserTypesModify);
+router.get("/usertypes", verifyLogin, dashboardController.loadUserTypes);
+router.get("/usertypes/create", verifyLogin, dashboardController.loadUserTypesCreate);
+router.get("/usertypes/modify/:typeId", verifyLogin, dashboardController.loadUserTypesModify);
+router.get("/usertypes/delete/:typeId", verifyLogin, dashboardController.processUserTypesDelete);
+router.post("/usertypes/create", verifyLogin, dashboardController.processUserTypesCreate);
+router.post("/usertypes/modify/:typeId", verifyLogin, dashboardController.processUserTypesModify);
 
 
-router.get('/enquiries',verifyLogin, dashboardController.loadEnquiries);
-router.get('/enquiries/create',verifyLogin, dashboardController.loadCreateEnquiries);
-router.post('/enquiries/create',verifyLogin, dashboardController.processCreateEnquiry)
-router.get('/enquiries/view/:id',verifyLogin, dashboardController.loadViewEnquiries)
-router.get('/enquiries/update/:id',verifyLogin, (req, res) => res.send('under work'));
+router.get('/enquiries', verifyLogin, dashboardController.loadEnquiries);
+router.get('/enquiries/create', verifyLogin, dashboardController.loadCreateEnquiries);
+router.post('/enquiries/create', verifyLogin, dashboardController.processCreateEnquiry)
+router.get('/enquiries/view/:id', verifyLogin, dashboardController.loadViewEnquiries)
+router.get('/enquiries/update/:id', verifyLogin, (req, res) => res.send('under work'));
 
 
 module.exports = router;
