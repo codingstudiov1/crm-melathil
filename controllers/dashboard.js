@@ -1,6 +1,7 @@
 const helpers = require("../helpers/helpers");
 const clientHelper = require("../helpers/clients-helper");
 const enquiriesHelper = require("../helpers/enquiries-helper");
+const userTypeHelper = require('../helpers/usertype-helper');
 const strings = require("../config/strings");
 const { CLIENT_STATUS, CLIENT_TEMPARATURE } = require("../config/strings");
 const viewData = { layout: "dashboard-layout" };
@@ -88,7 +89,7 @@ module.exports.loadClientTypeModify = async (req, res, next) => {
   clientHelper.loadClientType(id).then((result) => {
     viewData.title = "Modify Client Types";
     viewData.clientType = result;
-    viewData.formAction = "/admin/clients/client-types/modify/" + id;
+    viewData.formAction = "/dashboard/clients/client-types/modify/" + id;
     res.render("clients/client-type-create_edit", viewData);
   });
 };
@@ -96,17 +97,17 @@ module.exports.processClientTypeModify = async (req, res, next) => {
   let id = req.params.id;
   let data = req.body;
   clientHelper.updateClientType(id, data).then((result) => {
-    res.redirect("/admin/clients/client-types");
+    res.redirect("/dashboard/clients/client-types");
   });
 };
 module.exports.processClientTypeDelete = async (req, res, next) => {
   let id = req.params.id;
   clientHelper.deleteClientType(id).then(() => {
-    res.redirect("/admin/clients/client-types");
+    res.redirect("/dashboard/clients/client-types");
   });
 };
 module.exports.loadUserTypes = (req, res, next) => {
-  adminHelper.getAllUserTypes().then((result) => {
+  userTypeHelper.getAllUserTypes().then((result) => {
     viewData.userTypes = result;
     viewData.title = "User Types";
     res.render("usertypes/user-types", viewData);
@@ -116,15 +117,15 @@ module.exports.loadUserTypesCreate = (req, res, next) => {
   viewData.typeData = {};
   viewData.hide = "";
   viewData.title = "Create usertype";
-  viewData.formAction = "/admin/usertypes/create";
+  viewData.formAction = "/dashboard/usertypes/create";
   res.render("usertypes/create-edit-usertype", viewData);
 };
 module.exports.loadUserTypesModify = async (req, res, next) => {
   const typeId = req.params.typeId;
   viewData.hide = "readonly";
-  viewData.typeData = await adminHelper.getUserType(typeId);
+  viewData.typeData = await userTypeHelper.getUserType(typeId);
   viewData.title = "Modify usertype";
-  viewData.formAction = "/admin/usertypes/modify/" + typeId;
+  viewData.formAction = "/dashboard/usertypes/modify/" + typeId;
   res.render("usertypes/create-edit-usertype", viewData);
 };
 module.exports.processUserTypesCreate = (req, res, next) => {
@@ -133,10 +134,10 @@ module.exports.processUserTypesCreate = (req, res, next) => {
     usertype,
     permissions: rest,
   };
-  adminHelper
+  userTypeHelper
     .createNewUserType(data)
     .then((result) => {
-      res.redirect("/admin/usertypes");
+      res.redirect("/dashboard/usertypes");
     })
     .catch((error) => {
       res.status(304).json(error);
@@ -149,10 +150,10 @@ module.exports.processUserTypesModify = (req, res, next) => {
     usertype,
     permissions: rest,
   };
-  adminHelper
+  userTypeHelper
     .modifyUserType(userTypeId, data)
     .then(() => {
-      res.redirect("/admin/usertypes");
+      res.redirect("/dashboard/usertypes");
     })
     .catch((error) => {
       res.status(304).json(error);
@@ -160,10 +161,10 @@ module.exports.processUserTypesModify = (req, res, next) => {
 };
 module.exports.processUserTypesDelete = (req, res, next) => {
   const userTypeId = req.params.typeId;
-  adminHelper
+  userTypeHelper
     .deleteUserType(userTypeId)
     .then(() => {
-      res.redirect("/admin/usertypes");
+      res.redirect("/dashboard/usertypes");
     })
     .catch((error) => {
       res.status(304).json(error);
