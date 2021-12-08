@@ -12,7 +12,7 @@ $(document).ready(function () {
   //     console.log(formData);
   //     $("#loader").show();
   //     $.ajax({
-  //       url: "/admin/register",
+  //       url: "/dashboard/register",
   //       method: "POST",
   //       data: formData,
   //       success: (response) => {
@@ -56,15 +56,15 @@ $(document).ready(function () {
     $("#loader").show();
     var data = $("#formAdminLogin").serialize();
     $.ajax({
-      url: "/admin/login",
+      url: "/dashboard/login",
       method: "post",
       data: data,
       success: (response) => {
         $("#loader").hide();
         if (response.status) {
-          window.location.replace("/admin/home");
+          window.location.replace("/dashboard/home");
         } else {
-          window.location.replace("/admin/login");
+          window.location.replace("/dashboard/login");
         }
       },
       error: (response) => {
@@ -86,7 +86,7 @@ $(document).ready(function () {
         console.log(response);
         $("#loader").hide();
         if (response.status) {
-          window.location.replace("/employee/dashboard");
+          window.location.replace("/dashboard/home");
         } else {
           $("#loader").hide();
           document.querySelector("#successModalBody").innerHTML =
@@ -120,7 +120,7 @@ $(document).ready(function () {
   //     document.querySelector("#formCreateUsertype")
   //   );
   //   $.ajax({
-  //     url: "/admin/usertypes/create",
+  //     url: "/dashboard/usertypes/create",
   //     method: "post",
   //     data: formData,
   //     success: (response) => {

@@ -7,14 +7,19 @@ router.get("/", function (req, res, next) {
   res.redirect("/login");
 });
 router.get("/login", function (req, res, next) {
+ if(req.session.userSession){
+    res.redirect('/dashboard/home')
+ }
+ else{
   res.render("login", { title: "Express" });
+ }
 });
 router.post("/login", (req, res, next) => {
   let data = req.body;
   helper
     .getUserLogin(data)
     .then((response) => {
-      req.session.employeeSession = response.user;
+      req.session.userSession = response.user;
       res.status(200).json(response);
     })
     .catch((error) => {
