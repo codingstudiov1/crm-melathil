@@ -1,18 +1,16 @@
 const helpers = require("../helpers/helpers");
 const clientHelper = require("../helpers/clients-helper");
 const enquiriesHelper = require("../helpers/enquiries-helper");
-const userTypeHelper = require('../helpers/usertype-helper');
+const userTypeHelper = require("../helpers/usertype-helper");
 const strings = require("../config/strings");
 const { CLIENT_STATUS, CLIENT_TEMPARATURE } = require("../config/strings");
 const viewData = { layout: "dashboard-layout" };
-
-
-
+var moment = require("moment");
 
 //Logout controller
 module.exports.processLogout = (req, res, next) => {
   req.session.destroy();
-  res.redirect('/');
+  res.redirect("/");
 };
 // Reject Employee Controller
 module.exports.rejectEmployee = (req, res, next) => {
@@ -40,41 +38,47 @@ module.exports.loadCreateClient = async function (req, res, next) {
   viewData.clientTypes = await clientHelper.getAllClientTypes();
   viewData.title = "Create client";
   viewData.formId = "formCreateClient";
-  viewData.action = "/dashboard/clients/create"
+  viewData.action = "/dashboard/clients/create";
   viewData.clientData = {};
   res.render("clients/create_edit", viewData);
 };
 module.exports.processCreateClient = function (req, res, next) {
   let custData = req.body;
-  clientHelper.createClient(custData).then(result => res.redirect('/dashboard/clients'))
+  clientHelper
+    .createClient(custData)
+    .then((result) => res.redirect("/dashboard/clients"));
 };
 module.exports.loadEditClient = async (req, res, next) => {
   let clientId = req.params.id;
   viewData.title = "Modify Client Details";
-  viewData.formId = "formEditClient"
+  viewData.formId = "formEditClient";
   viewData.action = "/dashboard/clients/edit/" + clientId;
   viewData.clientData = await clientHelper.getClientDetails(clientId);
   viewData.clientTypes = await clientHelper.getAllClientTypes();
   res.render("clients/create_edit", viewData);
-}
+};
 module.exports.processEditClient = async (req, res, next) => {
   let clientId = req.params.id;
   let data = req.body;
-  clientHelper.modifyClient(clientId, data).then(() => res.redirect('/dashboard/clients'));
-}
+  clientHelper
+    .modifyClient(clientId, data)
+    .then(() => res.redirect("/dashboard/clients"));
+};
 module.exports.processDeleteClient = async (req, res, next) => {
   let clientId = req.params.id;
-  clientHelper.deleteClient(clientId).then(() => res.redirect('/dashboard/clients'));
-}
+  clientHelper
+    .deleteClient(clientId)
+    .then(() => res.redirect("/dashboard/clients"));
+};
 module.exports.loadEditClient = async (req, res, next) => {
   let clientId = req.params.id;
   viewData.title = "Modify Client Details";
-  viewData.formId = "formEditClient"
+  viewData.formId = "formEditClient";
   viewData.action = "/dashboard/clients/edit/" + clientId;
   viewData.clientData = await clientHelper.getClientDetails(clientId);
   viewData.clientTypes = await clientHelper.getAllClientTypes();
   res.render("clients/create_edit", viewData);
-}
+};
 module.exports.loadClientTypeCreate = function (req, res, next) {
   viewData.title = "CREATE CLIENT TYPE";
   viewData.clientType = {};
@@ -181,46 +185,70 @@ module.exports.processUserTypesDelete = (req, res, next) => {
 };
 module.exports.loadEnquiries = (req, res, next) => {
   viewData.title = "Enquiries";
-  // req.session.userSession = {
-  //   "_id": "61b05f9ca579348f49088687",
-  //   "employeeId": "449641",
-  //   "firstName": "Sreevidhya",
-  //   "lastName": "S",
-  //   "address": "Ezhamkulam",
-  //   "phone": "9961413300",
-  //   "email": "e2@melathilgroup.com",
-  //   "dob": Date("1985-01-01T00:00:00.000Z"),
-  //   "gender": "Female",
-  //   "status": "active",
-  //   "password": "1234567",
-  //   "__v": 0
-  // }
+  req.session.userSession = {
+    _id: "61b77bd129a103e9798310e7",
+    employeeId: "174032",
+    firstName: "Sreevidhya",
+    lastName: "S",
+    address: "Ezhamkulam",
+    phone: "9961413300",
+    email: "e2@melathilgroup.com",
+    dob: Date("1986-01-01T00:00:00.000Z"),
+    gender: "Female",
+    status: "active",
+    usertype: "61b778dfce3c1a3ca9c3da94",
+    password: "$2a$10$EcyqGTNBrllURksQMU8dZ.yntUlvQ85u8dQC/KIML6E2Hhf.bMHim",
+    __v: 0,
+  };
   let userSession = req.session.userSession;
   enquiriesHelper.getEnquiries(userSession._id).then((result) => {
     viewData.enquiries = result;
-    res.render('enquiries/view-enquiries', viewData);
-  })
-}
+    res.render("enquiries/view-enquiries", viewData);
+  });
+};
 module.exports.loadCreateEnquiries = async (req, res, next) => {
   viewData.clients = await clientHelper.getAllClients();
-  viewData.title = "Create Enquiry"
+  viewData.title = "Create Enquiry";
   viewData.action = "/dashboard/enquiries/create";
   viewData.status = CLIENT_STATUS;
   viewData.temp = CLIENT_TEMPARATURE;
-  res.render('enquiries/add_edit_enquiries', viewData);
-}
+  res.render("enquiries/add_edit_enquiries", viewData);
+};
 module.exports.processCreateEnquiry = (req, res, next) => {
   let enquiryData = req.body;
   enquiryData.user = "61abaf9b672ec701ca4a58b1";
-  enquiriesHelper.createEnquiry(enquiryData).then(resp => res.redirect('/dashboard/enquiries'))
-}
+  enquiriesHelper
+    .createEnquiry(enquiryData)
+    .then((resp) => res.redirect("/dashboard/enquiries"));
+};
 module.exports.loadViewEnquiries = (req, res, next) => {
   let enqId = req.params.id;
-
-  enquiriesHelper.viewEnquiryDetails(enqId).then(resp => {
-    console.log(resp)
-    viewData.title = 'Enquiry Details ';
+  enquiriesHelper.viewEnquiryDetails(enqId).then((resp) => {
+    viewData.title = "Enquiry Details ";
     viewData.enq = resp;
-    res.render('enquiries/view_enuiry_details', viewData);
+    viewData.moment = moment;
+    res.render("enquiries/view_enuiry_details", viewData);
   });
-}
+};
+module.exports.loadAllEnquiries = (req, res, next) => {
+  enquiriesHelper.getAllEnquiries().then((data) => {
+    viewData.enquiries = data;
+    viewData.moment = moment;
+    res.render("enquiries/all_enquiries", viewData);
+  });
+};
+module.exports.loadEnquiryUpdateCreate = (req, res, next) => {
+  let enqId = req.params.id;
+  viewData.title = "Update Enquiry";
+  viewData.action = "/dashboard/enquiries/update/" + enqId;
+  viewData.status = CLIENT_STATUS;
+  viewData.temp = CLIENT_TEMPARATURE;
+  res.render("enquiries/add_edit_updates", viewData);
+};
+module.exports.processEnquiryUpdateCreate = (req, res, next) => {
+  let enqId = req.params.id;
+  let data = req.body;
+  enquiriesHelper
+    .updateEnquiry(enqId, data)
+    .then(() => res.redirect("/dashboard/enquiries/view/" + enqId));
+};

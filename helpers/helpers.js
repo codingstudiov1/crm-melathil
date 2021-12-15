@@ -70,6 +70,7 @@ module.exports = {
     });
   },
   getUserLogin: (userInfo) => {
+    console.log(userInfo)
     return new Promise((resolve, reject) => {
       Users
         .aggregate(
@@ -81,34 +82,27 @@ module.exports = {
                 'foreignField': '_id',
                 'as': 'usertype'
               }
-            }, {
+            },
+            {
               '$unwind': '$usertype'
-            }, {
-              '$match': {
-                '$or': [
-                  {
-                    'email': userInfo.username
-                  }, {
-                    'phone': userInfo.username
-                  }, {
-                    'employeeId': userInfo.username
-                  }
-                ]
-              }
-            }
+            },
+            // {
+            //   '$match': {
+            //     '$or': [
+            //       {
+            //         'email': userInfo.username
+            //       }, {
+            //         'phone': userInfo.username
+            //       }, {
+            //         'employeeId': userInfo.username
+            //       }
+            //     ]
+            //   }
+            // }
           ]
         )
-        // .findOne({
-        //   $or: [{ phone: userInfo.username }, { email: userInfo.username }],
-        // })
-
-
-
-
-
-
-
         .then(async (result) => {
+          console.log(result)
           if (result[0]) {
 
             switch (result[0].status) {

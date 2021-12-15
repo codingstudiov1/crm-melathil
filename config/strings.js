@@ -1,8 +1,8 @@
 module.exports = {
-  localDatabase: "mongodb://localhost:27017/melathilcrm",
-  logDatabaseUrl: "mongodb://localhost:27017/melathilcrm_log",
+  localDatabase: "mongodb://localhost:27017/testdatabase",
+  logDatabaseUrl: "mongodb://localhost:27017/testdatabase_log",
   databaseUrl:
-    "mongodb+srv://admin01:AeEQx6Opc9D5VnM9@cluster0.v7spe.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "mongodb+srv://admin01:AeEQx6Opc9D5VnM9@cluster0.v7spe.mongodb.net/testdatabase?retryWrites=true&w=majority",
   ACTIVE_STATUS: 'active',
   REJECT_STATUS: 'rejected',
   PENDING_STATUS: 'pending',

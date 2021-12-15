@@ -1,0 +1,36 @@
+<div class="container-fluid">
+  <div class="row mt-3">
+    <div class="col-12 mt-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table id="example1" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Sl No</th>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Client</th>
+                        <th>Phone</th>
+                        <th>Client Type</th>
+                    </tr>
+                </thead>
+              <tbody>
+                <% enquiries.forEach((element,index) => { %>
+                <tr style="cursor: pointer;" onclick="window.location.href='#'">
+                  <td><%= index+1 %></td>
+                  <td><%= element.title %> </td>
+                  <td><%= moment(element.date).format("DD-MM-YYYY") %> </td>
+                  <td><%= element.client.name %> </td>
+                  <td><%= element.client.phone %> </td>
+                  <td><%= element.client.type %> </td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -109,7 +109,8 @@ router.get('/enquiries', verifyLogin, dashboardController.loadEnquiries);
 router.get('/enquiries/create', verifyLogin, dashboardController.loadCreateEnquiries);
 router.post('/enquiries/create', verifyLogin, dashboardController.processCreateEnquiry)
 router.get('/enquiries/view/:id', verifyLogin, dashboardController.loadViewEnquiries)
-router.get('/enquiries/update/:id', verifyLogin, (req, res) => res.send('under work'));
-
+router.get('/enquiries/update/:id', verifyLogin, dashboardController.loadEnquiryUpdateCreate);
+router.post('/enquiries/update/:id', verifyLogin, dashboardController.processEnquiryUpdateCreate);
+router.get('/enquiries/all', dashboardController.loadAllEnquiries);
 
 module.exports = router;
