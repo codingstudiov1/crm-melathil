@@ -1,5 +1,5 @@
 module.exports = {
-  localDatabase: "mongodb://localhost:27017/testdatabase",
+  localDatabase: "mongodb://localhost:27017/melathil",
   logDatabaseUrl: "mongodb://localhost:27017/testdatabase_log",
   databaseUrl:
     "mongodb+srv://admin01:AeEQx6Opc9D5VnM9@cluster0.v7spe.mongodb.net/testdatabase?retryWrites=true&w=majority",
