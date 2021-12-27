@@ -94,8 +94,8 @@
     <aside class="main-sidebar sidebar-light-primary elevation-1">
       <!-- Brand Logo -->
       <a href="/dashboard/home" class="brand-link">
-        <img src="/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">Melathil Hardwares</span>
+        <span class="brand-text font-weight-light">Melathil Hardwares</span> <br>
+        <span class="brand-text font-weight-light small">Customer Relation Application</span>
       </a>
 
       <!-- Sidebar -->
@@ -105,8 +105,8 @@
           <div class="image">
             <img src="/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
           </div>
-          <div class="info">
-            <!-- <a href="#" class="d-block"> <%#= user.firstName %> <%#= user.lastName %> </a> -->
+          <div class="info"> Welcome 
+           <%= user.firstName %> <%= user.lastName %> 
           </div>
         </div>
 
@@ -135,14 +135,14 @@
                 </p>
               </a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a href="/charts" class="nav-link">
                 <i class="nav-icon fas fa-chart-line"></i>
                 <p>
                   Charts
                 </p>
               </a>
-            </li>
+            </li> -->
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-users"></i>
@@ -207,24 +207,30 @@
                 </p>
               </a>
               <ul class="nav nav-treeview">
+                <% if (permissions?.create_clients) { %>
                 <li class="nav-item">
                   <a href="/dashboard/clients/create" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>New client</p>
                   </a>
                 </li>
+                <% } %>
+                <% if (permissions?.view_clients) { %>
                 <li class="nav-item">
                   <a href="/dashboard/clients" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Client list</p>
                   </a>
                 </li>
+                <% } %>
+               <% if (permissions.view_client_type) { %>
                 <li class="nav-item">
                   <a href="/dashboard/clients/client-types" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Client types</p>
                   </a>
                 </li>
+               <% } %>
               </ul>
             </li>
             <li class="nav-item">
@@ -236,30 +242,25 @@
                 </p>
               </a>
               <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/dashboard/enquiries/all" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>All enquiries</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="/dashboard/enquiries/create" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>New Enquiry</p>
-                  </a>
-                </li>
+                <% if (permissions?.view_all_enquiries) { %>
+                  <li class="nav-item">
+                    <a href="/dashboard/enquiries/all" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>All enquiries</p>
+                    </a>
+                  </li>
+                <% } %>
+               <% if (permissions?.new_enquiry) { %>
+                
+               <% } %>
+               <% if (permissions?.view_enquiry) { %>
                 <li class="nav-item">
                   <a href="/dashboard/enquiries" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Enquiry list</p>
                   </a>
                 </li>
-                <li class="nav-item">
-                  <a href="UI/buttons.html" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Enquiry Status</p>
-                  </a>
-                </li>
+               <% } %>
               </ul>
             </li>
             <li class="nav-item">

@@ -17,10 +17,10 @@ module.exports = {
     var id = "" + rn(options).toString();
     console.log(id);
     return new Promise((resolve, reject) => {
-      Users.findOne({ employeeId: id }).then((result) => {
+      Users.findOne({ userId: id }).then((result) => {
         console.log(result);
         if (result) {
-          this.generateMemberId();
+          this();
         } else {
           resolve(id);
         }

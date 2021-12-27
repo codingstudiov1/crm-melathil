@@ -29,13 +29,6 @@
                 <input type="text" name="usertype" id="name" class="form-control"  value="<%= typeData.usertype %>"/>
               </div>
               <div class="row small">
-                <div class="col-12">
-                  <div class="form-group">
-                      <input type="checkbox" <%= typeData?.permissions?.manage_clients %>  name="manage_clients" id="manage_clients" />
-                    <!-- typeData.permissions.manage_clients -->
-                    <label for="manage_clients">Manage Clients</label>
-                  </div>
-                </div>
                 <div class="mx-3">
                   <div class="row">
                     <div class="col-md-4">
@@ -74,25 +67,42 @@
                         <label for="view_client_type">View Client Type</label>
                       </div>
                     </div>
-                  </div>
-                </div>
-                
-                
-                <div class="col-12">
-                  <div class="form-group">
-                    <input type="checkbox" name="manage_employees" id="manage_employees" />
-                    <label for="manage_employees">Manage Employees</label>
-                  </div>
-                </div>
-                <div class="mx-3">
-                  <div class="row">
-
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="form-group">
-                    <input type="checkbox" name="manage_enquiries" id="manage_enquiries" />
-                    <label for="manage_enquiries">Manage Enquiries</label>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <input <%= typeData?.permissions?.view_all_enquiries %> type="checkbox" name="view_all_enquiries" id="view_all_enquiries" />
+                        <label for="view_client_type">View all enquiries</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <input <%= typeData?.permissions?.view_new_enquiry %> type="checkbox" name="view_new_enquiry" id="view_new_enquiry" />
+                        <label for="view_client_type">New enquiry</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <input <%= typeData?.permissions?.view_enquiry %> type="checkbox" name="view_enquiry" id="view_enquiry" />
+                        <label for="view_client_type">View enquiry</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <input <%= typeData?.permissions?.view_modify_enquiry %> type="checkbox" name="view_modify_enquiry" id="view_modify_enquiry" />
+                        <label for="view_client_type">Modify enquiry</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <input <%= typeData?.permissions?.view_close_enquiry %> type="checkbox" name="view_close_enquiry" id="view_close_enquiry" />
+                        <label for="view_client_type">Close enquiry</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <input <%= typeData?.permissions?.view_delete_enquiry %> type="checkbox" name="view_delete_enquiry" id="view_delete_enquiry" />
+                        <label for="view_client_type">Delete enquiry</label>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

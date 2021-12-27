@@ -7,6 +7,11 @@ const { CLIENT_STATUS, CLIENT_TEMPARATURE } = require("../config/strings");
 const viewData = { layout: "dashboard-layout" };
 var moment = require("moment");
 
+module.exports.loadDashHome = (req, res, next) => {
+  viewData.user = req.session.userSession;
+  viewData.permissions = req.session?.userSession?.usertype?.permissions;
+  res.render("admin/home", viewData);
+};
 //Logout controller
 module.exports.processLogout = (req, res, next) => {
   req.session.destroy();
@@ -223,8 +228,9 @@ module.exports.processCreateEnquiry = (req, res, next) => {
 };
 module.exports.loadViewEnquiries = (req, res, next) => {
   let enqId = req.params.id;
+  viewData.title = "Enquiry Details ";
   enquiriesHelper.viewEnquiryDetails(enqId).then((resp) => {
-    viewData.title = "Enquiry Details ";
+    console.log(resp);
     viewData.enq = resp;
     viewData.moment = moment;
     res.render("enquiries/view_enuiry_details", viewData);
@@ -232,6 +238,7 @@ module.exports.loadViewEnquiries = (req, res, next) => {
 };
 module.exports.loadAllEnquiries = (req, res, next) => {
   enquiriesHelper.getAllEnquiries().then((data) => {
+    viewData.title = "Enquiry Details ";
     viewData.enquiries = data;
     viewData.moment = moment;
     res.render("enquiries/all_enquiries", viewData);

@@ -31,6 +31,7 @@ router.get("/register", function (req, res, next) {
 });
 router.post("/register", (req, res, next) => {
   let userData = req.body;
+
   helper
     .createUser(userData)
     .then(() => {

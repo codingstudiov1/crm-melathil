@@ -4,7 +4,7 @@ const viewData = { layout: "dashboard-layout" };
 const helpers = require("../helpers/helpers");
 const dashboardController = require("../controllers/dashboard");
 const passport = require('passport');
-
+let permissions = {};
 const verifyLogin = function (req, res, next) {
   // if (req.session.userSession) {
   //   next();
@@ -13,6 +13,7 @@ const verifyLogin = function (req, res, next) {
   //   res.redirect('/login');
   // }
   next();
+  permissions = req.session.userSession.permissions;
 }
 
 router.get("/register", (req, res, next) => {
@@ -25,25 +26,8 @@ router.post("/register", function (req, res, next) {
     res.status(200).json(response);
   });
 });
-router.get("/login", (req, res, next) => {
-  res.render("admin/login");
-});
-router.post("/login", (req, res, next) => {
-  let credentials = req.body;
-  helpers
-    .getLogin(credentials)
-    .then((response) => {
-      res.session.userSession = response;
-      res.status(200).json(response);
-    })
-    .catch((error) => {
-      res.status(401).json(error);
-    });
-});
 router.get('/logout', dashboardController.processLogout);
-router.get("/home", verifyLogin, (req, res, next) => {
-  res.render("admin/home", viewData);
-});
+router.get("/home", verifyLogin, dashboardController.loadDashHome);
 
 router.get("/requests", verifyLogin, (req, res, next) => {
   res.render("admin/requests", viewData);
