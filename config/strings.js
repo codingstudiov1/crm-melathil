@@ -1,4 +1,5 @@
 module.exports = {
+  TOKEN_KEY: 'melathil_hardwares',
   localDatabase: "mongodb://localhost:27017/melathil",
   logDatabaseUrl: "mongodb://localhost:27017/testdatabase_log",
   databaseUrl:

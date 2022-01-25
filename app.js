@@ -12,7 +12,7 @@ var dashBoardRouter = require("./routes/dashboard");
 const { sessionSecret } = require("./config/strings");
 
 var indexRouter = require("./routes/index");
-  
+
 var app = express();
 
 // view engine setup
@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(session({ secret: 'melathilhardwares', cookie: { maxAge: 24 * 60 * 60 * 1000 } }))
 
 app.use("/", indexRouter);
-
+app.use('/admin', require('./routes/admin'));
 app.use("/dashboard", dashBoardRouter);
 
 

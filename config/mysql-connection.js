@@ -10,13 +10,15 @@ const connection = mysql.createConnection({
 });
 
 module.exports.select = function (qry) {
-    connection.query(qry, function (error, result, fields) {
-        if (!error) {
-            resolve(result, fields);
-        }
-        else {
-            reject(error);
-        }
+    return new Promise((resolve, reject) => {
+        connection.query(qry, function (error, result, fields) {
+            if (!error) {
+                resolve(result, fields);
+            }
+            else {
+                reject(error);
+            }
+        })
     })
 }
 
