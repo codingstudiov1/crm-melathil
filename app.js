@@ -4,7 +4,6 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var expressLayouts = require("express-ejs-layouts");
-var db = require("./config/connection");
 var session = require('express-session')
 
 
@@ -28,7 +27,6 @@ app.use(
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-db.createConnection();
 // db.createLogConnection();
 
 app.use(logger("dev"));
