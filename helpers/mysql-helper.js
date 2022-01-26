@@ -111,6 +111,39 @@ module.exports = {
                 })
             })
         })
+    },
+    createClient: (clientData) => {
+        return new Promise(async (resolve, reject) => {
+            const { name, address, email, phone, designation, type } = clientData;
+            let qry = `INSERT INTO CLIENTS ( name, address, email, phone, designation, type) VALUES ('${name}','${address}','${email}','${phone}','${designation}',${type})`;
+            await insert(qry);
+            resolve();
+        })
+    },
+    getClients: () => {
+        return new Promise(async (resolve, reject) => {
+            let qry = "SELECT CL.id as clientId,CL.name,CL.phone,CL.email,CT.name AS typeName FROM CLIENTS CL INNER JOIN CLIENT_TYPES CT ON CL.TYPE = CT.ID";
+            let clients = await select(qry);
+            console.log(clients);
+            resolve(clients);
+        })
+    },
+    getClientDetails: (id) => {
+        return new Promise(async (resolve, reject) => {
+            let qry = `SELECT * FROM CLIENTS WHERE ID=${id}`;
+            let client = await select(qry);
+            resolve(client[0]);
+        })
+    },
+    modifyClientDetails: (id, data) => {
+        const { name, address, email, phone, designation, type } = data;
+        values = [name, address, email, phone, designation, type, id];
+        return new Promise(async (resolve, reject) => {
+            let qry = "UPDATE CLIENTS SET name=?,address=?,email=?,phone=?,designation=?,type=? WHERE id=?";
+            update(qry, values).then(() => {
+                resolve();
+            })
+        })
     }
 
 }

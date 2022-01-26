@@ -3,7 +3,7 @@
     <div class="row mb-2">
       <div class="col-sm-6">
         <h1>
-            <%= title %> 
+          <%= title %>
         </h1>
       </div>
       <div class="col-sm-6">
@@ -28,6 +28,8 @@
                     <th>Sl No</th>
                     <th>Name</th>
                     <th>Phone</th>
+                    <th>Email</th>
+                    <th>Type</th>
                     <th colspan="2">Operations</th>
                   </tr>
                 </thead>
@@ -37,7 +39,9 @@
                     <td><%= index+1 %> </td>
                     <td><%= element.name %> </td>
                     <td><%= element.phone %> </td>
-                    <td><a href="/dashboard/clients/edit/<%= element._id %>">Edit</a></td>
+                    <td><%= element.email %> </td>
+                    <td><%= element.typeName %> </td>
+                    <td><a href="/dashboard/clients/edit/<%= element.clientId %>">Edit</a></td>
                     <td><a onclick="return confirm('Are you sure to delete <%= element.name %>')" href="/dashboard/clients/delete/<%= element._id %>">Delete</a></td>
                   </tr>
                   <% }) %>

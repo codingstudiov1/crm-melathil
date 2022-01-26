@@ -1,7 +1,8 @@
 const helpers = require("../helpers/helpers");
-const clientHelper = require("../helpers/clients-helper");
-const enquiriesHelper = require("../helpers/enquiries-helper");
-const userTypeHelper = require("../helpers/usertype-helper");
+// const clientHelper = require("../helpers/clients-helper");
+// const enquiriesHelper = require("../helpers/enquiries-helper");
+// const userTypeHelper = require("../helpers/usertype-helper");
+const mysqlHelper = require('../helpers/mysql-helper');
 const strings = require("../config/strings");
 const { CLIENT_STATUS, CLIENT_TEMPARATURE } = require("../config/strings");
 const viewData = { layout: "dashboard-layout" };
@@ -17,57 +18,42 @@ module.exports.processLogout = (req, res, next) => {
   req.session.destroy();
   res.redirect("/");
 };
-// Reject Employee Controller
-module.exports.rejectEmployee = (req, res, next) => {
-  let id = req.params.id;
-  helpers.rejectEmployee(id).then(() => {
-    res.redirect("/dashboard/employees/requests");
-  });
-};
-// Get active employees controller
-module.exports.activeEmployees = (req, res, next) => {
-  helpers.getActiveEmployees().then((employees) => {
-    viewData.employees = employees;
-    res.render("admin/active-employees", viewData);
-  });
-};
+
+
 // View all clients controller
 module.exports.allClinets = function (req, res, next) {
-  clientHelper.getAllClients().then((result) => {
-    viewData.clients = result;
-    viewData.title = "List of clients";
-    res.render("clients/view-clients", viewData);
-  });
+  mysqlHelper.getClients().then((clients) => {
+    res.render("clients/view-clients", { layout: "dashboard-layout", title: "Clients list", clients });
+  })
 };
 module.exports.loadCreateClient = async function (req, res, next) {
-  viewData.clientTypes = await clientHelper.getAllClientTypes();
-  viewData.title = "Create client";
-  viewData.formId = "formCreateClient";
-  viewData.action = "/dashboard/clients/create";
-  viewData.clientData = {};
-  res.render("clients/create_edit", viewData);
+  mysqlHelper.getClientTypes().then((clientTypes) => {
+    res.render("clients/create_edit", { layout: 'dashboard-layout', clientTypes, clientData: {}, title: 'Create client', formId: 'formCreateClient', action: "/dashboard/clients/create" });
+  })
 };
 module.exports.processCreateClient = function (req, res, next) {
-  let custData = req.body;
-  clientHelper
-    .createClient(custData)
-    .then((result) => res.redirect("/dashboard/clients"));
+  let data = req.body;
+  mysqlHelper.createClient(data).then(() => {
+    res.redirect('/dashboard/clients')
+  })
 };
+
 module.exports.loadEditClient = async (req, res, next) => {
-  let clientId = req.params.id;
-  viewData.title = "Modify Client Details";
-  viewData.formId = "formEditClient";
-  viewData.action = "/dashboard/clients/edit/" + clientId;
-  viewData.clientData = await clientHelper.getClientDetails(clientId);
-  viewData.clientTypes = await clientHelper.getAllClientTypes();
-  res.render("clients/create_edit", viewData);
+  const clientId = req.params.id;
+  const title = "Modify Client Details";
+  const formId = "formEditClient";
+  const action = "/dashboard/clients/edit/" + clientId;
+  const clientData = await mysqlHelper.getClientDetails(clientId);
+  req.session.clientId = clientId;
+  const clientTypes = await mysqlHelper.getClientTypes();
+  res.render("clients/create_edit", { layout: 'dashboard-layout', title, formId, action, clientData, clientTypes });
 };
 module.exports.processEditClient = async (req, res, next) => {
-  let clientId = req.params.id;
+  let clientId = req.session.clientId;
   let data = req.body;
-  clientHelper
-    .modifyClient(clientId, data)
-    .then(() => res.redirect("/dashboard/clients"));
+  mysqlHelper.modifyClientDetails(clientId, data).then(() => {
+    res.redirect('/dashboard/clients')
+  })
 };
 module.exports.processDeleteClient = async (req, res, next) => {
   let clientId = req.params.id;
@@ -75,15 +61,7 @@ module.exports.processDeleteClient = async (req, res, next) => {
     .deleteClient(clientId)
     .then(() => res.redirect("/dashboard/clients"));
 };
-module.exports.loadEditClient = async (req, res, next) => {
-  let clientId = req.params.id;
-  viewData.title = "Modify Client Details";
-  viewData.formId = "formEditClient";
-  viewData.action = "/dashboard/clients/edit/" + clientId;
-  viewData.clientData = await clientHelper.getClientDetails(clientId);
-  viewData.clientTypes = await clientHelper.getAllClientTypes();
-  res.render("clients/create_edit", viewData);
-};
+
 module.exports.loadClientTypeCreate = function (req, res, next) {
   viewData.title = "CREATE CLIENT TYPE";
   viewData.clientType = {};
@@ -97,114 +75,9 @@ module.exports.processClientTypeCreate = function (req, res, next) {
     res.redirect("/dashboard/clients/client-types");
   });
 };
-module.exports.loadClientTypes = async function (req, res, next) {
-  viewData.title = "Client Types";
-  viewData.clientType = await clientHelper.getAllClientTypes();
-  res.render("clients/client-types", viewData);
-};
-module.exports.loadClientTypeModify = async (req, res, next) => {
-  let id = req.params.id;
-  clientHelper.loadClientType(id).then((result) => {
-    viewData.title = "Modify Client Types";
-    viewData.clientType = result;
-    viewData.formAction = "/dashboard/clients/client-types/modify/" + id;
-    res.render("clients/client-type-create_edit", viewData);
-  });
-};
-module.exports.processClientTypeModify = async (req, res, next) => {
-  let id = req.params.id;
-  let data = req.body;
-  clientHelper.updateClientType(id, data).then((result) => {
-    res.redirect("/dashboard/clients/client-types");
-  });
-};
-module.exports.processClientTypeDelete = async (req, res, next) => {
-  let id = req.params.id;
-  clientHelper.deleteClientType(id).then(() => {
-    res.redirect("/dashboard/clients/client-types");
-  });
-};
-module.exports.loadUserTypes = (req, res, next) => {
-  userTypeHelper.getAllUserTypes().then((result) => {
-    viewData.userTypes = result;
-    viewData.title = "User Types";
-    res.render("usertypes/user-types", viewData);
-  });
-};
-module.exports.loadUserTypesCreate = (req, res, next) => {
-  viewData.typeData = {};
-  viewData.hide = "";
-  viewData.title = "Create usertype";
-  viewData.formAction = "/dashboard/usertypes/create";
-  res.render("usertypes/create-edit-usertype", viewData);
-};
-module.exports.loadUserTypesModify = async (req, res, next) => {
-  const typeId = req.params.typeId;
-  viewData.hide = "readonly";
-  viewData.typeData = await userTypeHelper.getUserType(typeId);
-  viewData.title = "Modify usertype";
-  viewData.formAction = "/dashboard/usertypes/modify/" + typeId;
-  res.render("usertypes/create-edit-usertype", viewData);
-};
-module.exports.processUserTypesCreate = (req, res, next) => {
-  const { usertype, ...rest } = req.body;
-  let data = {
-    usertype,
-    permissions: rest,
-  };
-  userTypeHelper
-    .createNewUserType(data)
-    .then((result) => {
-      res.redirect("/dashboard/usertypes");
-    })
-    .catch((error) => {
-      res.status(304).json(error);
-    });
-};
-module.exports.processUserTypesModify = (req, res, next) => {
-  const userTypeId = req.params.typeId;
-  const { usertype, ...rest } = req.body;
-  let data = {
-    usertype,
-    permissions: rest,
-  };
-  userTypeHelper
-    .modifyUserType(userTypeId, data)
-    .then(() => {
-      res.redirect("/dashboard/usertypes");
-    })
-    .catch((error) => {
-      res.status(304).json(error);
-    });
-};
-module.exports.processUserTypesDelete = (req, res, next) => {
-  const userTypeId = req.params.typeId;
-  userTypeHelper
-    .deleteUserType(userTypeId)
-    .then(() => {
-      res.redirect("/dashboard/usertypes");
-    })
-    .catch((error) => {
-      res.status(304).json(error);
-    });
-};
+
 module.exports.loadEnquiries = (req, res, next) => {
   viewData.title = "Enquiries";
-  req.session.userSession = {
-    _id: "61b77bd129a103e9798310e7",
-    employeeId: "174032",
-    firstName: "Sreevidhya",
-    lastName: "S",
-    address: "Ezhamkulam",
-    phone: "9961413300",
-    email: "e2@melathilgroup.com",
-    dob: Date("1986-01-01T00:00:00.000Z"),
-    gender: "Female",
-    status: "active",
-    usertype: "61b778dfce3c1a3ca9c3da94",
-    password: "$2a$10$EcyqGTNBrllURksQMU8dZ.yntUlvQ85u8dQC/KIML6E2Hhf.bMHim",
-    __v: 0,
-  };
   let userSession = req.session.userSession;
   enquiriesHelper.getEnquiries(userSession._id).then((result) => {
     viewData.enquiries = result;
