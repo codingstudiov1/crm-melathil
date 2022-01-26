@@ -1,4 +1,6 @@
+const { USER_TYPES } = require('../config/strings');
 const mysqlHelper = require('../helpers/mysql-helper');
+const moment = require('moment');
 
 module.exports.loadAdminDashboard = function (req, res, next) {
     res.render('admin/admin-dashboard', { layout: 'admin-layout' });
@@ -41,4 +43,21 @@ module.exports.processCreateClientType = function (req, res, next) {
     mysqlHelper.createClientType(typeName).then(() => {
         res.status(200).json({ status: true, message: "Client type " + typeName + " created succesfully" })
     })
+}
+module.exports.loadApproveEmployees = function (req, res, next) {
+    let userId = req.params.id;
+    mysqlHelper.getPendingUserDetails(userId).then((user) => {
+        req.session.approveUserId = userId;
+        res.render('admin/approve-user', { layout: 'admin-layout', types: USER_TYPES, user, moment })
+    })
+}
+
+module.exports.processApproveUser = function (req, res, next) {
+    let userId = req.session.approveUserId;
+    req.session.approveUserId = null;
+    let data = req.body;
+    mysqlHelper.approveUser(userId, data).then(() => {
+        res.status(200).json({ status: true, message: "User approves" });
+    })
+
 }

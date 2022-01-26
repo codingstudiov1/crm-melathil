@@ -21,12 +21,12 @@
         <div class="card">
           <div class="card-body">
             <h3><%= element.firstName %> <%= element.lastName %> </h3>
-            <h6><%= element.employeeId %></h6>
+            <h6><%= element.id %></h6>
             <h6><%= element.phone %> </h6>
             <h6><%= element.email %> </h6>
             <h6><%= element.gender %> </h6>
             <div class="d-flex justify-content-start">
-              <a href="/dashboard/employees/requests/approve/<%= element.employeeId %> " class="btn btn-sm btn-success mr-2">Approve</a>
+              <a href="/admin/approve-user/<%= element.id %> " class="btn btn-sm btn-success mr-2">Approve</a>
               <a href="/dashboard/employees/requests/reject/<%= element.employeeId %> " class="btn btn-sm btn-danger mr-2"> Reject</a>
             </div>
           </div>

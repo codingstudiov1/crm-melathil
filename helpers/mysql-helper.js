@@ -33,6 +33,19 @@ module.exports = {
                             userData[0].usertype = confData[0].usertype;
                             resolve({ status: true, user: userData[0] });
                         }
+                            break;
+                        default: {
+                            switch (userData[0].status) {
+                                case PENDING_STATUS:
+                                    resolve({ message: "Your account is not yet activated. Kindly wait for admin approval" })
+                                    break;
+
+                                default:
+                                case ACTIVE_STATUS:
+                                    resolve({ status: true, user: userData[0] })
+                                    break;
+                            }
+                        }
                     }
                 }
             }
@@ -73,6 +86,30 @@ module.exports = {
             let types = await select(qry);
             resolve(types[0]);
 
+        })
+    },
+    getPendingUserDetails: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let qry = "SELECT * FROM USERS WHERE ID=" + userId + " AND STATUS='" + PENDING_STATUS + "'";
+            let user = await select(qry);
+            if (user.length > 0) {
+                resolve(user[0])
+            }
+            else {
+                resolve(null)
+            }
+        })
+    },
+    approveUser: (id, user) => {
+        return new Promise((resolve, reject) => {
+            var data = [user.firstName, user.lastName, user.email, user.phone, user.address, user.dob, ACTIVE_STATUS, id]
+            var qry = "UPDATE USERS SET firstName=?,lastName=?,email=?,phone=?,address=?,dob=?,status=? WHERE id=?";
+            var qry2 = "UPDATE LOGINS SET usertype=? WHERE userid=?";
+            update(qry, data).then(() => {
+                update(qry2, [user.usertype, id]).then(() => {
+                    resolve();
+                })
+            })
         })
     }
 

@@ -26,5 +26,9 @@ module.exports = {
     "HOT",
     "WARM",
     "COLD"
+  ],
+  USER_TYPES:[
+    "salesman",
+    "manager"
   ]
 };

@@ -1,0 +1,93 @@
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Approve users</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="/admin">Home</a></li>
+          <li class="breadcrumb-item active">Approve users</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<% if (user) { %>
+<section>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <form id="formApproveUser">
+            <div class="row">
+              <div class="col-md-6">
+
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input type="text" name="firstName" id="fname" value="<%= user.firstName %>" class="form-control">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="lname">Last name</label>
+                  <input type="text" name="lastName" id="lname" value="<%= user.lastName %>" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input type="text" name="email" id="email" value="<%= user.email %>" class="form-control">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="phone">Phone</label>
+                <input type="text" name="phone" id="phone" value="<%= user.phone %>" class="form-control">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="address">Address</label>
+              <textarea name="address" id="address" rows="4" class="form-control"><%= user.address %></textarea>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="gender">Gender</label>
+                  <select name="gender" id="gender" class="form-control">
+                    <% if (user.gender=="male") { %>
+                    <option value="male" selected>Male</option>
+                    <option value="female">Female</option>
+                    <% } else { %>
+                    <option value="male">Male</option>
+                    <option value="female" selected>Female</option>
+                    <% } %>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="dob">Date of birth</label>
+                <input type="text" name="dob" id="dob" class="form-control flatpicker" value="<%= user.dob %>">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="usertype">Usertype</label>
+              <select name="usertype" id="usertype" class="form-control">
+                <option value="">Select</option>
+                <% types.forEach(element => { %>
+                <option value="<%= element %>" style="text-transform: capitalize;"><%= element %></option>
+                <% }) %>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Approve</button>
+            <button onclick="window.location.replace('/admin/employee-requests')" class="btn btn-secondary">Back</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<% } %>

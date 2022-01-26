@@ -23,10 +23,10 @@ router.post("/login", (req, res, next) => {
   const { username, password } = req.body;
   mysqlHelper.doLogin(username, password).then((response) => {
     req.session.userSession = response.user;
-    const token = jwt.sign(response.user, TOKEN_KEY, { expiresIn: '24h' })
-    res.status(200).send({ status: true, usertype: response.user.usertype, token });
+    // const token = jwt.sign(response.user, TOKEN_KEY, { expiresIn: '24h' })
+    res.status(200).send({ status: true, usertype: response.user.usertype });
   }).catch((error) => {
-    console.log(error)
+    res.status(200).json(error)
   })
 
 

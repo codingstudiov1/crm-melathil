@@ -106,7 +106,7 @@
             <img src="/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
           </div>
           <div class="info"> Welcome 
-           <%= user.firstName %> <%= user.lastName %> 
+         
           </div>
         </div>
 
@@ -143,61 +143,7 @@
                 </p>
               </a>
             </li> -->
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-users"></i>
-                <p>
-                  Employees
-                  <i class="fas fa-angle-left right"></i>
-                  <!-- <span class="badge badge-info right">6</span> -->
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/dashboard/employees/requests" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>New Requests</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="/dashboard/employees/active" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Working</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="/dashboard/employees/resigned" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Resigned</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="/dashboard/employees/rejected" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Rejected</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <!-- User types -->
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-users"></i>
-                <p>
-                  User types
-                  <i class="fas fa-angle-left right"></i>
-                  <!-- <span class="badge badge-info right">6</span> -->
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/dashboard/usertypes" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>View usertypes</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
+           
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-user-friends"></i>
@@ -207,30 +153,28 @@
                 </p>
               </a>
               <ul class="nav nav-treeview">
-                <% if (permissions?.create_clients) { %>
+              
                 <li class="nav-item">
                   <a href="/dashboard/clients/create" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>New client</p>
                   </a>
                 </li>
-                <% } %>
-                <% if (permissions?.view_clients) { %>
+              
                 <li class="nav-item">
                   <a href="/dashboard/clients" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Client list</p>
                   </a>
                 </li>
-                <% } %>
-               <% if (permissions.view_client_type) { %>
+              
                 <li class="nav-item">
                   <a href="/dashboard/clients/client-types" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Client types</p>
                   </a>
                 </li>
-               <% } %>
+             
               </ul>
             </li>
             <li class="nav-item">
@@ -242,25 +186,21 @@
                 </p>
               </a>
               <ul class="nav nav-treeview">
-                <% if (permissions?.view_all_enquiries) { %>
+             
                   <li class="nav-item">
                     <a href="/dashboard/enquiries/all" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>All enquiries</p>
                     </a>
                   </li>
-                <% } %>
-               <% if (permissions?.new_enquiry) { %>
-                
-               <% } %>
-               <% if (permissions?.view_enquiry) { %>
+            
                 <li class="nav-item">
                   <a href="/dashboard/enquiries" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Enquiry list</p>
                   </a>
                 </li>
-               <% } %>
+            
               </ul>
             </li>
             <li class="nav-item">
