@@ -22,17 +22,18 @@
     <div class="container">
       <a class="btn btn-primary mb-3" href="/dashboard/enquiries/create">Create new</a>
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-12">
           <div class="card">
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table">
+                <table class="table" id="example1">
                   <thead>
                     <tr>
                       <th>Serial</th>
+                      <th>Status</th>
                       <th>Date</th>
                       <th>Name</th>
-                      <th colspan="2">Operaton</th>
+                      <th colspan="3">Operaton</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -42,19 +43,25 @@
                         <%= index+1 %>
                       </td>
                       <td>
-                        <%= element.date %>
+                        <% if (element.status===0) { %>
+                        <div class="badge bg-warning">Working</div>
+                        <% } else if (element.status===1) { %>
+                        <div class="badge bg-success">Closed</div>
+                        <% } else if (element.status===2) { %>
+                        <div class="badge bg-danger">Failed</div>
+                        <% } %>
+                      </td>
+                      <td>
+                        <%= moment(element.date).format("DD-MM-YYYY") %>
                       </td>
                       <td>
                         <%= element.title %>
                       </td>
                       <td>
-                        <a class="text-primary" href="/dashboard/enquiries/view/<%= element._id %> ">View Details</a>
+                        <a class="text-primary" href="/dashboard/enquiries/view/<%= element.id %> ">View Details</a>
                       </td>
-                      <td><a class="text-primary" onclick="return confirm('Are you sure to modify')" href="/dashboard/clients/client-types/modify/<%= element._id %> ">Edit</a>
+                      <td><a class="text-primary" onclick="return confirm('Are you sure to modify')" href="/dashboard/clients/client-types/modify/<%= element.id %> ">Edit</a>
                       </td>
-                      <td><a class="text-danger" onclick="return confirm('Are you sure to delete')" href="/dashboard/clients/client-types/delete/<%= element._id %> ">Delete</a>
-                      </td>
-
                     </tr>
                     <% }) %>
                   </tbody>

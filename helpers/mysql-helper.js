@@ -144,6 +144,48 @@ module.exports = {
                 resolve();
             })
         })
+    },
+    createEnquiry: (data) => {
+        return new Promise(async (resolve, reject) => {
+            const { title, date, client, user } = data;
+            let qry = `INSERT INTO ENQUIRY (title, date, client, employee) VALUES ('${title}','${date}',${client},${user})`;
+            let ins = await insert(qry);
+            const { remarks, status, temparature } = data;
+            let qry2 = `INSERT INTO ENQUIRY_DETAILS ( enquiryid,  date, remarks, status, temparature) VALUES ('${ins.insertId}','${date}','${remarks}','${status}','${temparature}')`;
+            await insert(qry2);
+            resolve();
+        })
+    },
+    getEnquiryByUser: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let qry = "SELECT * FROM ENQUIRY WHERE EMPLOYEE = " + userId;
+            let data = await select(qry);
+            resolve(data);
+        })
+    },
+    getEnquiryDetailsByUser: (enqId, userId) => {
+        return new Promise(async (resolve, reject) => {
+            let qry = `SELECT EN.*,CL.name as clientName,cl.phone as clientPhone,cl.designation as clientDesignation,CL.address as clientAddress,CT.NAME as clientTypeName,us.FIRSTNAME as firstName,US.LASTNAME as lastName,US.PHONE AS phone,US.EMAIL AS email FROM ENQUIRY EN INNER JOIN CLIENTS CL ON EN.CLIENT = CL.ID INNER JOIN CLIENT_TYPES CT ON CL.TYPE=CT.ID INNER JOIN USERS US ON EN.employee = US.ID WHERE EN.EMPLOYEE=${userId} AND EN.ID=${enqId}`;
+            let enquiry = await select(qry);
+            if (enquiry.length < 1) {
+                resolve(null);
+            }
+            else {
+                let qry2 = `SELECT * FROM ENQUIRY_DETAILS WHERE ENQUIRYID=${enqId}`;
+                let fullDetails = await select(qry2);
+                resolve({ enquiry: enquiry[0], details: fullDetails });
+            }
+        })
+    },
+    updateEnquiry: (enquiryId, upDetails) => {
+        return new Promise(async (resolve, reject) => {
+            console.log(upDetails)
+            const { date, status, temparature, remarks } = upDetails;
+            let qry = `INSERT INTO ENQUIRY_DETAILS (enquiryId,date,remarks,status,temparature) VALUES (${enquiryId},'${date}','${status}','${status}','${temparature}')`;
+            await insert(qry);
+            resolve();
+
+        })
     }
 
 }

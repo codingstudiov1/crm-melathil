@@ -19,37 +19,38 @@
 </section>
 
 <section>
+  <% if (enq) { %>
   <div class="row">
     <div class="col-md-8">
       <div class="card">
         <div class="card-body">
-          <h3>Title : <%= enq.title %> </h3>
-          <h6>Client : <%= enq.client.name %> </h6>
-          <h6>Phone number : <%= enq.client.phone %> </h6>
-          <h6>Address : <%= enq.client.address %> </h6>
-          <h6>Designation : <%= enq.client.designation %> </h6>
-          <h6>Type : <%= enq.client.type %> </h6>
+          <h3>Title : <%= enq.enquiry.title %> </h3>
+          <h6>Client : <%= enq.enquiry.clientName %> </h6>
+          <h6>Phone number : <%= enq.enquiry.clientPhone %> </h6>
+          <h6>Address : <%= enq.enquiry.clientAddress %> </h6>
+          <h6>Designation : <%= enq.enquiry.clientDesignation %> </h6>
+          <h6>Type : <%= enq.enquiry.clientTypeName %> </h6>
         </div>
       </div>
     </div>
   </div>
-  <section>
-    <div class="card my-3">
-      <div class="card-body">
-        <h3>With</h3>
-        <div class="row">
-          <% enq.associate.forEach(element => { %>
-          <div class="col-md-4 border p-3 m-3 shadow-sm">
-            <h6 class="badge badge-success"> <%= element.type %> </h6>
-            <h5> <%= element.name %></h5>
-            <h6><%= element.phone %> </h6>
-            <h6><%= element.address %> </h6>
+  <!-- <section>
+      <div class="card my-3">
+        <div class="card-body">
+          <h3>With</h3>
+          <div class="row">
+            <%# enq.associate.forEach(element => { %>
+            <div class="col-md-4 border p-3 m-3 shadow-sm">
+              <h6 class="badge badge-success"> <%#= element.type %> </h6>
+              <h5> <%#= element.name %></h5>
+              <h6><%#= element.phone %> </h6>
+              <h6><%#= element.address %> </h6>
+            </div>
+            <%# }) %>
           </div>
-          <% }) %>
         </div>
       </div>
-    </div>
-  </section>
+    </section> -->
   <div class="row">
     <div class="col-12">
       <div class="card">
@@ -88,17 +89,17 @@
       <div class="card">
         <div class="card-body">
           <h3>Salesman</h3>
-          <h6><%= enq.employee.firstName %> <%= enq.employee.lastName %> </h6>
-          <h6><%= enq.employee.phone %> </h6>
-          <h6><%= enq.employee.email %> </h6>
-
+          <h6><%= enq.enquiry.firstName %> <%= enq.enquiry.lastName %> </h6>
+          <h6><%= enq.enquiry.phone %> </h6>
+          <h6><%= enq.enquiry.email %> </h6>
         </div>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-md-3">
-      <a href="/dashboard/enquiries/update/<%= enq._id %>" class="btn btn-primary"> Post update</a>
+      <a href="/dashboard/enquiries/update/" class="btn btn-primary"> Post update</a>
     </div>
   </div>
+  <% } %>
 </section>

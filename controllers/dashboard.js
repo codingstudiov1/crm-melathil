@@ -76,38 +76,36 @@ module.exports.processClientTypeCreate = function (req, res, next) {
   });
 };
 
-module.exports.loadEnquiries = (req, res, next) => {
+module.exports.loadEnquiries = async (req, res, next) => {
   viewData.title = "Enquiries";
   let userSession = req.session.userSession;
-  enquiriesHelper.getEnquiries(userSession._id).then((result) => {
-    viewData.enquiries = result;
-    res.render("enquiries/view-enquiries", viewData);
-  });
+  let enquiries = await mysqlHelper.getEnquiryByUser(2);
+  res.render("enquiries/view-enquiries", { layout: 'dashboard-layout', enquiries, title: "Enquiries", moment });
 };
 module.exports.loadCreateEnquiries = async (req, res, next) => {
-  viewData.clients = await clientHelper.getAllClients();
-  viewData.title = "Create Enquiry";
-  viewData.action = "/dashboard/enquiries/create";
-  viewData.status = CLIENT_STATUS;
-  viewData.temp = CLIENT_TEMPARATURE;
-  res.render("enquiries/add_edit_enquiries", viewData);
+  const clients = await mysqlHelper.getClients();
+  const title = "Create Enquiry";
+  const action = "/dashboard/enquiries/create";
+  const status = CLIENT_STATUS;
+  const temp = CLIENT_TEMPARATURE;
+  res.render("enquiries/add_edit_enquiries", { layout: 'dashboard-layout', clients, title, action, status, temp });
 };
 module.exports.processCreateEnquiry = (req, res, next) => {
   let enquiryData = req.body;
-  enquiryData.user = "61abaf9b672ec701ca4a58b1";
-  enquiriesHelper
-    .createEnquiry(enquiryData)
-    .then((resp) => res.redirect("/dashboard/enquiries"));
+  enquiryData.user = 2;
+  mysqlHelper.createEnquiry(enquiryData).then(() => {
+    res.redirect('/dashboard/enquiries');
+  })
+
 };
 module.exports.loadViewEnquiries = (req, res, next) => {
   let enqId = req.params.id;
+  req.session.enquiryId = enqId;
+  let user = 2;
   viewData.title = "Enquiry Details ";
-  enquiriesHelper.viewEnquiryDetails(enqId).then((resp) => {
-    console.log(resp);
-    viewData.enq = resp;
-    viewData.moment = moment;
-    res.render("enquiries/view_enuiry_details", viewData);
-  });
+  mysqlHelper.getEnquiryDetailsByUser(enqId, user).then((details) => {
+    res.render("enquiries/view_enuiry_details", { layout: 'dashboard-layout', title: "Enquiry Details", enq: details, moment });
+  })
 };
 module.exports.loadAllEnquiries = (req, res, next) => {
   enquiriesHelper.getAllEnquiries().then((data) => {
@@ -118,17 +116,15 @@ module.exports.loadAllEnquiries = (req, res, next) => {
   });
 };
 module.exports.loadEnquiryUpdateCreate = (req, res, next) => {
-  let enqId = req.params.id;
-  viewData.title = "Update Enquiry";
-  viewData.action = "/dashboard/enquiries/update/" + enqId;
-  viewData.status = CLIENT_STATUS;
-  viewData.temp = CLIENT_TEMPARATURE;
-  res.render("enquiries/add_edit_updates", viewData);
+
+  if (req.session.enquiryId == undefined) res.redirect('/dashboard/enquiries')
+  else res.render("enquiries/add_edit_updates", { layout: 'dashboard-layout', title: "Update Enquiry", action: "/dashboard/enquiries/update/", status: CLIENT_STATUS, temp: CLIENT_TEMPARATURE });
 };
 module.exports.processEnquiryUpdateCreate = (req, res, next) => {
-  let enqId = req.params.id;
+  // let enqId = req.params.id;
+  let enqId = req.session.enquiryId;
   let data = req.body;
-  enquiriesHelper
+  mysqlHelper
     .updateEnquiry(enqId, data)
     .then(() => res.redirect("/dashboard/enquiries/view/" + enqId));
 };

@@ -26,8 +26,6 @@
           <div class="card">
             <div class="card-body">
               <form action="<%= action %> " method="post">
-
-
                 <div class="form-group">
                   <label for="title" class="form-label">Title</label>
                   <input type="text" name="title" id="title" placeholder="Enquiry title" class="form-control">
@@ -37,21 +35,21 @@
                   <select name="client" id="select2" class="form-control">
                     <option value="">Select</option>
                     <% clients.forEach(element => { %>
-                    <option value="<%= element._id %>"><%= element.name %> </option>
+                    <option value="<%= element.clientId %>"><%= element.name %> </option>
                       <% }) %>
                   </select>
                 </div>
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <label for="associated" class="form-label">Associated with</label>
-                  <select name="associated" id="select2_mult" class="form-control" multiple="multiple">
-                    <% clients.forEach(element => { %>
-                      <option value="<%= element._id %>"><%= element.name %> </option>
-                    <% }) %>
+                  <select name="associated" id="select2_mult" class="form-control" multiple="from-control multiple">
+                    <%# clients.forEach(element => { %>
+                      <option value="<%#= element.clientId %>"><%#= element.name %> </option>
+                    <%# }) %>
                   </select>
-                </div>
+                </div> -->
                 <div class="form-group">
                   <label for="date" class="form-label">Enquiry Date</label>
-                  <input type="date" name="date" id="date" class="form-control">
+                  <input type="text" name="date" id="date" class="form-control flatpicker">
                 </div>
                 <div class="form-group">
                   <label for="remarks" class="form-label">Remarks</label>
