@@ -37,4 +37,5 @@ router.get('/enquiries/update', verifyLogin, dashboardController.loadEnquiryUpda
 router.post('/enquiries/update', verifyLogin, dashboardController.processEnquiryUpdateCreate);
 router.get('/enquiries/all', dashboardController.loadAllEnquiries);
 
+router.get('/reports/enquiries', dashboardController.loadEnquiryReportRequest);
 module.exports = router;

@@ -1,0 +1,79 @@
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>
+          <%= title %>
+        </h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="/dashboard/home">Home</a></li>
+          <li class="breadcrumb-item active">
+            <%= title %>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <form action="/dashboard/reports/enquiries" method="get" onsubmit="getUserReport(event)">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="range">Date Range</label>
+                  <div id="reportrange" class="form-control">
+                    <i class="fa fa-calendar"></i>&nbsp;
+                    <span></span> <i class="fa fa-caret-down"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="status">Status</label>
+                  <select name="status" id="status" class="form-control">
+                    <option value="">All</option>
+                    <% status.forEach(element => { %>
+                    <option value="<%= element %>"><%= element %></option>
+                    <% }) %>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="status">Temparature</label>
+                  <select name="temparature" id="temparature" class="form-control">
+                    <option value="">All</option>
+                    <% temparature.forEach(element => { %>
+                    <option value="<%= element %>"><%= element %></option>
+                    <% }) %>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="client">Client</label>
+                  <select name="client" id="client" class="form-control select2">
+                    <option value="">All</option>
+                    <% clients.forEach(element => { %>
+                    <option value="<%= element.clientId %>"><%= element.name %></option>
+                    <% }) %>
+                  </select>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

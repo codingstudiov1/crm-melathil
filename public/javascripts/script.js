@@ -78,3 +78,13 @@ $(document).ready(function () {
   });
 
 });
+
+
+function getUserReport(evt) {
+  evt.preventDefault();
+  let data = $(evt.target).serialize();
+  console.log(data);
+  axios.get('/dashboard/reports/enquiries?' + data).then((response) => {
+
+  })
+}

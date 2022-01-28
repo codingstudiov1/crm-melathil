@@ -30,6 +30,9 @@
   <link rel="stylesheet" href="/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Flatpicker -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <!-- Date Range Picker -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -197,6 +200,24 @@
               </ul>
             </li>
             <li class="nav-item">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fas fa-book-open"></i>
+                <p>
+                  Reports
+                  <i class="fas fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+
+                <li class="nav-item">
+                  <a href="/dashboard/reports/enquiries" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Enquiry Report</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
               <a href="/dashboard/logout" class="nav-link">
                 <i class="nav-icon fas fa-ellipsis-h"></i>
                 <p>Logout</p>
@@ -270,6 +291,12 @@
   <script src="/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
   <!-- flatpicker -->
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <!-- Date Range Picker -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <!-- Axios -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
     $('.flatpicker').flatpickr();
     $('#select2').select2();
@@ -284,6 +311,33 @@
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     })
+  </script>
+  <script type="text/javascript">
+    $(function() {
+
+      var start = moment().subtract(29, 'days');
+      var end = moment();
+
+      function cb(start, end) {
+        $('#reportrange span').html(start.format('DD-MM-YYYY') + ' - ' + end.format('DD-MM-YYYY'));
+      }
+
+      $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+          'Today': [moment(), moment()],
+          'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+          'This Month': [moment().startOf('month'), moment().endOf('month')],
+          'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+      }, cb);
+
+      cb(start, end);
+
+    });
   </script>
 </body>
 

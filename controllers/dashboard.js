@@ -121,10 +121,24 @@ module.exports.loadEnquiryUpdateCreate = (req, res, next) => {
   else res.render("enquiries/add_edit_updates", { layout: 'dashboard-layout', title: "Update Enquiry", action: "/dashboard/enquiries/update/", status: CLIENT_STATUS, temp: CLIENT_TEMPARATURE });
 };
 module.exports.processEnquiryUpdateCreate = (req, res, next) => {
-  // let enqId = req.params.id;
   let enqId = req.session.enquiryId;
   let data = req.body;
   mysqlHelper
     .updateEnquiry(enqId, data)
     .then(() => res.redirect("/dashboard/enquiries/view/" + enqId));
 };
+module.exports.loadEnquiryReportRequest = async (req, res, next) => {
+  let user = 2;//To be replaced by session value;
+  let quiries = req.query;
+  console.log(quiries);
+  let clients = await mysqlHelper.getClients();
+  let temparature = CLIENT_TEMPARATURE;
+  let status = CLIENT_STATUS;
+
+  res.render('reports/client-enquiry-report', { layout: 'dashboard-layout', title: "Get Report", status, temparature, clients });
+
+}
+
+// module.exports.processEnquiryReportRequest = (req, res, next) => {
+
+// }
