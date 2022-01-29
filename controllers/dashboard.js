@@ -7,11 +7,20 @@ const strings = require("../config/strings");
 const { CLIENT_STATUS, CLIENT_TEMPARATURE } = require("../config/strings");
 const viewData = { layout: "dashboard-layout" };
 var moment = require("moment");
+const countsHelper = require("../helpers/counts-helper");
 
-module.exports.loadDashHome = (req, res, next) => {
-  viewData.user = req.session.userSession;
-  viewData.permissions = req.session?.userSession?.usertype?.permissions;
-  res.render("admin/home", viewData);
+module.exports.loadDashHome = async (req, res, next) => {
+  let counts = {};
+  let userId = 2;
+  let today = moment().format('YYYY-MM-DD');
+  let monthStart = moment().startOf('month').format('YYYY-MM-DD');
+  let monthEnd = moment().endOf('month').format('YYYY-MM-DD');
+  counts.monthlyEquiryCount = await countsHelper.getEnquiriesCountByUserAndDate(userId, monthStart, monthEnd);
+  counts.monthlyClosedEquiryCount = await countsHelper.getClosedEnquiriesCountByUserAndDate(userId, monthStart, monthEnd);
+  counts.monthlyWorkingEquiryCount = await countsHelper.getWorkingEnquiriesCountByUserAndDate(userId, monthStart, monthEnd);
+
+
+  res.render("employees/dashboard", { layout: 'dashboard-layout', title: 'Dashboard', counts, moment });
 };
 //Logout controller
 module.exports.processLogout = (req, res, next) => {
@@ -139,6 +148,12 @@ module.exports.loadEnquiryReportRequest = async (req, res, next) => {
 
 }
 
-// module.exports.processEnquiryReportRequest = (req, res, next) => {
+module.exports.loadTodaysReport = (req, res, next) => {
+  let today = moment().format('YYYY-MM-DD');
+  console.log(today)
+  mysqlHelper.getEmployeeReport(today).then((report) => {
+    console.log(report);
+    res.render('reports/daily-report', { layout: "dashboard-layout", title: "Daily Report", report, moment, date: today });
+  })
+};
 
-// }

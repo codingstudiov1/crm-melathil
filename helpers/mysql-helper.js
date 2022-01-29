@@ -186,6 +186,20 @@ module.exports = {
             resolve();
 
         })
-    }
-
+    },
+    getEmployeeReport: (date) => {
+        return new Promise((resolve, reject) => {
+            // INNER JOIN ENQUIRY EN ON ED.ENQUIRYID=EN.ID 
+            // INNER JOIN CLIENTS CL ON EN.CLIENT = CL.ID
+            // INNER JOIN CLIENT_TYPES CT ON CL.TYPE=CT.ID 
+            // ED.date,ED.status,ED.remarks,ED.temparature,EN.title,CL.name as clientName,CL.phone as clientPhone,CT.name as clientType 
+            let qry =
+                `SELECT *
+            FROM ENQUIRY_DETAILS ED 
+            WHERE ED.DATE='${date}'`;
+            select(qry).then((enqs) => {
+                resolve(enqs);
+            })
+        })
+    },
 }

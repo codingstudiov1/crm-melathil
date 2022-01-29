@@ -38,4 +38,6 @@ router.post('/enquiries/update', verifyLogin, dashboardController.processEnquiry
 router.get('/enquiries/all', dashboardController.loadAllEnquiries);
 
 router.get('/reports/enquiries', dashboardController.loadEnquiryReportRequest);
+router.get('/reports/today', dashboardController.loadTodaysReport);
+
 module.exports = router;
