@@ -1,7 +1,7 @@
 const { select, insert, update } = require("../config/mysql-connection");
 const { PENDING_STATUS, ACTIVE_STATUS } = require("../config/strings");
 const Promise = require('promise');
-
+const moment = require('moment');
 
 
 
@@ -177,6 +177,20 @@ module.exports = {
             }
         })
     },
+    getEnquiryDetails: (enqId) => {
+        return new Promise(async (resolve, reject) => {
+            let qry = `SELECT EN.*,CL.name as clientName,cl.phone as clientPhone,cl.designation as clientDesignation,CL.address as clientAddress,CT.NAME as clientTypeName,us.FIRSTNAME as firstName,US.LASTNAME as lastName,US.PHONE AS phone,US.EMAIL AS email FROM ENQUIRY EN INNER JOIN CLIENTS CL ON EN.CLIENT = CL.ID INNER JOIN CLIENT_TYPES CT ON CL.TYPE=CT.ID INNER JOIN USERS US ON EN.employee = US.ID WHERE  EN.ID=${enqId}`;
+            let enquiry = await select(qry);
+            if (enquiry.length < 1) {
+                resolve(null);
+            }
+            else {
+                let qry2 = `SELECT * FROM ENQUIRY_DETAILS WHERE ENQUIRYID=${enqId}`;
+                let fullDetails = await select(qry2);
+                resolve({ enquiry: enquiry[0], details: fullDetails });
+            }
+        })
+    },
     updateEnquiry: (enquiryId, upDetails) => {
         return new Promise(async (resolve, reject) => {
             console.log(upDetails)
@@ -202,4 +216,68 @@ module.exports = {
             })
         })
     },
+    getOpenedEnquiries: () => {
+        return new Promise((resolve, reject) => {
+            let qry =
+                `SELECT EN.*,CL.name as clientName,US.firstName as empName FROM ENQUIRY EN
+             INNER JOIN CLIENTS CL ON EN.CLIENT=CL.ID
+             INNER JOIN USERS US ON EN.EMPLOYEE = US.ID
+            WHERE EN.STATUS=0
+            ORDER BY EN.DATE DESC`;
+            select(qry).then((enquiries) => {
+                resolve(enquiries);
+            }).catch((error) => {
+                console.log(error);
+            })
+        })
+    },
+    getClosedEnquiries: () => {
+        return new Promise((resolve, reject) => {
+            let qry =
+                `SELECT EN.*,CL.name as clientName,US.firstName as empName FROM ENQUIRY EN
+             INNER JOIN CLIENTS CL ON EN.CLIENT=CL.ID
+             INNER JOIN USERS US ON EN.EMPLOYEE = US.ID
+            WHERE EN.STATUS=1
+            ORDER BY EN.DATE DESC`;
+            select(qry).then((enquiries) => {
+                resolve(enquiries);
+            }).catch((error) => {
+                console.log(error);
+            })
+        })
+    },
+    getAllEnquiries: () => {
+        return new Promise((resolve, reject) => {
+            let qry =
+                `SELECT EN.*,CL.name as clientName,US.firstName as empName FROM ENQUIRY EN
+             INNER JOIN CLIENTS CL ON EN.CLIENT=CL.ID
+             INNER JOIN USERS US ON EN.EMPLOYEE = US.ID
+            ORDER BY EN.DATE DESC`;
+            select(qry).then((enquiries) => {
+                resolve(enquiries);
+            }).catch((error) => {
+                console.log(error);
+            })
+        })
+    },
+    closeEnquiry: (id, data) => {
+        return new Promise((resolve, reject) => {
+            const { amount } = data;
+            let qry = `UPDATE ENQUIRY SET STATUS=1,AMOUNT=?,closedate=? WHERE ID=?`;
+            update(qry, [amount, moment().format('YYYY-MM-DD'), id]).then(() => {
+                let qry2 =
+                    `INSERT INTO ENQUIRY_DETAILS
+                 (enquiryid,addeddate,date,remarks,status,temparature) 
+                 VALUES (${id},'${moment().format('YYYY-MM-DD')}','${moment().format('YYYY-MM-DD')}','Enquiry closed by admin','Closed','CLOSED')`
+                console.log(qry2)
+                insert(qry2).then(() => {
+                    resolve();
+                }).catch(err => {
+                    console.log(err);
+                })
+            }).catch(err => {
+                console.log(err);
+            })
+        })
+    }
 }

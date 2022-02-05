@@ -1,7 +1,4 @@
-const helpers = require("../helpers/helpers");
-// const clientHelper = require("../helpers/clients-helper");
-// const enquiriesHelper = require("../helpers/enquiries-helper");
-// const userTypeHelper = require("../helpers/usertype-helper");
+
 const mysqlHelper = require('../helpers/mysql-helper');
 const strings = require("../config/strings");
 const { CLIENT_STATUS, CLIENT_TEMPARATURE } = require("../config/strings");

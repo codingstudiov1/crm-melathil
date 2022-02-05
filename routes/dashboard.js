@@ -1,7 +1,6 @@
 var express = require("express");
 var router = express.Router();
 const viewData = { layout: "dashboard-layout" };
-const helpers = require("../helpers/helpers");
 const dashboardController = require("../controllers/dashboard");
 const passport = require('passport');
 let permissions = {};

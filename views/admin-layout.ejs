@@ -31,7 +31,13 @@
 
   <!-- Flatpicker -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
+  <style>
+    @media print {
+      .hidden-print {
+        display: none !important;
+      }
+    }
+  </style>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -231,17 +237,21 @@
               <ul class="nav nav-treeview">
 
                 <li class="nav-item">
-                  <a href="/dashboard/enquiries/all" class="nav-link">
+                  <a href="/admin/enquiries" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>All enquiries</p>
                   </a>
                 </li>
-
-
                 <li class="nav-item">
-                  <a href="/dashboard/enquiries" class="nav-link">
+                  <a href="/admin/enquiries/working" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Enquiry list</p>
+                    <p>Active enquiries</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="/admin/enquiries/closed" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Closed enquiries</p>
                   </a>
                 </li>
 
@@ -329,6 +339,7 @@
   </script>
   <script>
     $(function() {
+      $('#dataTable').DataTable();
       $("#example1").DataTable({
         "responsive": true,
         "lengthChange": false,

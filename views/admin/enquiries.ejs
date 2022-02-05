@@ -1,0 +1,63 @@
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1><%=title %> </h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="/admin">Home</a></li>
+          <li class="breadcrumb-item active"><%=title %></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="table-reponsive mt-2">
+            <table id="dataTable" class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>SL.No</th>
+                  <th>Date</th>
+                  <th>Added Date</th>
+                  <th>Title</th>
+                  <th>Client</th>
+                  <th>Employee</th>
+                  <th>Status</th>
+                  <th>Operations</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% enquiries.forEach((element,index) => { %>
+                <tr>
+                  <td><%= index+1 %></td>
+                  <td><%= moment(element.date).format('DD-MM-YYYY') %> </td>
+                  <td><%= moment(element.addedDate).format('DD-MM-YYYY') %> </td>
+                  <td><%= element.title %> </td>
+                  <td><a href="/admin/clients/<%= element.client %>"><%= element.clientName %></a> </td>
+                  <td><a href="/admin/employees/<%= element.employee %>"><%= element.empName %></a></td>
+                  <td>
+                    <% if (element.status==0) { %>
+                    <span class="badge bg-warning">Active</span>
+                    <% } else if (element.status==1) { %>
+                    <span class="badge bg-success">Closed</span>
+
+                    <% } %>
+                  </td>
+                  <td><a class="btn btn-sm btn-primary" href="/admin/enquiries/<%= element.id %>">View details</a></td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

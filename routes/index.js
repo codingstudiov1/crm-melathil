@@ -1,6 +1,5 @@
 var express = require("express");
 var router = express.Router();
-const helper = require("../helpers/helpers");
 const mysqlConnection = require('../config/mysql-connection');
 const mysqlHelper = require("../helpers/mysql-helper");
 const jwt = require('jsonwebtoken');

@@ -1,6 +1,8 @@
 const { USER_TYPES } = require('../config/strings');
 const mysqlHelper = require('../helpers/mysql-helper');
 const moment = require('moment');
+const countsHelper = require('../helpers/counts-helper');
+
 
 module.exports.loadAdminDashboard = function (req, res, next) {
     res.render('admin/admin-dashboard', { layout: 'admin-layout' });
@@ -60,4 +62,61 @@ module.exports.processApproveUser = function (req, res, next) {
         res.status(200).json({ status: true, message: "User approves" });
     })
 
+}
+
+module.exports.loadEmployeeProfile = async (req, res, next) => {
+    let empId = req.params.id;
+    let monthStart = moment().startOf('month').format('YYYY-MM-DD');
+    let monthEnd = moment().endOf('month').format('YYYY-MM-DD');
+    let enquiriesCount = countsHelper.getEnquiriesCountByUserAndDate(empId, monthStart, monthEnd);
+    res.render('admin/employee-profile', { layout: 'admin-layout', enquiriesCount });
+
+}
+module.exports.loadOpenedEnquiries = async (req, res, next) => {
+    let enquiries = await mysqlHelper.getOpenedEnquiries();
+    console.log(enquiries)
+    res.render('admin/enquiries', { layout: 'admin-layout', enquiries, moment, title: 'Opened Enquiries' });
+}
+
+module.exports.loadAllEnquiries = async (req, res, next) => {
+    let enquiries = await mysqlHelper.getAllEnquiries();
+    res.render('admin/enquiries', { layout: 'admin-layout', enquiries, moment, title: 'All Enquiries' })
+}
+module.exports.loadClosedEnquiries = async (req, res, next) => {
+    let enquiries = await mysqlHelper.getClosedEnquiries();
+    res.render('admin/enquiries', { layout: 'admin-layout', enquiries, moment, title: 'Closed Enquiries' })
+}
+module.exports.loadEnquiryDetails = async (req, res, next) => {
+    let id = req.params.id;
+    let enquiries = await mysqlHelper.getEnquiryDetails(id);
+    req.session.enquirySession = enquiries;
+    console.log(enquiries);
+    res.render('admin/view-enquiry-details', { layout: 'admin-layout', enq: enquiries, moment, title: 'Enquiry Details' })
+}
+module.exports.loadCloseEnquiry = (req, res, next) => {
+    let enquiry = req.session?.enquirySession;
+    console.log(enquiry);
+    if (enquiry == undefined) {
+        res.redirect('/admin/enquiries')
+    }
+    else {
+        res.render('admin/close-enquiry', { layout: 'admin-layout', enquiry: enquiry.enquiry })
+    }
+}
+
+module.exports.processCloseEnquiry = (req, res, next) => {
+
+    let enquiryId = req.session?.enquirySession?.enquiry?.id;
+    req.session.enquirySession = null;
+    console.log(enquiryId);
+    if (enquiryId == undefined) {
+        res.redirect('/admin/enquiries')
+    }
+    else {
+        let data = req.body;
+        console.log(data);
+        mysqlHelper.closeEnquiry(enquiryId, data).then(() => {
+            res.redirect('/admin/enquiries/' + enquiryId);
+        })
+    }
 }
