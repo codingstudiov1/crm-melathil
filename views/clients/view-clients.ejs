@@ -30,7 +30,6 @@
                     <th>Phone</th>
                     <th>Email</th>
                     <th>Type</th>
-                    <th colspan="2">Operations</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -41,8 +40,6 @@
                     <td><%= element.phone %> </td>
                     <td><%= element.email %> </td>
                     <td><%= element.typeName %> </td>
-                    <td><a href="/dashboard/clients/edit/<%= element.clientId %>">Edit</a></td>
-                    <td><a onclick="return confirm('Are you sure to delete <%= element.name %>')" href="/dashboard/clients/delete/<%= element._id %>">Delete</a></td>
                   </tr>
                   <% }) %>
                 </tbody>
