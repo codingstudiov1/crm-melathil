@@ -23,7 +23,7 @@ module.exports.loadWorkingEmployees = function (req, res, next) {
 
 }
 
-module.exports.loadClients = async (req, res, next)=> {
+module.exports.loadClients = async (req, res, next) => {
 
     let clients = await mysqlHelper.getClients();
     res.render('admin/clients-list', { layout: 'admin-layout', clients, title: "List of clients" });
@@ -32,26 +32,26 @@ module.exports.loadEditClient = async (req, res, next) => {
     const clientId = req.params.id;
     const title = "Modify Client Details";
     const formId = "formEditClient";
-    const action = "/dashboard/clients/edit/" + clientId;
+    const action = "/admin/clients/edit/" + clientId;
     const clientData = await mysqlHelper.getClientDetails(clientId);
     req.session.clientId = clientId;
     const clientTypes = await mysqlHelper.getClientTypes();
     res.render("clients/create_edit", { layout: 'dashboard-layout', title, formId, action, clientData, clientTypes });
-  };
+};
 module.exports.processEditClient = async (req, res, next) => {
     let clientId = req.session.clientId;
     let data = req.body;
     mysqlHelper.modifyClientDetails(clientId, data).then(() => {
-      res.redirect('/dashboard/clients')
+        res.redirect('/admin/clients')
     })
-  };
-  module.exports.processDeleteClient = async (req, res, next) => {
+};
+module.exports.processDeleteClient = async (req, res, next) => {
     let clientId = req.params.id;
     clientHelper
-      .deleteClient(clientId)
-      .then(() => res.redirect("/dashboard/clients"));
-  };
-  
+        .deleteClient(clientId)
+        .then(() => res.redirect("/dashboard/clients"));
+};
+
 module.exports.loadClientTypes = function (req, res, next) {
     mysqlHelper.getClientTypes().then((response) => {
         res.render('clients/client-types', { layout: 'admin-layout', clientType: response, title: "List of clients type" });
@@ -145,4 +145,32 @@ module.exports.processCloseEnquiry = (req, res, next) => {
             res.redirect('/admin/enquiries/' + enquiryId);
         })
     }
+}
+module.exports.loadCreateManager = (req, res, next) => {
+    mysqlHelper.getManagers().then(managers => {
+        res.render('admin/create-manager', { layout: 'admin-layout', action: '/admin/create-manager', managers, title: 'Create Manager', manager: {} });
+    })
+}
+module.exports.processCreateManager = (req, res, next) => {
+    let data = req.body;
+    mysqlHelper.createManager(data).then((response) => {
+        res.redirect('/admin/create-manager');
+    })
+}
+module.exports.loadEditManager = (req, res, next) => {
+    let managerId = req.params.id;
+    req.session.manager = managerId;
+    mysqlHelper.getManagerDetails(managerId).then(manager => {
+        mysqlHelper.getManagers().then(managers => {
+            res.render('admin/create-manager', { layout: 'admin-layout', action: '/admin/edit-manager', managers, title: 'Edit Manager', manager: manager[0] });
+        })
+    })
+
+}
+module.exports.processEditManager = (req, res, next) => {
+    let managerId = req.session.manager
+    let data = req.body;
+    mysqlHelper.updateManagerDetails(managerId, data).then((response) => {
+        res.redirect('/admin/create-manager');
+    })
 }

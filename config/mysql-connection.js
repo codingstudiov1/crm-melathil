@@ -6,7 +6,7 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     database: 'melathil',
-    password:'12345678'
+    // password:''
 });
 
 module.exports.select = function (qry) {

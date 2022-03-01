@@ -1,5 +1,6 @@
 var createError = require("http-errors");
 var express = require("express");
+var app = express();
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
@@ -7,13 +8,13 @@ var expressLayouts = require("express-ejs-layouts");
 var session = require('express-session')
 
 
-var indexRouter = require("./routes/index");
-var dashBoardRouter = require("./routes/dashboard");
 const { sessionSecret } = require("./config/strings");
 
+var dashBoardRouter = require("./routes/dashboard");
 var indexRouter = require("./routes/index");
+var loginRouter = require('./routes/login');
+var adminRouter = require('./routes/admin');
 
-var app = express();
 
 // view engine setup
 app.use(expressLayouts);
@@ -37,8 +38,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(session({ secret: 'melathilhardwares', cookie: { maxAge: 24 * 60 * 60 * 1000 } }))
 
 app.use("/", indexRouter);
-app.use('/admin', require('./routes/admin'));
+app.use('/admin', adminRouter);
 app.use("/dashboard", dashBoardRouter);
+app.use('/login', loginRouter);
 
 
 // catch 404 and forward to error handler

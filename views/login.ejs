@@ -1,32 +1,28 @@
 <div class="container">
-    <div class="row">
-        <div class="col-md-5">
-            <div class="card mt-5 shadow">
-                <div class="card-body">
-                    <div class="card-title">
-                        <p class="h3">Login</p>
-                    </div>
-                    <form id="formUserLogin">
-                        <div class="form-group mt-3">
-                            <label for="username">Username</label>
-                            <input type="text" placeholder="Email or Phone" name="username" id="username"
-                                class="form-control">
-                        </div>
-                        <div class="form-group mt-3">
-                            <label for="password"> Password</label>
-                            <input type="password" placeholder="Password" name="password" id="password"
-                                class="form-control">
-                        </div>
-                        <div class="vstack gap-2 mt-3 col-md-8 mx-auto">
-                            <button type="submit" class="btn btn-secondary">Login</button>
-                            <button class="btn btn-outline-secondary">Cancel</button>
-                            <a href="/register">New Employee?</a>
-                            <a href="/forgot-password">Forgot password</a>
-                        </div>
-
-                    </form>
-                </div>
+  <div class="row">
+    <div class="col-md-5">
+      <div class="card mt-5 shadow">
+        <div class="card-body">
+          <div class="card-title">
+            <p class="h3"><%= title %></p>
+          </div>
+          <form onsubmit="processLogin(event)" action="<%= action %>">
+            <div class="form-group mt-3">
+              <label for="username">Username</label>
+              <input type="text" placeholder="Email or Phone" name="username" id="username" class="form-control">
             </div>
+            <div class="form-group mt-3">
+              <label for="password"> Password</label>
+              <input type="password" placeholder="Password" name="password" id="password" class="form-control">
+            </div>
+            <div class="vstack gap-2 mt-3 col-md-8 mx-auto">
+              <button type="submit" class="btn btn-secondary">Login</button>
+              <button class="btn btn-outline-secondary">Cancel</button>
+            </div>
+
+          </form>
         </div>
+      </div>
     </div>
+  </div>
 </div>

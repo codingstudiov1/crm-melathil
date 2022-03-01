@@ -2,11 +2,11 @@ var express = require("express");
 var router = express.Router();
 const dashboardController = require("../controllers/dashboard");
 const verifyLogin = function (req, res, next) {
-  if (!req.session.salesmanSession) {
-    req.session.destroy();
-    res.redirect('/login');
-  }
-  else
+  // if (!req.session.salesmanSession) {
+  //   req.session.destroy();
+  //   res.redirect('/login');
+  // }
+  // else
     next();
 
 }

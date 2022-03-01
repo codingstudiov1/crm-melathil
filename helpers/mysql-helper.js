@@ -8,10 +8,10 @@ const moment = require('moment');
 module.exports = {
     insertUser: (values) => {
         return new Promise(async (resolve, reject) => {
-            var qry = "INSERT INTO `users` (`email`, `phone`, `firstName`, `lastName`, `address`, `dob`, `gender`) VALUES ('" + values.email + "', '" + values.phone + "', '" + values.firstName + "', '" + values.lastName + "', '" + values.address + "', '" + values.dob + "', '" + values.gender + "')";
+            var qry = "INSERT INTO `users` (`email`, `phone`, `firstName`, `lastName`, `address`, `dob`, `gender`,`password`) VALUES ('" + values.email + "', '" + values.phone + "', '" + values.firstName + "', '" + values.lastName + "', '" + values.address + "', '" + values.dob + "', '" + values.gender + "',SHA1('" + values.password + "'))";
             let data = await insert(qry)
-            var qry2 = "insert into logins (userid,password) values(" + data.insertId + ",sha1('" + values.password + "'))"
-            await insert(qry2);
+            // var qry2 = "insert into logins (userid,password) values(" + data.insertId + ",sha1('" + values.password + "'))"
+            // await insert(qry2);
             resolve();
         })
     },
@@ -278,6 +278,53 @@ module.exports = {
             }).catch(err => {
                 console.log(err);
             })
+        })
+    },
+    getAdminLogin: ({ username, password }) => {
+        return new Promise((resolve, reject) => {
+            var qry = `SELECT * FROM admin where USERNAME=${username} AND PASSWORD=SHA1(${password})`;
+            select(qry).then(response => {
+                resolve(response);
+            })
+        })
+    },
+    getManagers: () => {
+        return new Promise((resolve, reject) => {
+            var qry = `SELECT * FROM manager`;
+            select(qry).then(response => {
+                resolve(response);
+            }).catch(err => {
+                console.log(err);
+            })
+        })
+    },
+    createManager: ({ name, username, password }) => {
+        return new Promise((resolve, reject) => {
+            var qry = `INSERT INTO manager (name,username,password) VALUES ('${name}',${username},SHA1('${password}'))`;
+            insert(qry).then((response) => {
+                resolve(response.id)
+            })
+
+        })
+    },
+    getManagerDetails: (id) => {
+        return new Promise((resolve, reject) => {
+            var qry = `SELECT * FROM manager where manager_id=${id}`;
+            select(qry).then(response => {
+                console.log(response)
+                resolve(response);
+            }).catch(err => {
+                console.log(err);
+            })
+        })
+    },
+    updateManagerDetails: (managerId, { name, username }) => {
+        return new Promise((resolve, reject) => {
+            var qry = `UPDATE manager SET name=?,username=? WHERE manager_id=?`;
+            update(qry, [name, username, managerId]).then(() => {
+                resolve();
+            })
+
         })
     }
 }

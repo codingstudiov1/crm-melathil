@@ -1,0 +1,67 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row py-3">
+      <div class="col-md-5">
+        <h1><%= title %> </h1>
+        <div class="card">
+          <div class="card-body">
+            <form action="<%= action %>" onsubmit="processCreateManager(event)" method="post">
+
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" class="form-control" value="<%= manager.name %>">
+              </div>
+
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" class="form-control" value="<%= manager.username %>">
+              </div>
+
+              <% if (!manager?.manager_id) { %>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="text" name="password" id="password" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="confirm">Confirm Password</label>
+                <input type="text" name="confirm" id="confirm" class="form-control">
+              </div>
+              <% } %>
+              <button class="btn btn-primary">Create</button>
+
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-7">
+        <h1>Manager List</h1>
+        <div class="card">
+          <div class="card-body">
+            <% managers.forEach(element => { %>
+            <div class="row">
+              <div class="col-12">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-10">
+                        <div class="d-flex flex-column">
+                          <h4>Name : <%= element.name %></h4>
+                          <h6>Username : <%= element.username %></h6>
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <a href="/admin/manager/<%= element.manager_id %>" class="btn btn-warning btn-block">Edit</a>
+                        <a href="/admin/create-manager" class="btn btn-danger btn-block">Delete</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
