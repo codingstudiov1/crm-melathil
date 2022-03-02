@@ -174,3 +174,10 @@ module.exports.processEditManager = (req, res, next) => {
         res.redirect('/admin/create-manager');
     })
 }
+
+module.exports.processDeleteManager = (req, res, next) => {
+    let managerId = req.params.id;
+    mysqlHelper.deleteManager(managerId).then(()=>{
+        res.redirect('/admin/create-manager');
+    })
+}

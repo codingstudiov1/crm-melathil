@@ -14,7 +14,7 @@ var dashBoardRouter = require("./routes/dashboard");
 var indexRouter = require("./routes/index");
 var loginRouter = require('./routes/login');
 var adminRouter = require('./routes/admin');
-
+var managerRouter = require('./routes/manager');
 
 // view engine setup
 app.use(expressLayouts);
@@ -41,7 +41,7 @@ app.use("/", indexRouter);
 app.use('/admin', adminRouter);
 app.use("/dashboard", dashBoardRouter);
 app.use('/login', loginRouter);
-
+app.use('/manager', managerRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

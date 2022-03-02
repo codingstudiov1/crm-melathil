@@ -40,4 +40,5 @@ router.get('/create-manager', verifyLogin, AdminController.loadCreateManager);
 router.post('/create-manager', verifyLogin, AdminController.processCreateManager);
 router.get('/manager/:id', verifyLogin, AdminController.loadEditManager);
 router.post('/edit-manager', verifyLogin, AdminController.processEditManager);
+router.get('/delete-manager/:id',verifyLogin,AdminController.processDeleteManager);
 module.exports = router;

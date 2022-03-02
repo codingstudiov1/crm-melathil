@@ -326,5 +326,16 @@ module.exports = {
             })
 
         })
+    },
+    deleteManager: (id) => {
+        return new Promise((resolve, reject) => {
+            var qry = `DELETE FROM manager WHERE manager_id=${id}`;
+            insert(qry).then(() => {
+                resolve();
+            }).catch(er => {
+                console.log(er)
+            })
+
+        })
     }
 }
