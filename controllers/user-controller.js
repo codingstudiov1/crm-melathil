@@ -9,7 +9,7 @@ const extra = { route: '/dashboard', layout: 'dashboard-layout' };
 
 module.exports.loadDashHome = async (req, res, next) => {
   let counts = {};
-  let userId = 2;
+  let userId = 1;
   let today = moment().format('YYYY-MM-DD');
   let monthStart = moment().startOf('month').format('YYYY-MM-DD');
   let monthEnd = moment().endOf('month').format('YYYY-MM-DD');
@@ -71,7 +71,7 @@ module.exports.processClientTypeCreate = function (req, res, next) {
 module.exports.loadEnquiries = async (req, res, next) => {
   viewData.title = "Enquiries";
   let userSession = req.session.userSession;
-  let enquiries = await mysqlHelper.getEnquiryByUser(2);
+  let enquiries = await mysqlHelper.getEnquiryByUser(1);
   res.render("enquiries/view-enquiries", { layout: 'dashboard-layout', enquiries, title: "Enquiries", moment });
 };
 module.exports.loadCreateEnquiries = async (req, res, next) => {
@@ -84,7 +84,7 @@ module.exports.loadCreateEnquiries = async (req, res, next) => {
 };
 module.exports.processCreateEnquiry = (req, res, next) => {
   let enquiryData = req.body;
-  enquiryData.user = 2;
+  enquiryData.user = 1;
   mysqlHelper.createEnquiry(enquiryData).then(() => {
     res.redirect('/dashboard/enquiries');
   })
@@ -93,7 +93,7 @@ module.exports.processCreateEnquiry = (req, res, next) => {
 module.exports.loadViewEnquiries = (req, res, next) => {
   let enqId = req.params.id;
   req.session.enquiryId = enqId;
-  let user = 2;
+  let user = 1;
   viewData.title = "Enquiry Details ";
   mysqlHelper.getEnquiryDetailsByUser(enqId, user).then((details) => {
     res.render("enquiries/view_enuiry_details", { layout: 'dashboard-layout', title: "Enquiry Details", enq: details, moment });
@@ -120,7 +120,7 @@ module.exports.processEnquiryUpdateCreate = (req, res, next) => {
     .then(() => res.redirect("/dashboard/enquiries/view/" + enqId));
 };
 module.exports.loadEnquiryReportRequest = async (req, res, next) => {
-  let user = 2;//To be replaced by session value;
+  let user = 1;//To be replaced by session value;
   let clients = await mysqlHelper.getClients();
   let temparature = CLIENT_TEMPARATURE;
   let status = CLIENT_STATUS;

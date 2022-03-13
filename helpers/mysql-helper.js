@@ -396,5 +396,31 @@ module.exports = {
                 console.log(err);
             })
         })
+    },
+    approveUserByManager: (managerId, userId) => {
+        return new Promise((resolve, reject) => {
+            let qry =
+                `UPDATE USERS SET STATUS=?,MANAGER=? WHERE ID=?`;
+            update(qry, [ACTIVE_STATUS, managerId, userId]).then(() => {
+                resolve()
+            }).catch(error => {
+                console.log(error);
+            })
+        })
+    },
+    getReports: (fromDate, toDate) => {
+        return new Promise(async (resolve, reject) => {
+            let qry = `SELECT * FROM ENQUIRY WHERE DATE BETWEEN '${fromDate}' AND '${toDate}'`;
+            let response = await select(qry);
+            resolve(response);
+        })
+    },
+    getActiveEnquiryByManager: (managerId, { user }) => {
+        user == undefined ? user = '' : user;
+        return new Promise(async (resolve, reject) => {
+            let qry = `SELECT e.*,u.firstName,u.lastName,c.name as client_name,c.designation FROM enquiry e INNER JOIN users u ON e.employee=u.id INNER JOIN clients c ON e.client=c.id WHERE client LIKE('%${user}%') AND employee IN(SELECT ID FROM users WHERE manager=${managerId})`
+            let response = await select(qry);
+            resolve(response);
+        })
     }
 }

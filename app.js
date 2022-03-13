@@ -10,7 +10,7 @@ var session = require('express-session')
 
 const { sessionSecret } = require("./config/strings");
 
-var dashBoardRouter = require("./routes/dashboard");
+var userRouter = require("./routes/user");
 var indexRouter = require("./routes/index");
 var loginRouter = require('./routes/login');
 var adminRouter = require('./routes/admin');
@@ -39,7 +39,7 @@ app.use(session({ secret: 'melathilhardwares', cookie: { maxAge: 24 * 60 * 60 * 
 
 app.use("/", indexRouter);
 app.use('/admin', adminRouter);
-app.use("/dashboard", dashBoardRouter);
+app.use("/user", userRouter);
 app.use('/login', loginRouter);
 app.use('/manager', managerRouter);
 

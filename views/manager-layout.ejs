@@ -28,9 +28,12 @@
   <link rel="stylesheet" href="/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-
   <!-- Flatpicker -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <!-- Date Range Picker -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.js" integrity="sha512-uLlukEfSLB7gWRBvzpDnLGvzNUluF19IDEdUoyGAtaO0MVSBsQ+g3qhLRL3GTVoEzKpc24rVT6X1Pr5fmsShBg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
   <style>
     @media print {
       .hidden-print {
@@ -266,10 +269,9 @@
   </div>
   <!-- ./wrapper -->
 
-  <!-- jQuery -->
+   <!-- jQuery -->
   <!-- <script src="../plugins/jquery/jquery.min.js"></script> -->
   <script src="/javascripts/jquery-3.6.0.js"></script>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="/javascripts/script.js"></script>
   <!-- Bootstrap 4 -->
   <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -277,7 +279,6 @@
   <script src="/dist/js/adminlte.min.js"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="/dist/js/demo.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <!-- DataTables  & Plugins -->
   <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -292,7 +293,16 @@
   <script src="/plugins/datatables-buttons/js/buttons.print.min.js"></script>
   <script src="/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
   <!-- flatpicker -->
+  <!-- Date Range Picker -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <!-- Axios -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <script>
     $('.flatpicker').flatpickr();
     $('#select2').select2();
@@ -300,7 +310,6 @@
   </script>
   <script>
     $(function() {
-      $('#dataTable').DataTable();
       $("#example1").DataTable({
         "responsive": true,
         "lengthChange": false,
@@ -309,6 +318,34 @@
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     })
   </script>
+  <script type="text/javascript">
+    $(function() {
+
+      var start = moment().subtract(0, 'days');
+      var end = moment();
+
+      function cb(start, end) {
+        $('#reportrange span').html(start.format('DD-MM-YYYY') + ' - ' + end.format('DD-MM-YYYY'));
+      }
+
+      $('#reportrange').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+          'Today': [moment(), moment()],
+          'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+          'This Month': [moment().startOf('month'), moment().endOf('month')],
+          'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+      }, cb);
+
+      cb(start, end);
+
+    });
+  </script>
+  <script src="/javascripts/melathil.js"></script>
 </body>
 
 </html>

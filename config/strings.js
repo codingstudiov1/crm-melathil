@@ -28,8 +28,13 @@ module.exports = {
     "WARM",
     "COLD"
   ],
-  USER_TYPES:[
-    "salesman",
-    "manager"
+  USER_TYPES: [
+    "SHOWROOM",
+    "FIELD",
+  ],
+  ENQUIRY_PROIRITY: [
+    "Class A",
+    "Class B",
+    "Class C"
   ]
 };

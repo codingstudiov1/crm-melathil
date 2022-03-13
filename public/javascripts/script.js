@@ -38,7 +38,7 @@ $(document).ready(function () {
           document
             .querySelector("#btnClose")
             .addEventListener("click", function () {
-              window.location.replace("/");
+              window.location.replace("/login/user");
             });
         },
         error: (error) => {

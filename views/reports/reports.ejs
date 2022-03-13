@@ -1,0 +1,87 @@
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>
+          <%= title %>
+        </h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="<%= route %>/">Home</a></li>
+          <li class="breadcrumb-item active">
+            <%= title %>
+          </li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="row">
+    <div class="col-6">
+      <div class="card">
+        <div class="card-body">
+          <form action="<%= route %>/reports" onsubmit="getReport(event)" method="get">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                    <label for="salesman">Salesman</label>
+                    <select name="user" id="user" class="form-control">
+                        <option value="">Select</option>
+                        <% users.forEach(element => { %>
+                            <option value="<%= element.id %>"><%= `${element.firstName} ${element.lastName}` %></option>
+                        <% }) %>
+                    </select>
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<% if (report.length>0) { %>
+<section>
+  <div class="mt-3">
+    <div class="card">
+      <div class="card-body">
+          <div class="modal-header">
+              <h6><%= text %></h6>
+          </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+
+              </tr>
+            </thead>
+            <tbody>
+              <% report.forEach(element => { %>
+              <tr>
+                <td><%= element.enquiryid %> </td>
+                <td><%= moment(element.date).format('DD-MM-YYYY') %></td>
+                <td><%= element.title %></td>
+                <td><%= element.title %></td>
+                <td><%= element.status %></td>
+                <td><%= element.closeddate %></td>
+                <td><%= element.amount %></td>
+                <td><%= element.client_name %></td>
+
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<% } %>
