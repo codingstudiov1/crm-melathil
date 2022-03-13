@@ -5,6 +5,7 @@ const { CLIENT_STATUS, CLIENT_TEMPARATURE } = require("../config/strings");
 const viewData = { layout: "dashboard-layout" };
 var moment = require("moment");
 const countsHelper = require("../helpers/counts-helper");
+const extra = { route: '/dashboard', layout: 'dashboard-layout' };
 
 module.exports.loadDashHome = async (req, res, next) => {
   let counts = {};
@@ -120,16 +121,20 @@ module.exports.processEnquiryUpdateCreate = (req, res, next) => {
 };
 module.exports.loadEnquiryReportRequest = async (req, res, next) => {
   let user = 2;//To be replaced by session value;
-  let quiries = req.query;
-  console.log(quiries);
   let clients = await mysqlHelper.getClients();
   let temparature = CLIENT_TEMPARATURE;
   let status = CLIENT_STATUS;
-
-  res.render('reports/client-enquiry-report', { layout: 'dashboard-layout', title: "Get Report", status, temparature, clients });
+  res.render('reports/client-enquiry-report', { layout: 'dashboard-layout', title: "Get Report", status, temparature, clients, enquiries: [] });
 
 }
-
+module.exports.processEnquiryReportRequest = async (req, res, next) => {
+  let query = req.query;
+  let clients = await mysqlHelper.getClients();
+  mysqlHelper.filterEnquiries(query).then((response) => {
+    console.log(response);
+    res.render('reports/client-enquiry-report', { moment, layout: 'dashboard-layout', title: 'Search Report', status: CLIENT_STATUS, temparature: CLIENT_TEMPARATURE, clients, enquiries: response })
+  })
+}
 module.exports.loadTodaysReport = (req, res, next) => {
   let today = moment().format('YYYY-MM-DD');
   console.log(today)

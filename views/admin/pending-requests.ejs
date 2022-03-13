@@ -26,8 +26,8 @@
             <h6><%= element.email %> </h6>
             <h6><%= element.gender %> </h6>
             <div class="d-flex justify-content-start">
-              <a href="/admin/approve-user/<%= element.id %> " class="btn btn-sm btn-success mr-2">Approve</a>
-              <a href="/dashboard/employees/requests/reject/<%= element.employeeId %> " class="btn btn-sm btn-danger mr-2"> Reject</a>
+              <a href="<%= route %>/approve-user/<%= element.id %> " class="btn btn-sm btn-success mr-2">Approve</a>
+              <a href="<%= route %>/employees/requests/reject/<%= element.employeeId %> " class="btn btn-sm btn-danger mr-2"> Reject</a>
             </div>
           </div>
         </div>

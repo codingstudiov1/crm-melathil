@@ -1,0 +1,82 @@
+<section class="pt-3">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <h4>
+            <div class="modal-header">Users Under Me</div>
+          </h4>
+          <div class="my-3">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <td>Id</td>
+                    <td>Name</td>
+                    <td>Gender</td>
+                    <td>Phone</td>
+                    <td>Email</td>
+                    <td></td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% users.forEach((element,index) => { %>
+                  <tr>
+                    <td><%= element.id%></td>
+                    <td><%= element.firstName %> <%= element.lastName %></td>
+                    <td><%= element.gender %></td>
+                    <td><%= element.phone %></td>
+                    <td><%= element.email %></td>
+                    <td><a class="btn btn-sm btn-secondary" href="#">View deails</a></td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="py-3">
+  <div class="row">
+    <div class="col-md-10">
+      <div class="card">
+        <div class="card-body">
+          <h4>
+            <div class="modal-header">Add to users list</div>
+          </h4>
+          <div class="mt-3">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <td>Id</td>
+                    <td>Name</td>
+                    <td>Gender</td>
+                    <td>Phone</td>
+                    <td>Email</td>
+                    <td></td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <% unManaged.forEach((element,index) => { %>
+                    <td><%= element.id%></td>
+                    <td><%= element.firstName %> <%= element.lastName %></td>
+                    <td><%= element.gender %></td>
+                    <td><%= element.phone %></td>
+                    <td><%= element.email %></td>
+                    <td><a class="btn btn-secondary" href="/manager/add-to-user/<%= element.id%>">Allocate Manager</a></td>
+                    <% }) %>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

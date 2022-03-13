@@ -15,6 +15,7 @@ const verifyLogin = function (req, res, next) {
 router.get('/', verifyLogin, AdminController.loadAdminDashboard);
 router.get('/employee-requests', verifyLogin, AdminController.loadPendingRequests);
 router.get('/working-employees', verifyLogin, AdminController.loadWorkingEmployees);
+router.get('/resigned-employees', verifyLogin, AdminController.loadResignedEmployees);
 router.get('/approve-user/:id', verifyLogin, AdminController.loadApproveEmployees)
 router.post('/approve-user', verifyLogin, AdminController.processApproveUser)
 

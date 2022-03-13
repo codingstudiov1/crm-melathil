@@ -1,5 +1,5 @@
 const { select, insert, update } = require("../config/mysql-connection");
-const { PENDING_STATUS, ACTIVE_STATUS } = require("../config/strings");
+const { PENDING_STATUS, ACTIVE_STATUS, RESIGN_STATUS } = require("../config/strings");
 const Promise = require('promise');
 const moment = require('moment');
 
@@ -10,9 +10,7 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             var qry = "INSERT INTO `users` (`email`, `phone`, `firstName`, `lastName`, `address`, `dob`, `gender`,`password`) VALUES ('" + values.email + "', '" + values.phone + "', '" + values.firstName + "', '" + values.lastName + "', '" + values.address + "', '" + values.dob + "', '" + values.gender + "',SHA1('" + values.password + "'))";
             let data = await insert(qry)
-            // var qry2 = "insert into logins (userid,password) values(" + data.insertId + ",sha1('" + values.password + "'))"
-            // await insert(qry2);
-            resolve();
+            resolve(data);
         })
     },
     doLogin: function (username, password) {
@@ -51,20 +49,40 @@ module.exports = {
             }
         })
     },
-    getPendingUsers: function () {
+
+    getUserByStatus: (status) => {
         return new Promise(async (resolve, reject) => {
-            let qry = "SELECT * FROM USERS WHERE STATUS = '" + PENDING_STATUS + "'";
+            let qry = "SELECT * FROM USERS WHERE STATUS = '" + status + "'";
             let requests = await select(qry);
             resolve(requests);
         })
     },
-    getActiveUsers: function () {
-        return new Promise(async (resolve, reject) => {
-            let qry = "SELECT * FROM USERS U INNER JOIN LOGINS L ON U.ID = L.USERID WHERE U.STATUS = '" + ACTIVE_STATUS + "' AND L.USERTYPE !='admin'";
-            let requests = await select(qry);
-            resolve(requests);
-        })
-    },
+    // getPendingUsers: function () {
+    //     return new Promise(async (resolve, reject) => {
+    //         let qry = "SELECT * FROM USERS WHERE STATUS = '" + PENDING_STATUS + "'";
+    //         let requests = await select(qry);
+    //         resolve(requests);
+    //     })
+    // },
+    // getActiveUsers: function () {
+    //     return new Promise(async (resolve, reject) => {
+    //         let qry = "SELECT * FROM USERS U  WHERE U.STATUS = '" + ACTIVE_STATUS + "'";
+    //         let requests = await select(qry);
+    //         resolve(requests);
+    //     })
+    // },
+
+    // getResignedUsers: () => {
+    //     return new Promise((resolve, reject) => {
+    //         let qry = `SELECT * FROM USERS WHERE STATUS = '${RESIGN_STATUS}'`;
+    //         select(qry).then(response => {
+    //             resolve(response);
+    //         })
+    //             .catch(error => {
+    //                 console.log(error);
+    //             })
+    //     })
+    // },
     createClientType: (typeName) => {
         return new Promise(async (resolve, reject) => {
             let qry = "INSERT INTO client_types (name) VALUES ('" + typeName + "')";
@@ -336,6 +354,47 @@ module.exports = {
                 console.log(er)
             })
 
+        })
+    },
+    getUsersByManager: (id) => {
+        return new Promise((resolve, reject) => {
+            var qry = `SELECT * FROM users WHERE manager=${id}`;
+            select(qry).then((response) => {
+                resolve(response);
+            })
+        })
+    },
+    getNoManagerUsers: () => {
+        return new Promise((resolve, reject) => {
+            var qry = `SELECT * FROM users WHERE manager = 0 AND status='${ACTIVE_STATUS}'`;
+            select(qry).then((response) => {
+                resolve(response);
+            })
+        })
+    },
+    allocateManager: (id, user) => {
+        return new Promise((resolve, reject) => {
+            var qry = `UPDATE users SET manager = ? WHERE id=?`;
+            update(qry, [id, user]).then(() => {
+                resolve();
+            }).catch(err => {
+                console.log(err);
+            })
+        })
+    },
+    filterEnquiries: (queries) => {
+        let { startDate, endDate } = queries;
+        return new Promise((resolve, reject) => {
+            let qry = `SELECT EN.*,ED.*,CL.name AS 'client_name' FROM ENQUIRY EN 
+            INNER JOIN CLIENTS CL ON EN.client = CL.id
+            INNER JOIN ENQUIRY_DETAILS ED ON ED.enquiryid = EN.id
+            WHERE ED.DATE BETWEEN '${moment(startDate).format('YYYY-MM-DD')}' AND '${moment(endDate).format('YYYY-MM-DD')}'`;
+            console.log(qry);
+            select(qry).then(data => {
+                resolve(data);
+            }).catch(err => {
+                console.log(err);
+            })
         })
     }
 }

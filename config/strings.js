@@ -20,7 +20,8 @@ module.exports = {
     "Selection Changed",
     "Quotation Prepared",
     "Billed",
-    "Delivered"
+    "Delivered",
+    "Closed"
   ],
   CLIENT_TEMPARATURE: [
     "HOT",
