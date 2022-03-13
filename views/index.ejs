@@ -1,1 +1,9 @@
-
+<section>
+  <div class="row d-flex justify-content-center m-3">
+    <% routes.forEach(element => { %>
+    <div class="col-md-3  mt-3">
+        <a style="text-transform:capitalize ;" class="btn btn-primary w-100" href="/login/<%= element %>"><%= element %> </a>
+    </div>
+    <% }) %>
+  </div>
+</section>

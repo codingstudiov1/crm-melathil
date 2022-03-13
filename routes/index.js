@@ -1,14 +1,12 @@
 var express = require("express");
 var router = express.Router();
-const mysqlConnection = require('../config/mysql-connection');
-const mysqlHelper = require("../helpers/mysql-helper");
-const jwt = require('jsonwebtoken');
 const { TOKEN_KEY } = require("../config/strings");
-const IndexController = require('../controller/index-controller');
+const IndexController = require('../controllers/index-controller');
 
 
 
 router.get("/", IndexController.loadIndexPage);
+
 // router.get("/login", function (req, res, next) {
 //   if (req.session.userSession) {
 //     res.redirect('/dashboard/home')
@@ -36,9 +34,7 @@ router.get("/", IndexController.loadIndexPage);
 //   })
 
 // });
-router.get("/register", function (req, res, next) {
-  res.render("employees/register-employee");
-});
+router.get("/register",);
 router.post("/register", (req, res, next) => {
   let userData = req.body;
   mysqlHelper.insertUser(userData).then(() => {
@@ -53,9 +49,5 @@ router.post("/register", (req, res, next) => {
   });
 });
 
-router.get('/logout', (req, res, next) => {
-  req.session.destroy();
-  res.redirect('/login/user');
-})
 
 module.exports = router;

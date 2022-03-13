@@ -10,11 +10,11 @@ var session = require('express-session')
 
 const { sessionSecret } = require("./config/strings");
 
-var userRouter = require("./routes/user");
 var indexRouter = require("./routes/index");
 var loginRouter = require('./routes/login');
-var adminRouter = require('./routes/admin');
-var managerRouter = require('./routes/manager');
+// var userRouter = require("./routes/user");
+// var adminRouter = require('./routes/admin');
+// var managerRouter = require('./routes/manager');
 const { createConnection } = require("./config/connection");
 
 // view engine setup
@@ -40,10 +40,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(session({ secret: 'melathilhardwares', cookie: { maxAge: 24 * 60 * 60 * 1000 } }))
 
 app.use("/", indexRouter);
-app.use('/admin', adminRouter);
-app.use("/user", userRouter);
 app.use('/login', loginRouter);
-app.use('/manager', managerRouter);
+// app.use('/admin', adminRouter);
+// app.use("/user", userRouter);
+// app.use('/manager', managerRouter);
 
 
 createConnection().then(() => {
