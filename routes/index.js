@@ -4,12 +4,11 @@ const mysqlConnection = require('../config/mysql-connection');
 const mysqlHelper = require("../helpers/mysql-helper");
 const jwt = require('jsonwebtoken');
 const { TOKEN_KEY } = require("../config/strings");
+const IndexController = require('../controller/index-controller');
 
 
-/* GET home page. */
-router.get("/", function (req, res, next) {
-  // res.redirect("/login");
-});
+
+router.get("/", IndexController.loadIndexPage);
 // router.get("/login", function (req, res, next) {
 //   if (req.session.userSession) {
 //     res.redirect('/dashboard/home')

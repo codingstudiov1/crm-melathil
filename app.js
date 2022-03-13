@@ -15,6 +15,7 @@ var indexRouter = require("./routes/index");
 var loginRouter = require('./routes/login');
 var adminRouter = require('./routes/admin');
 var managerRouter = require('./routes/manager');
+const { createConnection } = require("./config/connection");
 
 // view engine setup
 app.use(expressLayouts);
@@ -24,11 +25,12 @@ app.use(
     cookie: { maxAge: 24 * 60 * 60 * 1000 },
   })
 );
-// app.set('layout','layouts/layout');
+
+
+
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-// db.createLogConnection();
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -42,6 +44,13 @@ app.use('/admin', adminRouter);
 app.use("/user", userRouter);
 app.use('/login', loginRouter);
 app.use('/manager', managerRouter);
+
+
+createConnection().then(() => {
+  console.log('Connected to mongodb');
+}).catch(error => {
+  console.log(error);
+})
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

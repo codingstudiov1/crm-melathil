@@ -1,9 +1,6 @@
 module.exports = {
   TOKEN_KEY: 'melathil_hardwares',
-  localDatabase: "mongodb://localhost:27017/melathil",
-  logDatabaseUrl: "mongodb://localhost:27017/testdatabase_log",
-  databaseUrl:
-    "mongodb+srv://admin01:AeEQx6Opc9D5VnM9@cluster0.v7spe.mongodb.net/testdatabase?retryWrites=true&w=majority",
+  localDatabase: "mongodb://localhost:27017/mmanagement",
   ACTIVE_STATUS: 'active',
   REJECT_STATUS: 'rejected',
   PENDING_STATUS: 'pending',

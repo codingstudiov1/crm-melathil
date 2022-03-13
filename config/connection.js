@@ -2,17 +2,14 @@ const mongoose = require("mongoose");
 const strings = require("../config/strings");
 
 module.exports.createConnection = () => {
-  mongoose
-    .connect(strings.localDatabase)
-    .then(() => {
-      console.info("Main Database Connected");
-    })
-    .catch((error) => {
-      console.error("Failed to connect Mongodb\n", error);
-    });
+  return new Promise((resolve, reject) => {
+    mongoose
+      .connect(strings.localDatabase)
+      .then(() => {
+        resolve("Main Database Connected");
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  })
 };
-// module.exports.createLogConnection = () => {
-//   mongoose.connect(strings.logDatabaseUrl)
-//     .then(() => console.log("Log database connected"))
-//     .catch((error) => console.error(error));
-// }
