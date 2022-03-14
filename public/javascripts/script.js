@@ -27,7 +27,7 @@ $(document).ready(function () {
       let data = $(this).serialize();
       console.log(data);
       $.ajax({
-        url: "/register",
+        url: evt.target.action,
         method: "post",
         data: data,
         success: (response) => {

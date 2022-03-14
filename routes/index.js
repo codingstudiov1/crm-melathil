@@ -1,11 +1,20 @@
 var express = require("express");
 var router = express.Router();
+const { body } = require('express-validator');
 const { TOKEN_KEY } = require("../config/strings");
 const IndexController = require('../controllers/index-controller');
-
+const User = require('../models/user-model');
 
 
 router.get("/", IndexController.loadIndexPage);
+router.get("/register", IndexController.loadRegistrationPage);
+router.post("/register", body('email').custom((value) => {
+  return User.findOne({ email: value }).then(user => {
+    if (user) {
+      return Promise.reject('Email already exist');
+    }
+  })
+}), IndexController.processEmployeeRegistration);
 
 // router.get("/login", function (req, res, next) {
 //   if (req.session.userSession) {
@@ -34,20 +43,7 @@ router.get("/", IndexController.loadIndexPage);
 //   })
 
 // });
-router.get("/register",);
-router.post("/register", (req, res, next) => {
-  let userData = req.body;
-  mysqlHelper.insertUser(userData).then(() => {
-    res.json({
-      message:
-        "Employee " +
-        userData.firstName +
-        " " +
-        userData.lastName +
-        " is created successfully..Please wait for admin authentication..",
-    })
-  });
-});
+
 
 
 module.exports = router;
