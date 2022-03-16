@@ -14,20 +14,25 @@ module.exports.loadRegistrationPage = function (req, res, next) {
 
 module.exports.processEmployeeRegistration = (req, res, next) => {
 
-    const errors = validationResult(req);
-    console.log(errors.formatter);
     let userData = req.body;
-    commonHelpers.createUser(userData).then((response) => {
+    commonHelpers.userPhoneDuplication(userData.phone).then(response => {
+        if (response) res.json({ message: 'Phone number alredy registered' });
+        else return commonHelpers.userEmailDuplication(userData.email)
+    }).then((response) => {
+        if (response) res.json({ message: 'Email alredy registered' });
+        else return commonHelpers.createUser(userData)
+    }).then(() => {
         res.json({
+            status: true,
             message:
                 "Employee " +
                 userData.firstName +
                 " " +
                 userData.lastName +
                 " is created successfully..Please wait for admin authentication..",
-        }).catch(error => {
-            console.log(error);
         })
+    }).catch(error => {
+        res.json(error);
     })
     // mysqlHelper.insertUser(userData).then(() => {
     //     res.json({

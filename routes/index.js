@@ -8,13 +8,7 @@ const User = require('../models/user-model');
 
 router.get("/", IndexController.loadIndexPage);
 router.get("/register", IndexController.loadRegistrationPage);
-router.post("/register", body('email').custom((value) => {
-  return User.findOne({ email: value }).then(user => {
-    if (user) {
-      return Promise.reject('Email already exist');
-    }
-  })
-}), IndexController.processEmployeeRegistration);
+router.post("/register", IndexController.processEmployeeRegistration);
 
 // router.get("/login", function (req, res, next) {
 //   if (req.session.userSession) {

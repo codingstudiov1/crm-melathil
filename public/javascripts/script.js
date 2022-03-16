@@ -1,3 +1,7 @@
+
+
+
+
 $(document).ready(function () {
   $('#loader').hide();
   $('#formCreateClientType').on("submit", function (evt) {
@@ -25,29 +29,25 @@ $(document).ready(function () {
     if ($("#formRegisterEmployee").valid()) {
       $("#loader").show();
       let data = $(this).serialize();
-      console.log(data);
-      $.ajax({
-        url: evt.target.action,
-        method: "post",
-        data: data,
-        success: (response) => {
-          $("#loader").hide();
-          document.querySelector("#successModalBody").innerHTML =
-            response.message;
+      axios.post(evt.target.action, data).then((response) => {
+        $("#loader").hide();
+        console.log(response.data);
+        if (response.data.status) {
+          document.querySelector("#successModalBody").innerHTML = response.data.message;
           success.show();
           document
             .querySelector("#btnClose")
             .addEventListener("click", function () {
               window.location.replace("/login/user");
             });
-        },
-        error: (error) => {
-          $("#loader").hide();
-          document.querySelector("#successModalBody").innerHTML =
-            error.responseJSON.message;
+        }
+        else{
+          document.querySelector("#successModalBody").innerHTML = response.data.message;
           success.show();
-        },
-      });
+        }
+
+      })
+     
     }
   });
 
