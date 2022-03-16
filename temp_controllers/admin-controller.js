@@ -34,52 +34,27 @@ module.exports.loadRejectedEmployees = (req,res,next)=>{
 
 module.exports.loadClients = async (req, res, next) => {
 
-    let clients = await mysqlHelper.getClients();
-    res.render('admin/clients-list', { ...extra, clients, title: "List of clients" });
+    
 }
 module.exports.loadEditClient = async (req, res, next) => {
-    const clientId = req.params.id;
-    const title = "Modify Client Details";
-    const formId = "formEditClient";
-    const action = "/admin/clients/edit/" + clientId;
-    const clientData = await mysqlHelper.getClientDetails(clientId);
-    req.session.clientId = clientId;
-    const clientTypes = await mysqlHelper.getClientTypes();
-    res.render("clients/create_edit", { ...extra, title, formId, action, clientData, clientTypes });
+    
 };
 module.exports.processEditClient = async (req, res, next) => {
-    let clientId = req.session.clientId;
-    let data = req.body;
-    mysqlHelper.modifyClientDetails(clientId, data).then(() => {
-        res.redirect('/admin/clients')
-    })
+   
 };
 module.exports.processDeleteClient = async (req, res, next) => {
-    let clientId = req.params.id;
-    clientHelper
-        .deleteClient(clientId)
-        .then(() => res.redirect("/dashboard/clients"));
+  
 };
 
 module.exports.loadClientTypes = function (req, res, next) {
-    mysqlHelper.getClientTypes().then((response) => {
-        res.render('clients/client-types', { ...extra, clientType: response, title: "List of clients type" });
-
-    })
+   
 }
 module.exports.loadClientTypeCreate = function (req, res, next) {
 
-    res.render('clients/client-type-create_edit',
-        {
-            ...extra,
-            title: "Create Clients Type", formId: "formCreateClientType", clientType: {},
-        });
+   
 }
 module.exports.processCreateClientType = function (req, res, next) {
-    const { typeName } = req.body;
-    mysqlHelper.createClientType(typeName).then(() => {
-        res.status(200).json({ status: true, message: "Client type " + typeName + " created succesfully" })
-    })
+    
 }
 module.exports.loadApproveEmployees = function (req, res, next) {
     let userId = req.params.id;

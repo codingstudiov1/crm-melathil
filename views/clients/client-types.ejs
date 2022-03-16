@@ -8,7 +8,7 @@
       </div>
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="/admin">Home</a></li>
+          <li class="breadcrumb-item"><a href="/<%= route %>">Home</a></li>
           <li class="breadcrumb-item active">
             <%= title %>
           </li>
@@ -20,7 +20,7 @@
 <section>
   <div class="content">
     <div class="container">
-      <a class="btn btn-primary mb-3" href="/admin/create-client-type">Create new</a>
+      <a class="btn btn-primary mb-3" href="/<%= route %>/create-client-type">Create new</a>
       <div class="row">
         <div class="col-md-8">
           <div class="table-responsive">
@@ -31,7 +31,9 @@
                     <tr>
                       <th>Serial</th>
                       <th>Name</th>
+                      <% if (route=='admin') { %>
                       <th colspan="2">Operaton</th>
+                      <% } %>
                     </tr>
                   </thead>
                   <tbody>
@@ -41,12 +43,14 @@
                         <%= index+1 %>
                       </td>
                       <td>
-                        <%= element.name %>
+                        <%= element.type_name %>
                       </td>
-                      <td><a class="text-primary" onclick="return confirm('Are you sure to modify')" href="/admin/modify-client-type/<%= element._id %> ">Edit</a>
+                      <% if (route=='admin') { %>
+                      <td><a class="text-primary" onclick="return confirm('Are you sure to modify')" href="/<%= route %>/modify-client-type/<%= element._id %> ">Edit</a>
                       </td>
-                      <td><a class="text-danger" onclick="return confirm('Are you sure to delete')" href="/admin/delete-client-type/<%= element._id %> ">Delete</a>
+                      <td><a class="text-danger" onclick="return confirm('Are you sure to delete')" href="/<%= route %>/delete-client-type/<%= element._id %> ">Delete</a>
                       </td>
+                      <% } %>
 
                     </tr>
                     <% }) %>
