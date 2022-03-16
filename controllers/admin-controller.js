@@ -1,6 +1,50 @@
+const { PENDING_STATUS, ACTIVE_STATUS, RESIGN_STATUS, REJECT_STATUS, USER_TYPES } = require("../config/strings");
 const clientsHelper = require("../helpers/clients-helper");
+const userHelpers = require("../helpers/user-helpers");
+const moment = require('moment');
 
-const extra = { layout: 'admin-layout', route: 'admin' };
+const extra = { layout: 'admin-layout', route: 'admin', moment };
+
+
+module.exports.loadPendingRequests = function (req, res, next) {
+    userHelpers.getUsersByStatus(PENDING_STATUS).then((requests) => {
+        res.render('admin/pending-requests', { ...extra, pendingRequests: requests })
+    })
+
+}
+module.exports.loadApproveEmployees = function (req, res, next) {
+    let userId = req.params.id;
+    userHelpers.getSingleUser({ _id: userId, user_status: PENDING_STATUS }).then((user) => {
+        req.session.approveUserId = userId;
+        res.render('admin/approve-user', { ...extra, types: USER_TYPES, user })
+    })
+}
+module.exports.processApproveUser = function (req, res, next) {
+    let userId = req.session.approveUserId;
+    req.session.approveUserId = null;
+    let data = req.body;
+    data.user_status = ACTIVE_STATUS;
+    userHelpers.updateUsers(userId, data).then(() => {
+        res.status(200).json({ status: true, message: "User approved" });
+    })
+
+}
+module.exports.loadWorkingEmployees = function (req, res, next) {
+    userHelpers.getUsersByStatus(ACTIVE_STATUS).then((requests) => {
+        res.render('admin/employees', { ...extra, employees: requests })
+    })
+
+}
+module.exports.loadResignedEmployees = (req, res, next) => {
+    userHelpers.getUsersByStatus(RESIGN_STATUS).then((response) => {
+        res.render('admin/employees', { ...extra, employees: response })
+    })
+}
+module.exports.loadRejectedEmployees = (req, res, next) => {
+    userHelpers.getUsersByStatus(REJECT_STATUS).then((response) => {
+        res.render('admin/employees', { ...extra, employees: response })
+    })
+}
 
 module.exports.loadClients = async (req, res, next) => {
     let clients = await clientsHelper.loadClients();

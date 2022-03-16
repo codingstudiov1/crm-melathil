@@ -9,27 +9,17 @@ module.exports.loadAdminDashboard = function (req, res, next) {
 }
 
 module.exports.loadPendingRequests = function (req, res, next) {
-    mysqlHelper.getUserByStatus(PENDING_STATUS).then((requests) => {
-        res.render('admin/pending-requests', { ...extra, pendingRequests: requests })
-    })
-
+   
 }
 module.exports.loadWorkingEmployees = function (req, res, next) {
-    mysqlHelper.getUserByStatus(ACTIVE_STATUS).then((requests) => {
-        res.render('admin/employees', { ...extra, employees: requests })
-    })
-
+   
 }
 
 module.exports.loadResignedEmployees = (req,res,next)=>{
-    mysqlHelper.getUserByStatus(RESIGN_STATUS).then((response)=>{
-        res.render('admin/employees',{...extra,employees:response})
-    })
+   
 }
 module.exports.loadRejectedEmployees = (req,res,next)=>{
-    mysqlHelper.getUserByStatus(REJECT_STATUS).then((response)=>{
-        res.render('admin/employees',{...extra,employees:response})
-    })
+   
 }
 
 module.exports.loadClients = async (req, res, next) => {
@@ -57,20 +47,11 @@ module.exports.processCreateClientType = function (req, res, next) {
     
 }
 module.exports.loadApproveEmployees = function (req, res, next) {
-    let userId = req.params.id;
-    mysqlHelper.getPendingUserDetails(userId).then((user) => {
-        req.session.approveUserId = userId;
-        res.render('admin/approve-user', { ...extra, types: USER_TYPES, user, moment })
-    })
+  
 }
 
 module.exports.processApproveUser = function (req, res, next) {
-    let userId = req.session.approveUserId;
-    req.session.approveUserId = null;
-    let data = req.body;
-    mysqlHelper.approveUser(userId, data).then(() => {
-        res.status(200).json({ status: true, message: "User approves" });
-    })
+    
 
 }
 

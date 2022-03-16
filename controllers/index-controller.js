@@ -1,6 +1,7 @@
 const commonHelpers = require("../helpers/common-helpers");
 const User = require('../models/user-model');
 const { validationResult } = require('express-validator');
+const { PENDING_STATUS } = require("../config/strings");
 
 module.exports.loadIndexPage = (req, res, next) => {
     const routes = ["admin", "user", "manager"]
@@ -15,6 +16,7 @@ module.exports.loadRegistrationPage = function (req, res, next) {
 module.exports.processEmployeeRegistration = (req, res, next) => {
 
     let userData = req.body;
+    userData.user_status = PENDING_STATUS;
     commonHelpers.userPhoneDuplication(userData.phone).then(response => {
         if (response) res.json({ message: 'Phone number alredy registered' });
         else return commonHelpers.userEmailDuplication(userData.email)
