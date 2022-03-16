@@ -13,7 +13,7 @@ const { sessionSecret } = require("./config/strings");
 var indexRouter = require("./routes/index");
 var loginRouter = require('./routes/login');
 var adminRouter = require('./routes/admin');
-// var userRouter = require("./routes/user");
+var userRouter = require("./routes/user");
 // var managerRouter = require('./routes/manager');
 const { createConnection } = require("./config/connection");
 
@@ -42,7 +42,7 @@ app.use(session({ secret: 'melathilhardwares', cookie: { maxAge: 24 * 60 * 60 * 
 app.use("/", indexRouter);
 app.use('/login', loginRouter);
 app.use('/admin', adminRouter);
-// app.use("/user", userRouter);
+app.use("/user", userRouter);
 // app.use('/manager', managerRouter);
 
 

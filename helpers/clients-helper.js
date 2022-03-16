@@ -24,7 +24,7 @@ module.exports = {
             })
         })
     },
-    createClient: (data) => {
+        createClient: (data) => {
         return new Promise((resolve, reject) => {
             let client = new Clients(data);
             client.save().then((response) => {

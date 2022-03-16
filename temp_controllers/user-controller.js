@@ -28,22 +28,9 @@ module.exports.processLogout = (req, res, next) => {
 
 
 // View all clients controller
-module.exports.allClinets = function (req, res, next) {
-  mysqlHelper.getClients().then((clients) => {
-    res.render("clients/view-clients", { layout: "dashboard-layout", title: "Clients list", clients });
-  })
-};
-module.exports.loadCreateClient = async function (req, res, next) {
-  mysqlHelper.getClientTypes().then((clientTypes) => {
-    res.render("clients/create_edit", { layout: 'dashboard-layout', clientTypes, clientData: {}, title: 'Create client', formId: 'formCreateClient', action: "/dashboard/clients/create" });
-  })
-};
-module.exports.processCreateClient = function (req, res, next) {
-  let data = req.body;
-  mysqlHelper.createClient(data).then(() => {
-    res.redirect('/dashboard/clients')
-  })
-};
+
+
+
 
 
 
