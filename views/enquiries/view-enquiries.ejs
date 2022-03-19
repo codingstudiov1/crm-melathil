@@ -8,7 +8,7 @@
       </div>
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="<%= route %>">Home</a></li>
+          <li class="breadcrumb-item"><a href="/<%= route %>">Home</a></li>
           <li class="breadcrumb-item active">
             <%= title %>
           </li>
@@ -20,7 +20,7 @@
 <section>
   <div class="content">
     <div class="container">
-      <a class="btn btn-primary mb-3" href="<%= route %>/enquiries/create">Create new</a>
+      <a class="btn btn-primary mb-3" href="/<%= route %>/enquiries/create">Create new</a>
       <div class="row">
         <div class="col-12">
           <div class="card">
@@ -30,9 +30,9 @@
                   <thead>
                     <tr>
                       <th>Serial</th>
-                      <th>Status</th>
+                      <th>Title</th>
                       <th>Date</th>
-                      <th>Name</th>
+                      <th>Client</th>
                       <th colspan="3">Operaton</th>
                     </tr>
                   </thead>
@@ -41,26 +41,28 @@
                     <tr>
                       <td>
                         <%= index+1 %>
+                     
+                      <td><%= element.enq_title %> </td>
+                      <td>
+                        <%= moment(element.enq_date).format("DD-MM-YYYY") %>
                       </td>
                       <td>
-                        <% if (element.status===0) { %>
-                        <div class="badge bg-warning">Working</div>
-                        <% } else if (element.status===1) { %>
-                        <div class="badge bg-success">Closed</div>
-                        <% } else if (element.status===2) { %>
-                        <div class="badge bg-danger">Failed</div>
-                        <% } %>
+                        <%= element.enq_client.client_name %>
                       </td>
+                    </td>
+                    <!-- <td>
+                      <% if (element.enq_closed) { %>
+                      <div class="badge bg-warning">Working</div>
+                      <% } else if (element.status===1) { %>
+                      <div class="badge bg-success">Closed</div>
+                      <% } else if (element.status===2) { %>
+                      <div class="badge bg-danger">Failed</div>
+                      <% } %>
+                    </td> -->
                       <td>
-                        <%= moment(element.date).format("DD-MM-YYYY") %>
+                        <a class="text-primary" href="/<%= route %>/enquiries/view/<%= element.id %> ">View Details</a>
                       </td>
-                      <td>
-                        <%= element.title %>
-                      </td>
-                      <td>
-                        <a class="text-primary" href="<%= route %>/enquiries/view/<%= element.id %> ">View Details</a>
-                      </td>
-                      <td><a class="text-primary" onclick="return confirm('Are you sure to modify')" href="<%= route %>/clients/client-types/modify/<%= element.id %> ">Edit</a>
+                      <td><a class="text-primary" onclick="return confirm('Are you sure to modify')" href="/<%= route %>/clients/client-types/modify/<%= element.id %> ">Edit</a>
                       </td>
                     </tr>
                     <% }) %>

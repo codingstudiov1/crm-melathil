@@ -19,7 +19,7 @@
                 <% enquiries.forEach((element,index) => { %>
                 <tr style="cursor: pointer;" onclick="window.location.href='#'">
                   <td><%= index+1 %></td>
-                  <td><%= element.title %> </td>
+                  <td><%= element.enq_title %> </td>
                   <td><%= moment(element.date).format("DD-MM-YYYY") %> </td>
                   <td><%= element.client.name %> </td>
                   <td><%= element.client.phone %> </td>

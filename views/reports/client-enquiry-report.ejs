@@ -8,7 +8,7 @@
       </div>
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="/dashboard/home">Home</a></li>
+          <li class="breadcrumb-item"><a href="/<%= route %>/home">Home</a></li>
           <li class="breadcrumb-item active">
             <%= title %>
           </li>
@@ -24,7 +24,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <form action="/dashboard/reports/enquiries" method="get" onsubmit="getUserReport(event)">
+          <form action="/<%= route %>/reports/enquiries" method="get" onsubmit="getUserReport(event)">
             <div class="row">
               <div class="col-md-3">
                 <div class="form-group">
@@ -63,7 +63,7 @@
                   <select name="client" id="client" class="form-control select2">
                     <option value="">All</option>
                     <% clients.forEach(element => { %>
-                    <option value="<%= element.clientId %>"><%= element.name %></option>
+                    <option value="<%= element._id %>"><%= element.client_name %></option>
                     <% }) %>
                   </select>
                 </div>
@@ -100,7 +100,7 @@
                 <td><%= element.closeddate %></td>
                 <td><%= element.amount %></td>
                 <td><%= element.client_name %></td>
-                
+
               </tr>
               <% }) %>
             </tbody>

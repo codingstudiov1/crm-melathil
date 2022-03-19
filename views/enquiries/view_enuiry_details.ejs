@@ -8,7 +8,7 @@
       </div>
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="<%= route %>">Home</a></li>
+          <li class="breadcrumb-item"><a href="/<%= route %>">Home</a></li>
           <li class="breadcrumb-item active">
             <%= title %>
           </li>
@@ -24,12 +24,12 @@
     <div class="col-md-8">
       <div class="card">
         <div class="card-body">
-          <h3>Title : <%= enq.enquiry.title %> </h3>
-          <h6>Client : <%= enq.enquiry.clientName %> </h6>
-          <h6>Phone number : <%= enq.enquiry.clientPhone %> </h6>
-          <h6>Address : <%= enq.enquiry.clientAddress %> </h6>
-          <h6>Designation : <%= enq.enquiry.clientDesignation %> </h6>
-          <h6>Type : <%= enq.enquiry.clientTypeName %> </h6>
+          <h3>Title : <%= enq.enq_title %> </h3>
+          <h6>Client : <%= enq.enq_client.client_name %> </h6>
+          <h6>Phone number : <%= enq.enq_client.client_phone %> </h6>
+          <h6>Address : <%= enq.enq_client.client_address %> </h6>
+          <h6>Designation : <%= enq.enq_client.client_desi %> </h6>
+          <h6>Type : <%= enq.enq_client.client_type.type_name %> </h6>
         </div>
       </div>
     </div>
@@ -68,13 +68,13 @@
                 </tr>
               </thead>
               <tbody>
-                <% enq.details.forEach((element,index) => { %>
+                <% enq.enq_updates.forEach((element,index) => { %>
                 <tr>
                   <td><%= index+1 %> </td>
-                  <td><%= moment(element.date).format("DD-MM-YYYY") %> </td>
-                  <td><%= element.status %> </td>
-                  <td><%= element.temparature %> </td>
-                  <td><%= element.remarks %> </td>
+                  <td><%= moment(element.update_date).format("DD-MM-YYYY") %> </td>
+                  <td><%= element.update_status %> </td>
+                  <td><%= element.update_temparature %> </td>
+                  <td><%= element.update_remarks %> </td>
                 </tr>
                 <% }) %>
               </tbody>
@@ -89,19 +89,21 @@
       <div class="card">
         <div class="card-body">
           <h3>Salesman</h3>
-          <h6><%= enq.enquiry.firstName %> <%= enq.enquiry.lastName %> </h6>
-          <h6><%= enq.enquiry.phone %> </h6>
-          <h6><%= enq.enquiry.email %> </h6>
+          <h6><%= enq.enq_user.firstName %> <%= enq.enq_user.lastName %> </h6>
+          <h6><%= enq.enq_user.phone %> </h6>
+          <h6><%= enq.enq_user.email %> </h6>
         </div>
       </div>
     </div>
   </div>
   <% } %>
 </section>
+<% if (!enq.enq_closed) { %>
 <section>
   <div class="row py-4">
     <div class="col-md-3">
-      <a href="/dashboard/enquiries/update/" class="btn btn-primary"> Post update</a>
+      <a href="/<%= route %>/enquiries/update/" class="btn btn-primary"> Post update</a>
     </div>
   </div>
 </section>
+<% } %>
