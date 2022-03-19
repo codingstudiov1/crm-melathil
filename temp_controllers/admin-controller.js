@@ -4,9 +4,7 @@ const moment = require('moment');
 const countsHelper = require('../helpers/counts-helper');
 const extra = { route: '/admin', layout: 'admin-layout' }
 
-module.exports.loadAdminDashboard = function (req, res, next) {
-    res.render('admin/admin-dashboard', { ...extra });
-}
+
 
 module.exports.loadPendingRequests = function (req, res, next) {
    

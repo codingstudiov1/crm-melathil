@@ -5,7 +5,7 @@ const userHelpers = require("../helpers/user-helpers");
 const enquiryHelpers = require("../helpers/enquiry-helpers");
 const { CLIENT_STATUS, CLIENT_TEMPARATURE, ENQUIRY_PROIRITY } = require("../config/strings");
 
-const extra = { layout: 'user-layout', route: 'user', moment };
+const extra = { layout: 'user-layout', route: 'user', moment, name:"" };
 
 
 module.exports.allClinets = function (req, res, next) {
@@ -61,6 +61,17 @@ module.exports.processCreateEnquiry = (req, res, next) => {
     })
 
 };
+module.exports.processCloseRequest = (req, res, next) => {
+    let data = req.body;
+    data.close_full = data?.close_full ? true : false;
+    // console.log(data.close_full);
+    data.close_enquiry = req.session.enquiryId;
+    data.close_user = '6232335750ce51faa37d42dd';
+    enquiryHelpers.newCloseRequest(data).then(() => {
+        res.redirect(`/user/enquiries/view/${req.session.enquiryId}`)
+    })
+}
+
 module.exports.loadViewEnquiries = (req, res, next) => {
     let enqId = req.params.id;
     req.session.enquiryId = enqId;

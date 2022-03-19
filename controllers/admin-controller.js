@@ -2,10 +2,26 @@ const { PENDING_STATUS, ACTIVE_STATUS, RESIGN_STATUS, REJECT_STATUS, USER_TYPES 
 const clientsHelper = require("../helpers/clients-helper");
 const userHelpers = require("../helpers/user-helpers");
 const moment = require('moment');
+const enquiryHelpers = require("../helpers/enquiry-helpers");
 
 const extra = { layout: 'admin-layout', route: 'admin', moment };
 
+module.exports.loadAdminDashboard = async function (req, res, next) {
 
+    let counts = {};
+    try {
+
+        counts.enquiryCount = await enquiryHelpers.getCount({ enq_date: { $lte: moment().startOf('month'), $lte: moment().endOf('month') } })
+        counts.closedCount = await enquiryHelpers.getCount({ enq_date: { $lte: moment().startOf('month'), $lte: moment().endOf('month') }, enq_closed: true, enq_failed: false })
+        counts.usersCount = await userHelpers.getCount({ user_status: ACTIVE_STATUS });
+
+        res.render('admin/admin-dashboard', { ...extra, counts });
+
+
+    } catch (error) {
+        console.log(error);
+    }
+}
 module.exports.loadPendingRequests = function (req, res, next) {
     userHelpers.getUsersByStatus(PENDING_STATUS).then((requests) => {
         res.render('admin/pending-requests', { ...extra, pendingRequests: requests })

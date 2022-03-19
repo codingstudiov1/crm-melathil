@@ -27,4 +27,6 @@ router.get('/reports/enquiries', verifyLogin, UserController.loadEnquiryReportRe
 // router.get('/reports/enquiries/search', verifyLogin, UserController.processEnquiryReportRequest);
 // router.get('/logout', UserController.processLogout);
 
+router.post('/enquiries/close-request', UserController.processCloseRequest);
+
 module.exports = router;

@@ -12,6 +12,13 @@ const schema = new Schema({
     enq_closed: { type: Boolean, default: false },
     enq_close_date: Schema.Types.Date,
     closed_amount: Number,
+    enq_partial_closes: [
+        {
+            close_date: { type: Schema.Types.Date },
+            close_remarks: String,
+            close_amount: Number,
+        }
+    ],
     enq_updates: [
         {
             update_date: Schema.Types.Date,
@@ -19,7 +26,6 @@ const schema = new Schema({
             update_remarks: String,
             update_status: String,
             update_temparature: String,
-
         }
     ]
 

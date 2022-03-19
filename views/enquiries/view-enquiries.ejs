@@ -41,7 +41,7 @@
                     <tr>
                       <td>
                         <%= index+1 %>
-                     
+
                       <td><%= element.enq_title %> </td>
                       <td>
                         <%= moment(element.enq_date).format("DD-MM-YYYY") %>
@@ -49,8 +49,8 @@
                       <td>
                         <%= element.enq_client.client_name %>
                       </td>
-                    </td>
-                    <!-- <td>
+                      </td>
+                      <!-- <td>
                       <% if (element.enq_closed) { %>
                       <div class="badge bg-warning">Working</div>
                       <% } else if (element.status===1) { %>
@@ -61,8 +61,6 @@
                     </td> -->
                       <td>
                         <a class="text-primary" href="/<%= route %>/enquiries/view/<%= element.id %> ">View Details</a>
-                      </td>
-                      <td><a class="text-primary" onclick="return confirm('Are you sure to modify')" href="/<%= route %>/clients/client-types/modify/<%= element.id %> ">Edit</a>
                       </td>
                     </tr>
                     <% }) %>
@@ -76,3 +74,4 @@
     </div>
   </div>
 </section>
+<!-- Button trigger modal -->

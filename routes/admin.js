@@ -12,7 +12,7 @@ const verifyLogin = function (req, res, next) {
 }
 
 
-// router.get('/', verifyLogin, AdminController.loadAdminDashboard);
+router.get('/', verifyLogin, AdminController.loadAdminDashboard);
 router.get('/employee-requests', verifyLogin, AdminController.loadPendingRequests);
 router.get('/working-employees', verifyLogin, AdminController.loadWorkingEmployees);
 router.get('/resigned-employees', verifyLogin, AdminController.loadResignedEmployees);

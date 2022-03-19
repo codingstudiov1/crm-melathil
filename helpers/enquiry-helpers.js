@@ -1,4 +1,5 @@
 const Enquiries = require('../models/enquiry-model');
+const CloseRequests = require('../models/close-request-model');
 
 module.exports = {
 
@@ -13,7 +14,11 @@ module.exports = {
                 .then(async (response) => {
                     let enquiries = await Enquiries.populate(response, {
                         path: 'enq_client.client_type',
-                        model: 'ClientTypes'
+                        model: 'ClientTypes',
+                    })
+                    enquiries =  await Enquiries.populate(response, {
+                        path: 'enq_with.client_type',
+                        model: 'ClientTypes',
                     })
                     resolve(enquiries);
                 })
@@ -68,6 +73,34 @@ module.exports = {
             })
         })
     },
+    getCount: (keys) => {
+        return new Promise((resolve, reject) => {
+            Enquiries.find({ ...keys }).count().then((response) => {
+                resolve(response);
+            }).catch(error => {
+                reject(error);
+            })
+        })
+    },
+    newCloseRequest: (data) => {
+        return new Promise((resolve, reject) => {
+            const close = new CloseRequests(data);
+            close.save().then((response) => {
+                resolve(response);
+            }).catch(error => {
+                reject(error);
+            })
+        })
+    },
+    deleteCloseRequest: (id) => {
+        return new Promise((resolve, reject) => {
+            CloseRequests.findByIdAndDelete(id).then((response) => {
+                resolve(response);
+            }).catch(error => {
+                reject(error);
+            })
+        })
+    }
 
 
 }

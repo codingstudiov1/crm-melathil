@@ -27,5 +27,14 @@ module.exports = {
                 console.log(error);
             })
         })
+    },
+    getCount: (keys) => {
+        return new Promise((resolve, reject) => {
+            Users.find({ ...keys }).count().then((response) => {
+                resolve(response)
+            }).catch(error => {
+                console.log(error);
+            })
+        })
     }
 }
