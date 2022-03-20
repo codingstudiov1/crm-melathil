@@ -47,8 +47,11 @@ footer {
   margin-top: 2rem;
   color: white;
 }
-.footer-content{
+.footer-content {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+.cursor-pointer {
+  cursor: pointer;
 }

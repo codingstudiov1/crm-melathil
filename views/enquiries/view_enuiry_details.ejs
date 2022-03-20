@@ -30,6 +30,9 @@
           <h6>Address : <%= enq.enq_client.client_address %> </h6>
           <h6>Designation : <%= enq.enq_client.client_desi %> </h6>
           <h6>Type : <%= enq.enq_client.client_type.type_name %> </h6>
+          <% if (route=='admin') { %>
+          <a class="btn btn-primary" href="/<%= route %>/enquiry/modify/<%= enq._id %>">Modify</a>
+          <% } %>
         </div>
       </div>
     </div>
@@ -71,6 +74,7 @@
                   <th>Status</th>
                   <th>Temparature</th>
                   <th>Remarks</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -81,6 +85,12 @@
                   <td><%= element.update_status %> </td>
                   <td><%= element.update_temparature %> </td>
                   <td><%= element.update_remarks %> </td>
+                  <td>
+                    <% if (route=='admin') { %>
+                    <a class="btn btn-sm btn-primary" href="/<%= route %>/enquiries/modify-update/<%= element._id %>">Modify</a>
+                    <a class="btn btn-sm btn-danger" href="/<%= route %>/enquiries/delete-update/<%= element._id %>">Delete</a>
+                    <% } %>
+                  </td>
                 </tr>
                 <% }) %>
               </tbody>

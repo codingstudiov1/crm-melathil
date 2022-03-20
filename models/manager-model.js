@@ -4,14 +4,14 @@ const { Schema, model } = require('mongoose');
 const managerSchema = new Schema({
     first_name: String,
     last_name: String,
+    username: String,
     phone: String,
     email: String,
     address: String,
     dob: String,
     gender: String,
     password: String,
-    signup_date: { type: Date, default: new Date() },
-    approval_date: { type: Date },
+
 });
 
 managerSchema.virtual('full_name').get(function () {

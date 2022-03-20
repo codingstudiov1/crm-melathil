@@ -29,22 +29,29 @@ router.get("/clients/edit/:id", verifyLogin, AdminController.loadEditClient);
 router.post("/clients/edit/:id", verifyLogin, AdminController.processEditClient);
 router.get('/clients/delete/:id', verifyLogin, AdminController.processDeleteClient);
 // // Get employee profile
-// router.get('/employees/:id', verifyLogin, AdminController.loadEmployeeProfile);
+
 // // View working enquiries
 // router.get('/enquiries/working', verifyLogin, AdminController.loadOpenedEnquiries);
 // // All Enquiries
-// router.get('/enquiries', verifyLogin, AdminController.loadAllEnquiries);
-// router.get('/enquiries/closed', verifyLogin, AdminController.loadClosedEnquiries);
-// router.get('/enquiries/:id', verifyLogin, AdminController.loadEnquiryDetails);
+router.get('/enquiries', verifyLogin, AdminController.loadAllEnquiries);
+router.get('/enquiries/:id', verifyLogin, AdminController.loadEnquiryDetails);
+router.get('/enquiry/modify/:id', verifyLogin, AdminController.loadEnquiryModify);
+router.get('/enquiry/closed', verifyLogin, AdminController.loadClosedEnquiries);
+router.get('/enquiry/failed', verifyLogin, AdminController.loadFailedEnquiries);
+router.get('/clients/:id', verifyLogin, AdminController.loadClientDetails);
 // router.get('/enquiry/close', verifyLogin, AdminController.loadCloseEnquiry);
 // router.post('/enquiry/close', verifyLogin, AdminController.processCloseEnquiry);
 
-// router.get('/create-manager', verifyLogin, AdminController.loadCreateManager);
-// router.post('/create-manager', verifyLogin, AdminController.processCreateManager);
-// router.get('/manager/:id', verifyLogin, AdminController.loadEditManager);
-// router.post('/edit-manager', verifyLogin, AdminController.processEditManager);
-// router.get('/delete-manager/:id',verifyLogin,AdminController.processDeleteManager);
+router.get('/managers', verifyLogin, AdminController.loadManagers);
+router.get('/create-manager', verifyLogin, AdminController.loadCreateManager);
+router.post('/create-manager', verifyLogin, AdminController.processCreateManager);
+router.get('/manager/:id', verifyLogin, AdminController.loadEditManager);
+router.post('/edit-manager', verifyLogin, AdminController.processEditManager);
+router.get('/delete-manager/:id', verifyLogin, AdminController.processDeleteManager);
 
+router.get('/user-types/:type', verifyLogin, AdminController.loadUsersByTypes);
 
+router.get('/employees/:id', verifyLogin, AdminController.loadEmployeeProfile);
+router.get('/employees/:id/enquiries', verifyLogin, AdminController.loadEmployeeEnquiries);
 
 module.exports = router;

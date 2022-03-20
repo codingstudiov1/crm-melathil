@@ -10,18 +10,20 @@ module.exports = {
                 .populate({ path: 'enq_client' })
                 .populate('enq_with')
                 .populate('enq_user')
+                .sort({ enq_date: -1 })
                 .exec()
                 .then(async (response) => {
                     let enquiries = await Enquiries.populate(response, {
                         path: 'enq_client.client_type',
                         model: 'ClientTypes',
                     })
-                    enquiries =  await Enquiries.populate(response, {
+                    enquiries = await Enquiries.populate(response, {
                         path: 'enq_with.client_type',
                         model: 'ClientTypes',
                     })
                     resolve(enquiries);
                 })
+               
                 .catch(error => {
                     reject(error);
                 })

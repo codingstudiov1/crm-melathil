@@ -1,7 +1,6 @@
 
 
 
-
 $(document).ready(function () {
   $('#loader').hide();
   $('#formCreateClientType').on("submit", function (evt) {
@@ -41,16 +40,13 @@ $(document).ready(function () {
               window.location.replace("/login/user");
             });
         }
-        else{
+        else {
           document.querySelector("#successModalBody").innerHTML = response.data.message;
           success.show();
         }
-
       })
-     
     }
   });
-
   $("#formUserLogin").on("submit", function (evt) {
     evt.preventDefault();
     $("#loader").show();
@@ -76,15 +72,25 @@ $(document).ready(function () {
       console.log(error);
     })
   });
-
 });
-
-
 function getUserReport(evt) {
   evt.preventDefault();
   let data = $(evt.target).serialize();
   console.log(data);
   axios.get('/dashboard/reports/enquiries?' + data).then((response) => {
-
   })
+}
+function pathHighlight() {
+  let anchors = document.querySelectorAll('.nav-item .nav-link');
+  for (var i = 0; i < anchors.length; i = i + 2) {
+    console.log(i)
+    if (window.location.pathname == anchors[i].pathname) {
+      $(anchors[i]).closest('li').addClass('active menu-open');
+      $(anchors[i]).addClass('active');
+    }
+    else {
+      $(anchors[i]).closest('li').removeClass('active menu-open');
+      $(anchors[i]).removeClass("active");
+    }
+  }
 }

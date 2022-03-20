@@ -11,7 +11,7 @@
         <div class="icon">
           <i class="ion ion-bag"></i>
         </div>
-        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        <a href="/admin/enquiries" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
@@ -41,7 +41,7 @@
         <div class="icon">
           <i class="ion ion-person-add"></i>
         </div>
-        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        <a href="/admin/working-employees" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
@@ -49,16 +49,77 @@
       <!-- small box -->
       <div class="small-box bg-danger">
         <div class="inner">
-          <h3>65</h3>
+          <h3><%= counts.failedCount %> </h3>
 
-          <p>Unique Visitors</p>
+          <p>Failed Enquiries</p>
         </div>
         <div class="icon">
           <i class="ion ion-pie-graph"></i>
         </div>
-        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        <a href="/admin/enquiry/failed" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
   </div>
+</section>
+<section>
+  <!-- Info boxes -->
+  <div class="row">
+    <div class="col-12 col-sm-6 col-md-3">
+      <div class="info-box">
+        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-walking"></i></span>
+        <div class="info-box-content cursor-pointer" onclick="window.location.href='/<%= route%>/user-types/field'">
+          <span class="info-box-text">Field Executives</span>
+          <span class="info-box-number">
+            <%= counts.fieldStaffCount %>
+          </span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-12 col-sm-6 col-md-3">
+      <div class="info-box mb-3 cursor-pointer" onclick="window.location.href='/<%= route%>/user-types/showroom'">
+        <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-store"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Showroom Executives</span>
+          <span class="info-box-number"> <%= counts.showroomStaffCount %> </span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+
+    </div>
+    <!-- /.col -->
+
+    <div class="col-12 col-sm-6 col-md-3">
+      <div class="cursor-pointer info-box mb-3" onclick="window.location.href='/<%= route%>/managers/profile'">
+        <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Managers</span>
+          <span class="info-box-number"><%= counts.managersCount %></span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <!-- fix for small devices only -->
+    <div class="clearfix hidden-md-up"></div>
+
+    <div class="col-12 col-sm-6 col-md-3">
+      <div class="info-box mb-3 cursor-pointer" onclick="window.location.href='#'">
+        <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Closings</span>
+          <span class="info-box-number">760</span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
 </section>

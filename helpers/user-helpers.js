@@ -36,5 +36,18 @@ module.exports = {
                 console.log(error);
             })
         })
+    },
+    getUsers: (keys) => {
+        return new Promise((resolve, reject) => {
+            Users
+                .find({ ...keys })
+                .populate('managed_by')
+                .exec()
+                .then((response) => {
+                    resolve(response)
+                }).catch(error => {
+                    console.log(error);
+                })
+        })
     }
 }

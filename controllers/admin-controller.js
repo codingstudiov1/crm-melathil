@@ -1,8 +1,11 @@
-const { PENDING_STATUS, ACTIVE_STATUS, RESIGN_STATUS, REJECT_STATUS, USER_TYPES } = require("../config/strings");
+const { PENDING_STATUS, ACTIVE_STATUS, RESIGN_STATUS, REJECT_STATUS, USER_TYPES, CLIENT_STATUS, CLIENT_TEMPARATURE, ENQUIRY_PROIRITY } = require("../config/strings");
 const clientsHelper = require("../helpers/clients-helper");
 const userHelpers = require("../helpers/user-helpers");
 const moment = require('moment');
 const enquiryHelpers = require("../helpers/enquiry-helpers");
+const managerHelpers = require("../helpers/manager-helpers");
+const { ObjectId } = require("mongoose").Types;
+const bcrypt = require('bcryptjs');
 
 const extra = { layout: 'admin-layout', route: 'admin', moment };
 
@@ -14,6 +17,10 @@ module.exports.loadAdminDashboard = async function (req, res, next) {
         counts.enquiryCount = await enquiryHelpers.getCount({ enq_date: { $lte: moment().startOf('month'), $lte: moment().endOf('month') } })
         counts.closedCount = await enquiryHelpers.getCount({ enq_date: { $lte: moment().startOf('month'), $lte: moment().endOf('month') }, enq_closed: true, enq_failed: false })
         counts.usersCount = await userHelpers.getCount({ user_status: ACTIVE_STATUS });
+        counts.failedCount = await enquiryHelpers.getCount({ enq_date: { $lte: moment().startOf('month'), $lte: moment().endOf('month') }, enq_closed: true, enq_failed: true });
+        counts.managersCount = await managerHelpers.getCount();
+        counts.showroomStaffCount = await userHelpers.getCount({ user_field: "SHOWROOM" });
+        counts.fieldStaffCount = await userHelpers.getCount({ user_field: "FIELD" });
 
         res.render('admin/admin-dashboard', { ...extra, counts });
 
@@ -116,20 +123,64 @@ module.exports.processDeleteClient = async (req, res, next) => {
     let clientId = req.params.id;
     clientsHelper.deleteClient(clientId).then(() => res.redirect("/admin/clients"));
 };
-module.exports.loadEmployeeProfile = (req, res, next) => {
+module.exports.loadEmployeeProfile = async (req, res, next) => {
+    let empId = req.params.id;
+    let monthStart = moment().startOf('month').format('YYYY-MM-DD');
+    let monthEnd = moment().endOf('month').format('YYYY-MM-DD');
+    let counts = {};
+    counts.activeCount = await enquiryHelpers.getCount({ enq_date: { $gte: monthStart, $lte: monthEnd }, enq_user: empId });
+    counts.closedCount = await enquiryHelpers.getCount({ enq_date: { $gte: monthStart, $lte: monthEnd }, enq_user: empId, enq_closed: true, enq_failed: false });
+    counts.failedCount = await enquiryHelpers.getCount({ enq_date: { $gte: monthStart, $lte: monthEnd }, enq_user: empId, enq_closed: true, enq_failed: true });
+    counts.activeCountAll = await enquiryHelpers.getCount({ enq_user: empId });
+    counts.closedCountAll = await enquiryHelpers.getCount({ enq_user: empId, enq_closed: true, enq_failed: false });
+    counts.failedCountAll = await enquiryHelpers.getCount({ enq_user: empId, enq_closed: true, enq_failed: true });
+    res.render('admin/employee-profile', { ...extra, counts, empId });
+
+}
+module.exports.loadEmployeeEnquiries = async (req, res, next) => {
+    let empId = req.params.id;
+    let monthStart = moment().startOf('month').format('YYYY-MM-DD');
+    let monthEnd = moment().endOf('month').format('YYYY-MM-DD');
+    let counts = {};
+    let enquiries = await enquiryHelpers.getEnquiries({ enq_user: empId });
+    res.render('admin/enquiries', { ...extra, enquiries,title:'Enquiries of ' });
 
 }
 module.exports.loadOpenedEnquiries = (req, res, next) => {
 
 }
-module.exports.loadAllEnquiries = (req, res, next) => {
-
+module.exports.loadAllEnquiries = async (req, res, next) => {
+    let enquiries = await enquiryHelpers.getEnquiries({});
+    res.render('admin/enquiries', { ...extra, enquiries, title: 'All Enquiries' })
 }
-module.exports.loadClosedEnquiries = (req, res, next) => {
-
+module.exports.loadEnquiryDetails = async (req, res, next) => {
+    let id = req.params.id;
+    let enquiries = await enquiryHelpers.getEnquiries({ _id: ObjectId(id) });
+    enquiries = enquiries.length > 0 ? enquiries[0] : {};
+    req.session.enquirySession = enquiries;
+    console.log(enquiries);
+    res.render('enquiries/view_enuiry_details', { ...extra, enq: enquiries, title: 'Enquiry Details' })
 }
-module.exports.loadEnquiryDetails = (req, res, next) => {
-
+module.exports.loadEnquiryModify = async (req, res, next) => {
+    let id = req.params.id;
+    let clients = await clientsHelper.loadClients();
+    let enquiry = await enquiryHelpers.getEnquiries({ _id: ObjectId(id) });
+    enquiry = enquiry.length > 0 ? enquiry[0] : {};
+    res.render('enquiries/add_edit_enquiries', { ...extra, enquiry, clients, status: CLIENT_STATUS, enqClass: ENQUIRY_PROIRITY, temp: CLIENT_TEMPARATURE, title: "Modify Enquiry", action: "/admin/modify-enquiry" })
+}
+module.exports.loadClosedEnquiries = async (req, res, next) => {
+    let enquiries = await enquiryHelpers.getEnquiries({ enq_closed: true, enq_failed: false }, {});
+    res.render('admin/enquiries', { ...extra, enquiries, moment, title: 'Closed Enquiries' })
+}
+module.exports.loadFailedEnquiries = async (req, res, next) => {
+    let enquiries = await enquiryHelpers.getEnquiries({ enq_closed: true, enq_failed: true }, {});
+    res.render('admin/enquiries', { ...extra, enquiries, moment, title: 'Failed Enquiries' })
+}
+module.exports.loadClientDetails = async (req, res, next) => {
+    let client = req.params.id;
+    client = await clientsHelper.getClientDetails(client);
+    let enquiries = await enquiryHelpers.getEnquiries({ enq_client: client }, {});
+    res.render('admin/enquiries', { ...extra, enquiries, moment, title: `Enquiries by ${client.client_name} (${client.client_desi})` })
 }
 module.exports.loadCloseEnquiry = (req, res, next) => {
 
@@ -138,17 +189,47 @@ module.exports.processCloseEnquiry = (req, res, next) => {
 
 }
 module.exports.loadCreateManager = (req, res, next) => {
-
+    managerHelpers.getManagers().then(managers => {
+        res.render('admin/create-manager', { ...extra, action: '/admin/create-manager', title: 'Create Manager', manager: {} });
+    })
 }
-module.exports.processCreateManager = (req, res, next) => {
-
+module.exports.loadManagers = async (req, res, next) => {
+    const managers = await managerHelpers.getManagers();
+    res.render('manager/managers', { ...extra, managers, title: 'Managers', })
 }
-module.exports.loadEditManager = (req, res, next) => {
-
+module.exports.processCreateManager = async (req, res, next) => {
+    let data = req.body;
+    data.password = await bcrypt.hash(data.password, 10);
+    managerHelpers.createManager(data).then(() => {
+        res.redirect('/admin/managers');
+    })
 }
-module.exports.processEditManager = (req, res, next) => {
-
+module.exports.loadEditManager = async (req, res, next) => {
+    let managerId = req.params.id;
+    req.session.manager = managerId;
+    let managers = await managerHelpers.getManagers();
+    managerHelpers.getManagerDetailsById(managerId).then(manager => {
+        res.render('admin/create-manager', { ...extra, action: '/admin/edit-manager', managers, title: 'Edit Manager', manager });
+    })
+}
+module.exports.processEditManager = async (req, res, next) => {
+    let managerId = req.session.manager
+    let data = req.body;
+    data.password = data.password == '' ? undefined : await bcrypt.hash(data.password, 10);
+    managerHelpers.modifyManager(managerId, data).then(() => {
+        res.redirect('/admin/managers');
+    })
 }
 module.exports.processDeleteManager = (req, res, next) => {
-
+    let managerId = req.params.id;
+    managerHelpers.deleteManager(managerId).then(() => {
+        res.redirect('/admin/managers');
+    })
+}
+module.exports.loadUsersByTypes = (req, res, next) => {
+    let type = req.params.type;
+    type = type.toUpperCase();
+    userHelpers.getUsers({ user_field: type }).then((response) => {
+        res.render('admin/users-by-type', { ...extra, title: `${type} staffs`, users: response })
+    })
 }

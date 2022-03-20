@@ -37,17 +37,21 @@
                 <% enquiries.forEach((element,index) => { %>
                 <tr>
                   <td><%= index+1 %></td>
-                  <td><%= moment(element.date).format('DD-MM-YYYY') %> </td>
+                  <td><%= moment(element.enq_date).format('DD-MM-YYYY') %> </td>
                   <td><%= moment(element.addedDate).format('DD-MM-YYYY') %> </td>
-                  <td><%= element.title %> </td>
-                  <td><a href="/admin/clients/<%= element.client %>"><%= element.clientName %></a> </td>
-                  <td><a href="/admin/employees/<%= element.employee %>"><%= element.empName %></a></td>
+                  <td><%= element.enq_title %> </td>
+                  <td><a href="/admin/clients/<%= element.enq_client._id %>"><%= element.enq_client.client_name %></a> </td>
+                  <td><a href="/admin/employees/<%= element.enq_user._id %>"><%= `${element.enq_user.firstName} ${element.enq_user.lastName}` %></a></td>
                   <td>
-                    <% if (element.status==0) { %>
+                    <% if (!element.enq_closed) { %>
                     <span class="badge bg-warning">Active</span>
-                    <% } else if (element.status==1) { %>
+                    <% } else{ %>
+                    <% if (!element.enq_failed) { %>
                     <span class="badge bg-success">Closed</span>
-
+                    <% } else { %>
+                    <span class="badge bg-secondary">Closed</span>
+                    <span class="badge bg-danger">Failed</span>
+                    <% } %>
                     <% } %>
                   </td>
                   <td><a class="btn btn-sm btn-primary" href="/admin/enquiries/<%= element.id %>">View details</a></td>
