@@ -14,6 +14,9 @@ var indexRouter = require("./routes/index");
 var loginRouter = require('./routes/login');
 var adminRouter = require('./routes/admin');
 var userRouter = require("./routes/user");
+var apiV1Router = require('./routes/apiv1');
+
+
 // var managerRouter = require('./routes/manager');
 const { createConnection } = require("./config/connection");
 
@@ -43,6 +46,7 @@ app.use("/", indexRouter);
 app.use('/login', loginRouter);
 app.use('/admin', adminRouter);
 app.use("/user", userRouter);
+app.use("/api/v1", apiV1Router);
 // app.use('/manager', managerRouter);
 
 
