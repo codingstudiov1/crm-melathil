@@ -54,4 +54,7 @@ router.get('/user-types/:type', verifyLogin, AdminController.loadUsersByTypes);
 router.get('/employees/:id', verifyLogin, AdminController.loadEmployeeProfile);
 router.get('/employees/:id/enquiries', verifyLogin, AdminController.loadEmployeeEnquiries);
 
+router.get('/close-requests', verifyLogin, AdminController.loadCloseRequests);
+router.get('/approve-close-enquiry/:id', verifyLogin, AdminController.processApproveCloseEnquiry);
+
 module.exports = router;

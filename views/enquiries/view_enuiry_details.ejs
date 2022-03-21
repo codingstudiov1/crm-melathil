@@ -60,7 +60,7 @@
       <div class="card">
         <div class="card-body">
           <div class="my-3">
-            <% if (!enq.enq_closed) { %>
+            <% if (!enq.enq_closed&& route==='user') { %>
             <a href="/<%= route %>/enquiries/update/" class="btn btn-primary"> Post update</a>
             <% } %>
           </div>
@@ -105,7 +105,7 @@
       <div class="card">
         <div class="card-body">
           <div class="my-3">
-            <% if (!enq.enq_closed) { %>
+            <% if (!enq.enq_closed && route==='user') { %>
             <button type="button" data-toggle="modal" data-target="#exampleModal" class="btn btn-warning"> Place Close Request</button>
             <% } %>
           </div>
@@ -122,15 +122,25 @@
                 </tr>
               </thead>
               <tbody>
+                <% let sum = 0 %>
                 <% enq.enq_partial_closes.forEach((element,index) => { %>
+                <% sum = sum+element.close_amount %>
                 <tr>
                   <td><%= index+1 %> </td>
-                  <td><%= moment(element.update_date).format("DD-MM-YYYY") %> </td>
-                  <td><%= element.update_status %> </td>
-                  <td><%= element.update_temparature %> </td>
+                  <td><%= moment(element.close_date).format("DD-MM-YYYY") %> </td>
+                  <td><%= element.close_remarks %> </td>
+                  <td><%= element.close_amount %> </td>
                 </tr>
                 <% }) %>
               </tbody>
+              <tfoot>
+                <tr>
+                  <td></td>
+                  <td>Total Sale</td>
+                  <td></td>
+                  <td><%= sum %> </td>
+                </tr>
+              </tfoot>
             </table>
           </div>
         </div>
@@ -138,7 +148,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-12">
+    <div class="col-md-5">
       <div class="card">
         <div class="card-body">
           <h3>Salesman</h3>
@@ -182,7 +192,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Apply changes</button>
+          <button type="submit" class="btn btn-primary">Apply changes</button>
         </div>
       </form>
     </div>

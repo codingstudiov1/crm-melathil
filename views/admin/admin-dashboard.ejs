@@ -109,11 +109,11 @@
     <div class="clearfix hidden-md-up"></div>
 
     <div class="col-12 col-sm-6 col-md-3">
-      <div class="info-box mb-3 cursor-pointer" onclick="window.location.href='#'">
+      <div class="info-box mb-3 cursor-pointer" onclick="window.location.href='/admin/close-requests'">
         <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
         <div class="info-box-content">
-          <span class="info-box-text">Closings</span>
-          <span class="info-box-number">760</span>
+          <span class="info-box-text">Close Requests</span>
+          <span class="info-box-number"><%= counts.closeRequestCount %></span>
         </div>
         <!-- /.info-box-content -->
       </div>
@@ -128,7 +128,7 @@
   <div class="row">
     <div class="col-md-6">
       <div class="card">
-        <div class="card-header bg-info">
+        <div class="modal-header bg-info">
           <h5>Last 5 days company Activities</h5>
         </div>
         <div class="card-body">
@@ -138,7 +138,7 @@
     </div>
     <div class="col-md-6">
       <div class="card">
-        <div class="card-header bg-info">
+        <div class="modal-header bg-info">
           <h5>Last 6 months company Activities</h5>
         </div>
         <div class="card-body">
@@ -148,93 +148,3 @@
     </div>
   </div>
 </section>
-
-
-<script>
-  const ctxFiveDays = document.getElementById('fiveDaysBarChart');
-  const ctxSixMonths = document.getElementById('sixMonthsLineChart');
-
-  axios.get('/api/v1/last-five-days-counts').then(response => {
-    const myChart = new Chart(ctxFiveDays, {
-      type: 'bar',
-      data: {
-        labels: response.data.days,
-        datasets: [{
-            label: '# of Enquiries',
-            data: response.data.success,
-            backgroundColor: [
-              '#1FA3B7',
-            ]
-          },
-          {
-            label: '# of closed nquiries',
-            data: response.data.closed,
-            backgroundColor: [
-              '#2FA64D',
-            ]
-          },
-          {
-            label: '# of failed nquiries',
-            data: response.data.failed,
-            backgroundColor: [
-              '#DB3447',
-            ]
-          }
-        ]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-  })
-  axios.get('/api/v1/last-six-months-counts').then(response => {
-    const myChart = new Chart(ctxSixMonths, {
-      type: 'line',
-      data: {
-        labels: response.data.months,
-        datasets: [{
-            label: '# of Enquiries',
-            data: response.data.success,
-            borderColor: [
-              '#1FA3B7',
-            ],
-            backgroundColor: [
-              '#1FA3B7',
-            ]
-          },
-          {
-            label: '# of closed nquiries',
-            data: response.data.closed,
-            borderColor: [
-              '#2FA64D',
-            ],
-            backgroundColor: [
-              '#2FA64D',
-            ]
-          },
-          {
-            label: '# of failed nquiries',
-            data: response.data.failed,
-            borderColor: [
-              '#DB3447',
-            ],
-            backgroundColor: [
-              '#DB3447',
-            ]
-          }
-        ]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-  })
-</script>

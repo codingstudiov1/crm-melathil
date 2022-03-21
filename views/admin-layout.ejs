@@ -33,8 +33,7 @@
   <!-- Flatpicker -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.js" integrity="sha512-Lii3WMtgA0C0qmmkdCpsG0Gjr6M0ajRyQRQSbTF6BsrVh/nhZdHpVZ76iMIPvQwz1eoXC3DmAg9K51qT5/dEVg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
   <style>
     @media print {
       .hidden-print {
@@ -203,25 +202,7 @@
                 </li>
               </ul>
             </li>
-            <!-- User types -->
-            <li class="nav-item">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fas fa-users"></i>
-                <p>
-                  User types
-                  <i class="fas fa-angle-left right"></i>
-                  <!-- <span class="badge badge-info right">6</span> -->
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="/<%= route %>/usertypes" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>View usertypes</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
+           
             <li class="nav-item">
               <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-user-friends"></i>
@@ -336,7 +317,8 @@
   <!-- jQuery -->
   <!-- <script src="../plugins/jquery/jquery.min.js"></script> -->
   <script src="/javascripts/jquery-3.6.0.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.js" integrity="sha512-Lii3WMtgA0C0qmmkdCpsG0Gjr6M0ajRyQRQSbTF6BsrVh/nhZdHpVZ76iMIPvQwz1eoXC3DmAg9K51qT5/dEVg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="/javascripts/script.js"></script>
   <!-- Bootstrap 4 -->
   <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -407,6 +389,7 @@
 
     });
   </script>
+  <script src="/javascripts/admin-charts.js"></script>
 </body>
 
 </html>

@@ -21,7 +21,7 @@ module.exports.loadAdminDashboard = async function (req, res, next) {
         counts.managersCount = await managerHelpers.getCount();
         counts.showroomStaffCount = await userHelpers.getCount({ user_field: "SHOWROOM" });
         counts.fieldStaffCount = await userHelpers.getCount({ user_field: "FIELD" });
-
+        counts.closeRequestCount = await enquiryHelpers.getCloseRequestCount();
         res.render('admin/admin-dashboard', { ...extra, counts });
 
 
@@ -125,16 +125,18 @@ module.exports.processDeleteClient = async (req, res, next) => {
 };
 module.exports.loadEmployeeProfile = async (req, res, next) => {
     let empId = req.params.id;
-    let monthStart = moment().startOf('month').format('YYYY-MM-DD');
-    let monthEnd = moment().endOf('month').format('YYYY-MM-DD');
+    let month = req.query.month
+    month = month === undefined || month === '' ? moment() : moment(month)
+    let monthStart = moment(month).startOf('month').format('YYYY-MM-DD');
+    let monthEnd = moment(month).endOf('month').format('YYYY-MM-DD');
     let counts = {};
     counts.activeCount = await enquiryHelpers.getCount({ enq_date: { $gte: monthStart, $lte: monthEnd }, enq_user: empId });
-    counts.closedCount = await enquiryHelpers.getCount({ enq_date: { $gte: monthStart, $lte: monthEnd }, enq_user: empId, enq_closed: true, enq_failed: false });
+    counts.closedCount = await enquiryHelpers.getCount({ enq_date: { $gte: monthStart, $lte: monthEnd }, enq_user: empId, enq_closed: true, enq_failed: { $ne: true } });
     counts.failedCount = await enquiryHelpers.getCount({ enq_date: { $gte: monthStart, $lte: monthEnd }, enq_user: empId, enq_closed: true, enq_failed: true });
     counts.activeCountAll = await enquiryHelpers.getCount({ enq_user: empId });
-    counts.closedCountAll = await enquiryHelpers.getCount({ enq_user: empId, enq_closed: true, enq_failed: false });
+    counts.closedCountAll = await enquiryHelpers.getCount({ enq_user: empId, enq_closed: true, enq_failed: { $ne: true } });
     counts.failedCountAll = await enquiryHelpers.getCount({ enq_user: empId, enq_closed: true, enq_failed: true });
-    res.render('admin/employee-profile', { ...extra, counts, empId });
+    res.render('admin/employee-profile', { ...extra, counts, month, empId });
 
 }
 module.exports.loadEmployeeEnquiries = async (req, res, next) => {
@@ -143,7 +145,7 @@ module.exports.loadEmployeeEnquiries = async (req, res, next) => {
     let monthEnd = moment().endOf('month').format('YYYY-MM-DD');
     let counts = {};
     let enquiries = await enquiryHelpers.getEnquiries({ enq_user: empId });
-    res.render('admin/enquiries', { ...extra, enquiries,title:'Enquiries of ' });
+    res.render('admin/enquiries', { ...extra, enquiries, title: 'Enquiries of ' });
 
 }
 module.exports.loadOpenedEnquiries = (req, res, next) => {
@@ -232,4 +234,21 @@ module.exports.loadUsersByTypes = (req, res, next) => {
     userHelpers.getUsers({ user_field: type }).then((response) => {
         res.render('admin/users-by-type', { ...extra, title: `${type} staffs`, users: response })
     })
+}
+module.exports.loadCloseRequests = async (req, res, next) => {
+    let pendingPartialClosings = await enquiryHelpers.getCloseRequests();
+    res.render('enquiries/close-requests', { ...extra, pendingPartialClosings });
+}
+module.exports.processApproveCloseEnquiry = async (req, res, next) => {
+    let id = req.params.id;
+    let closeRequest = await enquiryHelpers.getCloseRequestById(id);
+    console.log(closeRequest);
+    delete closeRequest._id;
+    let close = await enquiryHelpers.createClose(closeRequest);
+    await enquiryHelpers.updateClosings(closeRequest.close_enquiry, { enq_partial_closes: close._id });
+    await enquiryHelpers.deleteCloseRequest(closeRequest._id);
+    if (closeRequest.close_full) {
+        await enquiryHelpers.updateEnquiry(closeRequest.close_enquiry, { enq_closed: true });
+    }
+    res.redirect('/admin/close-requests');
 }

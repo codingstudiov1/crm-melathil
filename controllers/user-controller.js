@@ -1,11 +1,11 @@
 const clientsHelper = require("../helpers/clients-helper");
-
+const ObjectId = require('mongoose').Types.ObjectId;
 const moment = require('moment');
 const userHelpers = require("../helpers/user-helpers");
 const enquiryHelpers = require("../helpers/enquiry-helpers");
 const { CLIENT_STATUS, CLIENT_TEMPARATURE, ENQUIRY_PROIRITY } = require("../config/strings");
 
-const extra = { layout: 'user-layout', route: 'user', moment, name:"" };
+const extra = { layout: 'user-layout', route: 'user', moment, name: "" };
 
 
 module.exports.allClinets = function (req, res, next) {
@@ -100,5 +100,16 @@ module.exports.loadEnquiryReportRequest = async (req, res, next) => {
     let temparature = CLIENT_TEMPARATURE;
     let status = CLIENT_STATUS;
     res.render('reports/client-enquiry-report', { ...extra, title: "Get Report", status, temparature, clients, enquiries: [] });
+
+}
+module.exports.loadMonthlyReport = async (req, res, next) => {
+    let month = req.query.month
+    month = month === undefined || month === '' ? moment() : moment(month)
+    console.log(month);
+    let user = '6232335750ce51faa37d42dd'; //To be replaced with session
+    let tableTitle = `Monthly Report of ${moment(month).format('MMMM, YYYY')}`
+    let partialClosings = await enquiryHelpers.getPartialClosings({ close_user: user, close_date: { $gte: moment(month).startOf('month'), $lte: moment(month).endOf('month') } });
+    res.render('reports/monthly-report', { ...extra, title: `Monthly Report`, partialClosings, tableTitle });
+
 
 }

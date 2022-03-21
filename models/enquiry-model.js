@@ -13,11 +13,7 @@ const schema = new Schema({
     enq_close_date: Schema.Types.Date,
     closed_amount: Number,
     enq_partial_closes: [
-        {
-            close_date: { type: Schema.Types.Date },
-            close_remarks: String,
-            close_amount: Number,
-        }
+        { type: Schema.Types.ObjectId, ref: 'PartialClosings' },
     ],
     enq_updates: [
         {

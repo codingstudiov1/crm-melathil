@@ -8,14 +8,11 @@ module.exports.getLastFiveDaysCounts = async (req, res, next) => {
         var startOfDay = moment().subtract(i, 'days').startOf('days');
         var endOfDay = moment().subtract(i, 'days').endOf('days');
         days = [...days, moment().subtract(i, 'days').format('MMM DD')]
-        let activeCount = await enquiryHelpers.getCount({ enq_date: { $gte: startOfDay, $lte: endOfDay } });
-        successnumbers = [...successnumbers, activeCount];
-        let failedCount = await enquiryHelpers.getCount({ enq_date: { $gte: startOfDay, $lte: endOfDay }, enq_closed: true, enq_failed: true });
-        failedNumbers = [...failedNumbers, failedCount];
-        let closedCount = await enquiryHelpers.getCount({ enq_date: { $gte: startOfDay, $lte: endOfDay }, enq_closed: true, enq_failed: false });
-        closedNumbers = [...closedNumbers,closedCount]
+        successnumbers = [...successnumbers, await enquiryHelpers.getCount({ enq_date: { $gte: startOfDay, $lte: endOfDay } })];
+        failedNumbers = [...failedNumbers, await enquiryHelpers.getCount({ enq_date: { $gte: startOfDay, $lte: endOfDay }, enq_closed: true, enq_failed: true })];
+        closedNumbers = [...closedNumbers, enquiryHelpers.getCount({ enq_date: { $gte: startOfDay, $lte: endOfDay }, enq_closed: true, enq_failed: false })]
     }
-    res.status(200).json({ days, success: successnumbers, failed: failedNumbers,closed:closedNumbers });
+    res.status(200).json({ days, success: successnumbers, failed: failedNumbers, closed: closedNumbers });
 
 }
 module.exports.getLastSixMonthsCounts = async (req, res, next) => {
@@ -24,13 +21,27 @@ module.exports.getLastSixMonthsCounts = async (req, res, next) => {
         var startOfMonth = moment().subtract(i, 'months').startOf('months');
         var endOfMonth = moment().subtract(i, 'months').endOf('months');
         months = [...months, moment().subtract(i, 'months').format('MMM YY')]
-        let activeCount = await enquiryHelpers.getCount({ enq_date: { $gte: startOfMonth, $lte: endOfMonth } });
-        successnumbers = [...successnumbers, activeCount];
-        let failedCount = await enquiryHelpers.getCount({ enq_date: { $gte: startOfMonth, $lte: endOfMonth }, enq_closed: true, enq_failed: true });
-        failedNumbers = [...failedNumbers, failedCount];
-        let closedCount = await enquiryHelpers.getCount({ enq_date: { $gte: startOfMonth, $lte: endOfMonth }, enq_closed: true, enq_failed: false });
-        closedNumbers = [...closedNumbers,closedCount]
+        successnumbers = [...successnumbers, await enquiryHelpers.getCount({ enq_date: { $gte: startOfMonth, $lte: endOfMonth } })];
+        failedNumbers = [...failedNumbers, await enquiryHelpers.getCount({ enq_date: { $gte: startOfMonth, $lte: endOfMonth }, enq_closed: true, enq_failed: true })];
+        closedNumbers = [...closedNumbers, await enquiryHelpers.getCount({ enq_date: { $gte: startOfMonth, $lte: endOfMonth }, enq_closed: true, enq_failed: false })]
     }
-    res.status(200).json({ months, success: successnumbers, failed: failedNumbers,closed:closedNumbers });
+    res.status(200).json({ months, success: successnumbers, failed: failedNumbers, closed: closedNumbers });
 
+}
+
+module.exports.processLastTenDaysSalesByUser = async (req, res, next) => {
+    try {
+        let sales = [], days = [];
+        let user = '6232335750ce51faa37d42dd'; //To be replaced with session
+        for (i = 9; i >= 0; i--) {
+            days = [...days, moment().subtract(i, 'days').format('YY-MM-DD')]
+            var startOfDay = moment().subtract(i, 'days').startOf('days');
+            var endOfDay = moment().subtract(i, 'days').endOf('days');
+            let sale = await enquiryHelpers.getPartialClosingAmountByDate(user, startOfDay, endOfDay);
+            sales = [...sales, sale];
+        }
+        res.status(200).json({ days, sales });
+    } catch (error) {
+        console.log(error);
+    }
 }

@@ -22,9 +22,8 @@ router.get('/enquiries/view/:id', verifyLogin, UserController.loadViewEnquiries)
 router.get('/enquiries/update', verifyLogin, UserController.loadEnquiryUpdateCreate);
 router.post('/enquiries/update', verifyLogin, UserController.processEnquiryUpdateCreate);
 // router.get('/enquiries/all', verifyLogin, UserController.loadAllEnquiries);
-// router.get('/reports/today', verifyLogin, UserController.loadTodaysReport);
+router.get('/reports/sales-monthly', verifyLogin, UserController.loadMonthlyReport);
 router.get('/reports/enquiries', verifyLogin, UserController.loadEnquiryReportRequest);
-// router.get('/reports/enquiries/search', verifyLogin, UserController.processEnquiryReportRequest);
 // router.get('/logout', UserController.processLogout);
 
 router.post('/enquiries/close-request', UserController.processCloseRequest);

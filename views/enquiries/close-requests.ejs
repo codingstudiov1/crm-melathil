@@ -1,0 +1,46 @@
+<section>
+  <div class="row pt-3">
+    <div class="col-12">
+      <div class="card">
+        <div class="modal-header">
+          <h5>Close Requests</span></h5>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Remarks</th>
+                <th>Closing</th>
+                <th>Enquiry</th>
+                <th>Attended</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% pendingPartialClosings.forEach(element => { %>
+              <tr>
+                <td><%= moment(element.close_date).format('DD-MM-YYYY') %> </td>
+                <td><%= element.close_amount %> </td>
+                <td><%= element.close_remarks %> </td>
+                <td>
+                  <% if (element.close_full) { %>
+                  <span class="badge badge-success">Full Close</span>
+                  <% } else { %>
+                  <span class="badge badge-primary">Partial Close</span>
+                  <% } %>
+                </td>
+                <td><a href="/admin/enquiries/<%= element.close_enquiry._id %>"><%= element.close_enquiry.enq_title %></a></td>
+                <td><a href="/admin/employees/<%= element.close_user._id %>"><%= `${element.close_user?.firstName} ${element.close_user?.lastName}` %></a></td>
+                <td><a class="btn btn-sm btn-primary" href="/admin/approve-close-enquiry/<%= element._id %>">Approve</a>
+                  <a class="btn btn-sm btn-danger" href="/admin/reject-close-enquiry/<%= element._id %>">Reject</a>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
