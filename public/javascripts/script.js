@@ -51,18 +51,10 @@ $(document).ready(function () {
     evt.preventDefault();
     $("#loader").show();
     let data = $(this).serialize();
-    axios.post('/login', data).then((response) => {
+    axios.post(evt.target.action, data).then((response) => {
       if (response.data.status) {
-        window.localStorage.userToken = response.data.token;
         $("#loader").hide();
-        switch (response.data.usertype) {
-          case 'admin':
-            window.location.replace('/admin');
-            break;
-          default:
-            window.location.replace('/dashboard/home');
-            break;
-        }
+        window.location.replace(redirect);
       }
       else {
         $("#loader").hide();

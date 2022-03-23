@@ -11,7 +11,7 @@ const verifyLogin = function (req, res, next) {
   next();
 
 }
-// router.get("/home", verifyLogin, UserController.loadDashHome);
+router.get("/", verifyLogin, UserController.loadDashHome);
 router.get("/clients", verifyLogin, UserController.allClinets);
 router.get("/clients/create", verifyLogin, UserController.loadCreateClient);
 router.post("/clients/create", verifyLogin, UserController.processCreateClient);

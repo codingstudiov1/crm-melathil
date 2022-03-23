@@ -7,7 +7,24 @@ const { CLIENT_STATUS, CLIENT_TEMPARATURE, ENQUIRY_PROIRITY } = require("../conf
 
 const extra = { layout: 'user-layout', route: 'user', moment, name: "" };
 
+module.exports.loadDashHome = async (req, res, next) => {
+    let empId = '6232335750ce51faa37d42dd';         //req.session.userSession;
+    let month = req.query.month
+    month = month === undefined || month === '' ? moment() : moment(month)
+    let monthStart = moment(month).startOf('month').format('YYYY-MM-DD');
+    let monthEnd = moment(month).endOf('month').format('YYYY-MM-DD');
+    let counts = {};
+    let userDetails = await userHelpers.getSingleUser(empId);
+    console.log(userDetails);
+    counts.activeCount = await enquiryHelpers.getCount({ enq_date: { $gte: monthStart, $lte: monthEnd }, enq_user: empId });
+    counts.closedCount = await enquiryHelpers.getCount({ enq_date: { $gte: monthStart, $lte: monthEnd }, enq_user: empId, enq_closed: true, enq_failed: { $ne: true } });
+    counts.failedCount = await enquiryHelpers.getCount({ enq_date: { $gte: monthStart, $lte: monthEnd }, enq_user: empId, enq_closed: true, enq_failed: true });
+    counts.activeCountAll = await enquiryHelpers.getCount({ enq_user: empId });
+    counts.closedCountAll = await enquiryHelpers.getCount({ enq_user: empId, enq_closed: true, enq_failed: { $ne: true } });
+    counts.failedCountAll = await enquiryHelpers.getCount({ enq_user: empId, enq_closed: true, enq_failed: true });
 
+    res.render("employees/dashboard", { ...extra, title: `${userDetails.firstName}'s Dashboard`, counts, userDetails, month });
+};
 module.exports.allClinets = function (req, res, next) {
     clientsHelper.loadClients().then((clients) => {
         res.render("clients/view-clients", { ...extra, title: "Clients list", clients });

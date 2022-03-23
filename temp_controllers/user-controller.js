@@ -7,19 +7,7 @@ var moment = require("moment");
 const countsHelper = require("../helpers/counts-helper");
 const extra = { route: '/dashboard', layout: 'dashboard-layout' };
 
-module.exports.loadDashHome = async (req, res, next) => {
-  let counts = {};
-  let userId = 1;
-  let today = moment().format('YYYY-MM-DD');
-  let monthStart = moment().startOf('month').format('YYYY-MM-DD');
-  let monthEnd = moment().endOf('month').format('YYYY-MM-DD');
-  counts.monthlyEquiryCount = await countsHelper.getEnquiriesCountByUserAndDate(userId, monthStart, monthEnd);
-  counts.monthlyClosedEquiryCount = await countsHelper.getClosedEnquiriesCountByUserAndDate(userId, monthStart, monthEnd);
-  counts.monthlyWorkingEquiryCount = await countsHelper.getWorkingEnquiriesCountByUserAndDate(userId, monthStart, monthEnd);
 
-
-  res.render("employees/dashboard", { layout: 'dashboard-layout', title: 'Dashboard', counts, moment });
-};
 //Logout controller
 module.exports.processLogout = (req, res, next) => {
   req.session.destroy();

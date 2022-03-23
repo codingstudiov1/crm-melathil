@@ -2,33 +2,59 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1>
-          <%= title %>
-        </h1>
+        <h1><%= title %></h1>
       </div>
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="<%= route %>">Home</a></li>
+          <li class="breadcrumb-item"><a href="/admin">Home</a></li>
+          <li class="breadcrumb-item active"><%= title %></li>
         </ol>
+      </div>
+
+    </div>
+  </div>
+</section>
+<section>
+  <div class="row">
+    <div class="col-md-5">
+      <div class="card">
+        <div class="card-body">
+          <form action="/<%= route %>" method="get">
+            <div class="form-group">
+              <label for="month">Select Month</label>
+              <input type="month" name="month" id="month" checked class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Find</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7">
+      <div class="card">
+        <div class="card-body">
+          <h4>Name</h4>
+          <span><%= userDetails.fullName %> </span>
+          <h4>Head</h4>
+          <span><%= userDetails.managed_by?.full_name ||' Not assigned' %> </span>
+        </div>
       </div>
     </div>
   </div>
 </section>
-
 <section>
-  <h4>Monthly Report - <%= moment().format('MMMM YYYY') %> </h4>
+  <h4>Monthly Report - <%= moment(month).format('MMMM YYYY') %> </h4>
   <div class="row">
     <div class="col-lg-3 col-6">
       <!-- small box -->
       <div class="small-box bg-info">
         <div class="inner">
-          <h3><%= counts.monthlyEquiryCount %> </h3>
+          <h3><%= counts.activeCount %> </h3>
           <p>Enquiries</p>
         </div>
         <div class="icon">
           <i class="ion ion-ios-book"></i>
         </div>
-        <a href="/dashboard/enquiries" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        <a href="/<%= route %>/enquiries" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
@@ -36,7 +62,7 @@
       <!-- small box -->
       <div class="small-box bg-success">
         <div class="inner">
-          <h3><%= counts.monthlyClosedEquiryCount %></h3>
+          <h3><%= counts.closedCount %></h3>
 
           <p>Closed</p>
         </div>
@@ -51,7 +77,7 @@
       <!-- small box -->
       <div class="small-box bg-warning">
         <div class="inner">
-          <h3><%= (counts.monthlyClosedEquiryCount/counts.monthlyEquiryCount)*100 %><sup style="font-size: 20px">%</sup></h3>
+          <h3><%= (counts.closedCount/counts.activeCount)*100||0 %><sup style="font-size: 20px">%</sup></h3>
 
           <p>Success Rate</p>
         </div>
@@ -66,9 +92,9 @@
       <!-- small box -->
       <div class="small-box bg-danger">
         <div class="inner">
-          <h3><%= counts.monthlyWorkingEquiryCount %> </h3>
+          <h3><%= counts.failedCount %> </h3>
 
-          <p>Working enquiries</p>
+          <p>Failed enquiries</p>
         </div>
         <div class="icon">
           <i class="ion ion-information-circled"></i>
@@ -80,16 +106,16 @@
   </div>
 </section>
 <section>
+  <h4>All time records </h4>
   <div class="row">
     <div class="col-12 col-sm-6 col-md-3">
       <div class="info-box">
         <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
 
         <div class="info-box-content">
-          <span class="info-box-text">CPU Traffic</span>
+          <span class="info-box-text">Enquiries</span>
           <span class="info-box-number">
-            10
-            <small>%</small>
+            <%= counts.activeCountAll %>
           </span>
         </div>
         <!-- /.info-box-content -->
@@ -99,11 +125,11 @@
     <!-- /.col -->
     <div class="col-12 col-sm-6 col-md-3">
       <div class="info-box mb-3">
-        <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
+        <span class="info-box-icon bg-success elevation-1"><i class="fas fa-thumbs-up"></i></span>
 
         <div class="info-box-content">
-          <span class="info-box-text">Likes</span>
-          <span class="info-box-number">41,410</span>
+          <span class="info-box-text">Closed</span>
+          <span class="info-box-number"><%= counts.closedCountAll %></span>
         </div>
         <!-- /.info-box-content -->
       </div>
@@ -116,11 +142,11 @@
 
     <div class="col-12 col-sm-6 col-md-3">
       <div class="info-box mb-3">
-        <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
+        <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-percentage"></i></span>
 
         <div class="info-box-content">
-          <span class="info-box-text">Sales</span>
-          <span class="info-box-number">760</span>
+          <span class="info-box-text">Success Rate</span>
+          <span class="info-box-number"><%= (counts.closedCountAll/counts.activeCountAll)*100 %>%</span>
         </div>
         <!-- /.info-box-content -->
       </div>
@@ -129,11 +155,11 @@
     <!-- /.col -->
     <div class="col-12 col-sm-6 col-md-3">
       <div class="info-box mb-3">
-        <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+        <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-info"></i></span>
 
         <div class="info-box-content">
-          <span class="info-box-text">New Members</span>
-          <span class="info-box-number">2,000</span>
+          <span class="info-box-text">Failed</span>
+          <span class="info-box-number"><%= counts.failedCountAll %></span>
         </div>
         <!-- /.info-box-content -->
       </div>
@@ -142,49 +168,27 @@
     <!-- /.col -->
   </div>
 </section>
-
 <section>
-
   <div class="row">
     <div class="col-md-12">
       <div class="card">
+        <div class="modal-header bg-info">
+          <h5>Last 10 days Sales</h5>
+        </div>
         <div class="card-body">
-          <canvas id="myChart" width="400" height="100"></canvas>
+          <canvas id="tenDaysSales" height="100px"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="modal-header bg-info">
+          <h5>Last 6 Months Sales</h5>
+        </div>
+        <div class="card-body">
+          <canvas id="sixMonthSales"></canvas>
         </div>
       </div>
     </div>
   </div>
-
-  <script>
-    const ctx = document.getElementById('myChart');
-    const myChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June','July','August','September','October','November','December'],
-        datasets: [{
-          label: 'Total sales',
-          data: [100, 150, 200, 80, 35,135],
-          backgroundColor: [
-            'rgba(255, 99, 132, 1)',
-          ],
-          // borderColor: [
-          //   'rgba(255, 99, 132, 1)',
-          //   'rgba(54, 162, 235, 1)',
-          //   'rgba(255, 206, 86, 1)',
-          //   'rgba(75, 192, 192, 1)',
-          //   'rgba(153, 102, 255, 1)',
-          //   'rgba(255, 159, 64, 1)'
-          // ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: false
-          }
-        }
-      }
-    });
-  </script>
 </section>

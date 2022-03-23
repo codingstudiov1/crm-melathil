@@ -7,7 +7,17 @@ const managerHelpers = require("../helpers/manager-helpers");
 const { ObjectId } = require("mongoose").Types;
 const bcrypt = require('bcryptjs');
 
-const extra = { layout: 'admin-layout', route: 'admin', moment };
+const extra = { layout: 'admin-layout', route: 'admin', moment, user: {} };
+
+module.exports.verifyLogin = (req, res, next) => {
+    if (req.session.adminSession) {
+        extra.user = req.session.adminSession;
+        next();
+    }
+    else {
+        res.redirect('/');
+    }
+}
 
 module.exports.loadAdminDashboard = async function (req, res, next) {
 
@@ -138,7 +148,7 @@ module.exports.loadEmployeeProfile = async (req, res, next) => {
     counts.activeCountAll = await enquiryHelpers.getCount({ enq_user: empId });
     counts.closedCountAll = await enquiryHelpers.getCount({ enq_user: empId, enq_closed: true, enq_failed: { $ne: true } });
     counts.failedCountAll = await enquiryHelpers.getCount({ enq_user: empId, enq_closed: true, enq_failed: true });
-    res.render('admin/employee-profile', { ...extra, counts, month,  userDetails });
+    res.render('admin/employee-profile', { ...extra, counts, month, userDetails });
 
 }
 module.exports.loadEmployeeEnquiries = async (req, res, next) => {

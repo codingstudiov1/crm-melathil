@@ -9,7 +9,8 @@ const User = require('../models/user-model');
 router.get("/", IndexController.loadIndexPage);
 router.get("/register", IndexController.loadRegistrationPage);
 router.post("/register", IndexController.processEmployeeRegistration);
-
+router.get("/logout", IndexController.processLogout);
+// router.post('/create-admin',IndexController.processCreateAdmin);
 // router.get("/login", function (req, res, next) {
 //   if (req.session.userSession) {
 //     res.redirect('/dashboard/home')

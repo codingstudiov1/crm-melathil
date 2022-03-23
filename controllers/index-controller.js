@@ -47,3 +47,18 @@ module.exports.processEmployeeRegistration = (req, res, next) => {
     //     })
     // });
 }
+module.exports.processCreateAdmin = async (req, res, next) => {
+    const Admin = require('../models/admin-model');
+    const bcrypt = require('bcryptjs');
+    let data = req.body;
+    data.password = await bcrypt.hash(data.password, 10);
+    const adm = new Admin(data);
+    console.log(adm)
+    adm.save().then(()=>{
+        res.send('Created')
+    })
+}
+module.exports.processLogout = async (req, res, next) => {
+    req.session.destroy();
+    res.redirect('/');
+}
