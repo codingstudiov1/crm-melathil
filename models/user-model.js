@@ -19,6 +19,8 @@ const userSchema = new Schema({
     managed_by: { type: Schema.Types.ObjectId, ref: 'Manager' }
 
 });
-
+userSchema.virtual('fullName').get(function () {
+    return `${this.firstName} ${this.lastName}`;
+})
 
 module.exports = model('User', userSchema);

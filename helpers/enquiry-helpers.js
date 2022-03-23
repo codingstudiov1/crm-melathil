@@ -191,32 +191,20 @@ module.exports = {
         })
     },
     getPartialClosingAmountByDate: (user, from, to) => {
-        console.log(user, from, to)
         return new Promise((resolve, reject) => {
-            PartialClosings.aggregate([
-                {
-                    $match:
-                    {
-                        close_user: user,
-                        close_date: { $gte: from, $lte: to }
-                    }
-                },
-                {
-                    $group: {
-                        _id: null,
-                        sum: {
-                            $sum: '$close_amount'
-                        }
-                    }
-                }
-            ])
+            PartialClosings.find({ close_user: user, close_date: { $gte: from, $lte: to } })
                 .then((response) => {
-                    console.log(response);
+                    let close_amount = 0;
+                    response.forEach(element => {
+                        close_amount += element.close_amount;
+                    });
+                    resolve(close_amount);
                 }).catch(error => {
                     reject(error);
                 })
         })
-    }
+    },
+
 
 
 }

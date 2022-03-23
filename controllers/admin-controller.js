@@ -15,7 +15,7 @@ module.exports.loadAdminDashboard = async function (req, res, next) {
     try {
 
         counts.enquiryCount = await enquiryHelpers.getCount({ enq_date: { $lte: moment().startOf('month'), $lte: moment().endOf('month') } })
-        counts.closedCount = await enquiryHelpers.getCount({ enq_date: { $lte: moment().startOf('month'), $lte: moment().endOf('month') }, enq_closed: true, enq_failed: false })
+        counts.closedCount = await enquiryHelpers.getCount({ enq_date: { $lte: moment().startOf('month'), $lte: moment().endOf('month') }, enq_closed: true, enq_failed: { $ne: true } })   //false
         counts.usersCount = await userHelpers.getCount({ user_status: ACTIVE_STATUS });
         counts.failedCount = await enquiryHelpers.getCount({ enq_date: { $lte: moment().startOf('month'), $lte: moment().endOf('month') }, enq_closed: true, enq_failed: true });
         counts.managersCount = await managerHelpers.getCount();
@@ -130,13 +130,15 @@ module.exports.loadEmployeeProfile = async (req, res, next) => {
     let monthStart = moment(month).startOf('month').format('YYYY-MM-DD');
     let monthEnd = moment(month).endOf('month').format('YYYY-MM-DD');
     let counts = {};
+    let userDetails = await userHelpers.getSingleUser(empId);
+    console.log(userDetails);
     counts.activeCount = await enquiryHelpers.getCount({ enq_date: { $gte: monthStart, $lte: monthEnd }, enq_user: empId });
     counts.closedCount = await enquiryHelpers.getCount({ enq_date: { $gte: monthStart, $lte: monthEnd }, enq_user: empId, enq_closed: true, enq_failed: { $ne: true } });
     counts.failedCount = await enquiryHelpers.getCount({ enq_date: { $gte: monthStart, $lte: monthEnd }, enq_user: empId, enq_closed: true, enq_failed: true });
     counts.activeCountAll = await enquiryHelpers.getCount({ enq_user: empId });
     counts.closedCountAll = await enquiryHelpers.getCount({ enq_user: empId, enq_closed: true, enq_failed: { $ne: true } });
     counts.failedCountAll = await enquiryHelpers.getCount({ enq_user: empId, enq_closed: true, enq_failed: true });
-    res.render('admin/employee-profile', { ...extra, counts, month, empId });
+    res.render('admin/employee-profile', { ...extra, counts, month,  userDetails });
 
 }
 module.exports.loadEmployeeEnquiries = async (req, res, next) => {

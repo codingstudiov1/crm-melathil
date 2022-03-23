@@ -33,14 +33,31 @@ module.exports.processLastTenDaysSalesByUser = async (req, res, next) => {
     try {
         let sales = [], days = [];
         let user = '6232335750ce51faa37d42dd'; //To be replaced with session
-        for (i = 9; i >= 0; i--) {
-            days = [...days, moment().subtract(i, 'days').format('YY-MM-DD')]
-            var startOfDay = moment().subtract(i, 'days').startOf('days');
-            var endOfDay = moment().subtract(i, 'days').endOf('days');
+        for (j = 9; j >= 0; j--) {
+            days = [...days, moment().subtract(j, 'days').format('DD-MM-YYYY')]
+            var startOfDay = moment().subtract(j, 'days').startOf('days');
+            var endOfDay = moment().subtract(j, 'days').endOf('days');
             let sale = await enquiryHelpers.getPartialClosingAmountByDate(user, startOfDay, endOfDay);
             sales = [...sales, sale];
         }
         res.status(200).json({ days, sales });
+    } catch (error) {
+        console.log(error);
+    }
+}
+module.exports.processLastSixMonthsSalesUser = async (req, res, next) => {
+    try {
+        let monthlySales = [], months = [];
+        let user = '6232335750ce51faa37d42dd'; //To be replaced with session
+        for (i = 6; i >= 0; i--) {
+            months = [...months, moment().subtract(i, 'months').format('MM-YYYY')]
+            var startOfMonth = moment().subtract(i, 'months').startOf('months');
+            var endOfMonth = moment().subtract(i, 'months').endOf('months');
+            let saleMonth = await enquiryHelpers.getPartialClosingAmountByDate(user, startOfMonth, endOfMonth);
+            monthlySales = [...monthlySales, saleMonth];
+        }
+        res.status(200).json({ months, monthlySales });
+        // console.log(sal es)
     } catch (error) {
         console.log(error);
     }

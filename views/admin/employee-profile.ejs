@@ -10,6 +10,7 @@
           <li class="breadcrumb-item active">Employees Performance Profile</li>
         </ol>
       </div>
+
     </div>
   </div>
 </section>
@@ -18,13 +19,23 @@
     <div class="col-md-5">
       <div class="card">
         <div class="card-body">
-          <form action="/<%= route %>/employees/<%= empId %>" method="get">
+          <form action="/<%= route %>/employees/<%= userDetails._id %>" method="get">
             <div class="form-group">
               <label for="month">Select Month</label>
               <input type="month" name="month" id="month" checked class="form-control">
             </div>
             <button type="submit" class="btn btn-primary">Find</button>
           </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7">
+      <div class="card">
+        <div class="card-body">
+          <h4>Name</h4>
+          <span><%= userDetails.fullName %> </span>
+          <h4>Head</h4>
+          <span><%= userDetails.managed_by?.full_name ||' Not assigned' %> </span>
         </div>
       </div>
     </div>
@@ -43,7 +54,7 @@
         <div class="icon">
           <i class="ion ion-ios-book"></i>
         </div>
-        <a href="/<%= route %>/employees/<%= empId %>/enquiries" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        <a href="/<%= route %>/employees/<%= userDetails._id %>/enquiries" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
     <!-- ./col -->
@@ -159,16 +170,25 @@
 </section>
 <section>
   <div class="row">
-    <div class="col-12">
+    <div class="col-md-12">
       <div class="card">
         <div class="modal-header bg-info">
           <h5>Last 10 days Sales</h5>
         </div>
         <div class="card-body">
-          <canvas id="tenDaysSales"></canvas>
+          <canvas id="tenDaysSales" height="100px"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="modal-header bg-info">
+          <h5>Last 6 Months Sales</h5>
+        </div>
+        <div class="card-body">
+          <canvas id="sixMonthSales"></canvas>
         </div>
       </div>
     </div>
   </div>
-</section>
 </section>
