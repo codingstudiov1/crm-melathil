@@ -4,6 +4,24 @@ const Managers = require('../models/manager-model')
 const bcrypt = require('bcryptjs');
 let { ACTIVE_STATUS } = require('../config/strings')
 
+module.exports.verifyLogin = (req, res, next) => {
+    if (req.sesson?.adminSession) {
+        res.redirect('/admin');
+        return;
+    }
+    if (req.sesson?.managerSession) {
+        res.redirect('/manager');
+        return;
+    }
+    if (req.sesson?.userSession) {
+        res.redirect('/user');
+        return;
+    }
+    next();
+
+}
+
+
 module.exports.loadAdminLogin = (req, res, next) => {
     res.render('login', { action: '/login/admin', title: "Admin Login" })
 }
