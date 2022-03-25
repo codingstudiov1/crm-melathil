@@ -32,7 +32,7 @@ module.exports.getLastSixMonthsCounts = async (req, res, next) => {
 module.exports.processLastTenDaysSalesByUser = async (req, res, next) => {
     try {
         let sales = [], days = [];
-        let user = '6232335750ce51faa37d42dd'; //To be replaced with session
+        let user = req.session.user; //To be replaced with session
         for (j = 9; j >= 0; j--) {
             days = [...days, moment().subtract(j, 'days').format('DD-MM-YYYY')]
             var startOfDay = moment().subtract(j, 'days').startOf('days');
@@ -48,7 +48,7 @@ module.exports.processLastTenDaysSalesByUser = async (req, res, next) => {
 module.exports.processLastSixMonthsSalesUser = async (req, res, next) => {
     try {
         let monthlySales = [], months = [];
-        let user = '6232335750ce51faa37d42dd'; //To be replaced with session
+        let user = req.session.user; //To be replaced with session
         for (i = 6; i >= 0; i--) {
             months = [...months, moment().subtract(i, 'months').format('MM-YYYY')]
             var startOfMonth = moment().subtract(i, 'months').startOf('months');

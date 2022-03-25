@@ -58,7 +58,7 @@ module.exports.loadCreateEnquiries = async (req, res, next) => {
     const status = CLIENT_STATUS;
     const temp = CLIENT_TEMPARATURE;
     const enqClass = ENQUIRY_PROIRITY;
-    res.render("enquiries/add_edit_enquiries", { ...extra, clients, title, action, status, temp, enqClass });
+    res.render("enquiries/add_edit_enquiries", { ...extra, clients, enquiry:{}, title, action, status, temp, enqClass });
 };
 
 
@@ -74,7 +74,7 @@ module.exports.processCreateEnquiry = (req, res, next) => {
     }
 
     enquiryHelpers.createEnquiry(enquiryData).then(response => {
-        console.log(response);
+        res.redirect('/user/enquiries');
     })
 
 };

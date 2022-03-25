@@ -20,7 +20,7 @@
     <div class="col-md-6">
       <div class="card">
         <div class="card-body">
-          <form id="formApproveUser">
+          <form action="<%= action %> " id="formApproveUser">
             <div class="row">
               <div class="col-md-6">
 
@@ -75,7 +75,7 @@
             </div>
             <div class="form-group">
               <label for="usertype">Usertype</label>
-              <select name="usertype" id="usertype" class="form-control">
+              <select name="user_field" id="usertype" class="form-control">
                 <option value="">Select</option>
                 <% types.forEach(element => { %>
                 <option value="<%= element %>" style="text-transform: capitalize;"><%= element %></option>

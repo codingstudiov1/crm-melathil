@@ -16,8 +16,8 @@ $(document).ready(function () {
   $('#formApproveUser').on('submit', function (evt) {
     evt.preventDefault();
     let data = $(this).serialize();
-    axios.post('/admin/approve-user', data).then((response) => {
-      window.location.replace('/admin/employee-requests')
+    axios.post(evt.target.action, data).then((response) => {
+      window.location.replace(response.data.redirect)
     })
   })
   var success = new bootstrap.Modal(document.getElementById("successModal"), {

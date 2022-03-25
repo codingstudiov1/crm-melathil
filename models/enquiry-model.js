@@ -12,6 +12,7 @@ const schema = new Schema({
     enq_closed: { type: Boolean, default: false },
     enq_close_date: Schema.Types.Date,
     closed_amount: Number,
+    enq_class: String,
     enq_partial_closes: [
         { type: Schema.Types.ObjectId, ref: 'PartialClosings' },
     ],

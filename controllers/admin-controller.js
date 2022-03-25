@@ -49,7 +49,7 @@ module.exports.loadApproveEmployees = function (req, res, next) {
     let userId = req.params.id;
     userHelpers.getSingleUser({ _id: userId, user_status: PENDING_STATUS }).then((user) => {
         req.session.approveUserId = userId;
-        res.render('admin/approve-user', { ...extra, types: USER_TYPES, user })
+        res.render('admin/approve-user', { ...extra, types: USER_TYPES, user, action: '/admin/approve-user' })
     })
 }
 module.exports.processApproveUser = function (req, res, next) {
@@ -135,6 +135,7 @@ module.exports.processDeleteClient = async (req, res, next) => {
 };
 module.exports.loadEmployeeProfile = async (req, res, next) => {
     let empId = req.params.id;
+    req.session.user = empId;
     let month = req.query.month
     month = month === undefined || month === '' ? moment() : moment(month)
     let monthStart = moment(month).startOf('month').format('YYYY-MM-DD');
@@ -156,8 +157,10 @@ module.exports.loadEmployeeEnquiries = async (req, res, next) => {
     let monthStart = moment().startOf('month').format('YYYY-MM-DD');
     let monthEnd = moment().endOf('month').format('YYYY-MM-DD');
     let counts = {};
-    let enquiries = await enquiryHelpers.getEnquiries({ enq_user: empId });
-    res.render('admin/enquiries', { ...extra, enquiries, title: 'Enquiries of ' });
+    let classA = await enquiryHelpers.getEnquiries({ enq_user: empId, enq_class: 'Class A' });
+    let classB = await enquiryHelpers.getEnquiries({ enq_user: empId, enq_class: 'Class B' });
+    let classC = await enquiryHelpers.getEnquiries({ enq_user: empId, enq_class: 'Class C' });
+    res.render('admin/enquiries', { ...extra, classA, classB, classC, title: 'Enquiries of ' });
 
 }
 module.exports.loadOpenedEnquiries = (req, res, next) => {

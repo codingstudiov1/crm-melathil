@@ -61,16 +61,16 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <% unManaged.forEach((element,index) => { %>
                   <tr>
-                    <% unManaged.forEach((element,index) => { %>
                     <td><%= element.id%></td>
                     <td><%= element.firstName %> <%= element.lastName %></td>
                     <td><%= element.gender %></td>
                     <td><%= element.phone %></td>
                     <td><%= element.email %></td>
                     <td><a class="btn btn-secondary" href="/manager/add-to-user/<%= element.id%>">Allocate Manager</a></td>
-                    <% }) %>
                   </tr>
+                  <% }) %>
                 </tbody>
               </table>
             </div>
