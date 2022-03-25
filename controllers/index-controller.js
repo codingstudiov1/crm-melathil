@@ -13,9 +13,10 @@ module.exports.loadRegistrationPage = function (req, res, next) {
     res.render("employees/register-employee", { action: '/register' });
 }
 
-module.exports.processEmployeeRegistration = (req, res, next) => {
+module.exports.processEmployeeRegistration = async (req, res, next) => {
 
     let userData = req.body;
+    userData.password = await bcrypt.hash(userData.password, 10);
     userData.user_status = PENDING_STATUS;
     commonHelpers.userPhoneDuplication(userData.phone).then(response => {
         if (response) res.json({ message: 'Phone number alredy registered' });
@@ -54,7 +55,7 @@ module.exports.processCreateAdmin = async (req, res, next) => {
     data.password = await bcrypt.hash(data.password, 10);
     const adm = new Admin(data);
     console.log(adm)
-    adm.save().then(()=>{
+    adm.save().then(() => {
         res.send('Created')
     })
 }
