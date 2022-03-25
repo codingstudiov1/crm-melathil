@@ -2,7 +2,18 @@ const moment = require('moment');
 const { PENDING_STATUS, ACTIVE_STATUS, USER_TYPES } = require("../config/strings");
 const userHelpers = require('../helpers/user-helpers');
 
-const extra = { layout: "manager-layout", route: 'manager', moment, user: { _id: '6235e05b3308a985d2e78d1e' } };
+// const extra = { layout: "manager-layout", route: 'manager', moment, user: { _id: '6235e05b3308a985d2e78d1e' } };
+const extra = { layout: "manager-layout", route: 'manager', moment, user: {} };
+
+module.exports.verifyLogin = (req, res, next) => {
+    if (req.session.managerSession) {
+        user = req.session.managerSession;
+        next();
+    }
+    else {
+        res.redirect('/');
+    }
+}
 
 
 module.exports.loadManagerHome = (req, res, next) => {
@@ -47,8 +58,8 @@ module.exports.processApproveUser = (req, res, next) => {
     let data = req.body;
     data.user_status = ACTIVE_STATUS;
     data.managed_by = extra.user._id;
-    userHelpers.updateUsers(userId, data ).then(() => {
-        res.status(200).json({ status: true, message: "User approved",redirect:"/manager/employee-requests" });
+    userHelpers.updateUsers(userId, data).then(() => {
+        res.status(200).json({ status: true, message: "User approved", redirect: "/manager/employee-requests" });
     })
 }
 

@@ -2,7 +2,7 @@ const Promise = require('promise');
 
 const User = require('../models/user-model');
 const Manager = require('../models/manager-model');
-
+const Admin = require('../models/admin-model');
 
 module.exports = {
     createUser: (userData) => {
@@ -32,6 +32,15 @@ module.exports = {
             User.findOne({ email: email }).then((isExist) => {
                 if (isExist) resolve(true);
                 else resolve(false)
+            }).catch(error => {
+                reject(error);
+            })
+        })
+    },
+    changeAdminPassword: (id, pass) => {
+        return new Promise((resolve, reject) => {
+            Admin.findByIdAndUpdate(id, { password: pass }).then((isExist) => {
+                resolve();
             }).catch(error => {
                 reject(error);
             })

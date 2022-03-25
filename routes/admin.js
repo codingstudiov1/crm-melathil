@@ -48,5 +48,6 @@ router.get('/employees/:id/enquiries', AdminController.verifyLogin, AdminControl
 
 router.get('/close-requests', AdminController.verifyLogin, AdminController.loadCloseRequests);
 router.get('/approve-close-enquiry/:id', AdminController.verifyLogin, AdminController.processApproveCloseEnquiry);
-
+router.get('/change-password', AdminController.verifyLogin, AdminController.loadChangePassword);
+router.post('/change-password', AdminController.verifyLogin, AdminController.processChangePassword);
 module.exports = router;

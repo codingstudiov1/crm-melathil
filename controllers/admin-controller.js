@@ -6,6 +6,7 @@ const enquiryHelpers = require("../helpers/enquiry-helpers");
 const managerHelpers = require("../helpers/manager-helpers");
 const { ObjectId } = require("mongoose").Types;
 const bcrypt = require('bcryptjs');
+const commonHelpers = require("../helpers/common-helpers");
 
 const extra = { layout: 'admin-layout', route: 'admin', moment, user: {} };
 
@@ -116,7 +117,6 @@ module.exports.loadEditClient = async (req, res, next) => {
     const formId = "formEditClient";
     const action = "/admin/clients/edit/" + clientId;
     const clientData = await clientsHelper.getClientDetails(clientId);
-    console.log(clientData._doc)
     req.session.clientId = clientId;
     const clientTypes = await clientsHelper.getClientTypes();
 
@@ -142,7 +142,6 @@ module.exports.loadEmployeeProfile = async (req, res, next) => {
     let monthEnd = moment(month).endOf('month').format('YYYY-MM-DD');
     let counts = {};
     let userDetails = await userHelpers.getSingleUser(empId);
-    console.log(userDetails);
     counts.activeCount = await enquiryHelpers.getCount({ enq_date: { $gte: monthStart, $lte: monthEnd }, enq_user: empId });
     counts.closedCount = await enquiryHelpers.getCount({ enq_date: { $gte: monthStart, $lte: monthEnd }, enq_user: empId, enq_closed: true, enq_failed: { $ne: true } });
     counts.failedCount = await enquiryHelpers.getCount({ enq_date: { $gte: monthStart, $lte: monthEnd }, enq_user: empId, enq_closed: true, enq_failed: true });
@@ -175,7 +174,6 @@ module.exports.loadEnquiryDetails = async (req, res, next) => {
     let enquiries = await enquiryHelpers.getEnquiries({ _id: ObjectId(id) });
     enquiries = enquiries.length > 0 ? enquiries[0] : {};
     req.session.enquirySession = enquiries;
-    console.log(enquiries);
     res.render('enquiries/view_enuiry_details', { ...extra, enq: enquiries, title: 'Enquiry Details' })
 }
 module.exports.loadEnquiryModify = async (req, res, next) => {
@@ -257,7 +255,6 @@ module.exports.loadCloseRequests = async (req, res, next) => {
 module.exports.processApproveCloseEnquiry = async (req, res, next) => {
     let id = req.params.id;
     let closeRequest = await enquiryHelpers.getCloseRequestById(id);
-    console.log(closeRequest);
     delete closeRequest._id;
     let close = await enquiryHelpers.createClose(closeRequest);
     await enquiryHelpers.updateClosings(closeRequest.close_enquiry, { enq_partial_closes: close._id });
@@ -266,4 +263,15 @@ module.exports.processApproveCloseEnquiry = async (req, res, next) => {
         await enquiryHelpers.updateEnquiry(closeRequest.close_enquiry, { enq_closed: true });
     }
     res.redirect('/admin/close-requests');
+}
+module.exports.loadChangePassword = async (req, res, next) => {
+    res.render('admin/change-password', { ...extra, action: '/admin/change-password' })
+}
+module.exports.processChangePassword = async (req, res, next) => {
+    let user = req.session.adminSession._id;
+    let password = req.body.password;
+    password = await bcrypt.hash(password, 10);
+    commonHelpers.changeAdminPassword(user, password).then(() => {
+        res.redirect('/admin');
+    })
 }

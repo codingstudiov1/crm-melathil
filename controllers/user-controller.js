@@ -5,10 +5,19 @@ const userHelpers = require("../helpers/user-helpers");
 const enquiryHelpers = require("../helpers/enquiry-helpers");
 const { CLIENT_STATUS, CLIENT_TEMPARATURE, ENQUIRY_PROIRITY } = require("../config/strings");
 
-const extra = { layout: 'user-layout', route: 'user', moment, name: "" };
-
+// const extra = { layout: 'user-layout', route: 'user', moment, name: "", user: { _id: '6232335750ce51faa37d42dd' } };
+const extra = { layout: 'user-layout', route: 'user', moment, name: "", user: {} };
+module.exports.verifyLogin = (req, res, next) => {
+    if (req.session.userSession) {
+        user = req.session.userSession;
+        next();
+    }
+    else {
+        res.redirect('/');
+    }
+}
 module.exports.loadDashHome = async (req, res, next) => {
-    let empId = '6232335750ce51faa37d42dd';         //req.session.userSession;
+    let empId = extra.user._id;         //req.session.userSession;
     let month = req.query.month
     month = month === undefined || month === '' ? moment() : moment(month)
     let monthStart = moment(month).startOf('month').format('YYYY-MM-DD');
@@ -47,7 +56,7 @@ module.exports.processCreateClient = function (req, res, next) {
 module.exports.loadEnquiries = async (req, res, next) => {
 
     let userSession = req.session.userSession;
-    let enquiries = await enquiryHelpers.getEnquiries({ enq_user: "6232335750ce51faa37d42dd" }, { enq_title: 1, enq_date: 1, enq_client: 1, enq_with: 0, enq_user: 0 }); //To be replaced with session
+    let enquiries = await enquiryHelpers.getEnquiries({ enq_user: extra.user._id }, { enq_title: 1, enq_date: 1, enq_client: 1, enq_with: 0, enq_user: 0 }); //To be replaced with session
     console.log(enquiries);
     res.render("enquiries/view-enquiries", { ...extra, enquiries, title: "Enquiries", });
 };
@@ -58,13 +67,13 @@ module.exports.loadCreateEnquiries = async (req, res, next) => {
     const status = CLIENT_STATUS;
     const temp = CLIENT_TEMPARATURE;
     const enqClass = ENQUIRY_PROIRITY;
-    res.render("enquiries/add_edit_enquiries", { ...extra, clients, enquiry:{}, title, action, status, temp, enqClass });
+    res.render("enquiries/add_edit_enquiries", { ...extra, clients, enquiry: {}, title, action, status, temp, enqClass });
 };
 
 
 module.exports.processCreateEnquiry = (req, res, next) => {
     let enquiryData = req.body;
-    enquiryData.enq_user = '6232335750ce51faa37d42dd';        //To be replaced with session
+    enquiryData.enq_user = extra.user._id;        //To be replaced with session
     enquiryData.enq_updates =
     {
         update_date: enquiryData.enq_date,
@@ -83,7 +92,7 @@ module.exports.processCloseRequest = (req, res, next) => {
     data.close_full = data?.close_full ? true : false;
     // console.log(data.close_full);
     data.close_enquiry = req.session.enquiryId;
-    data.close_user = '6232335750ce51faa37d42dd';
+    data.close_user = extra.user._id;
     enquiryHelpers.newCloseRequest(data).then(() => {
         res.redirect(`/user/enquiries/view/${req.session.enquiryId}`)
     })
@@ -92,7 +101,7 @@ module.exports.processCloseRequest = (req, res, next) => {
 module.exports.loadViewEnquiries = (req, res, next) => {
     let enqId = req.params.id;
     req.session.enquiryId = enqId;
-    let user = '6232335750ce51faa37d42dd'; //To be replaced with session
+    let user = extra.user._id; //To be replaced with session
     enquiryHelpers.getEnquiries({ _id: enqId, enq_user: user }, { _id: 0 }).then((details) => {
         if (details.length > 0) enq = details[0];
         else enq = {};
@@ -112,7 +121,7 @@ module.exports.processEnquiryUpdateCreate = (req, res, next) => {
         .then(() => res.redirect(`/user/enquiries/view/${enqId}`));
 };
 module.exports.loadEnquiryReportRequest = async (req, res, next) => {
-    let user = '6232335750ce51faa37d42dd'; //To be replaced with session
+    let user = extra.user._id; //To be replaced with session
     let clients = await clientsHelper.loadClients()
     let temparature = CLIENT_TEMPARATURE;
     let status = CLIENT_STATUS;
@@ -123,7 +132,7 @@ module.exports.loadMonthlyReport = async (req, res, next) => {
     let month = req.query.month
     month = month === undefined || month === '' ? moment() : moment(month)
     console.log(month);
-    let user = '6232335750ce51faa37d42dd'; //To be replaced with session
+    let user = extra.user._id; //To be replaced with session
     let tableTitle = `Monthly Report of ${moment(month).format('MMMM, YYYY')}`
     let partialClosings = await enquiryHelpers.getPartialClosings({ close_user: user, close_date: { $gte: moment(month).startOf('month'), $lte: moment(month).endOf('month') } });
     res.render('reports/monthly-report', { ...extra, title: `Monthly Report`, partialClosings, tableTitle });
