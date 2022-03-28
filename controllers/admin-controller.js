@@ -59,7 +59,7 @@ module.exports.processApproveUser = function (req, res, next) {
     let data = req.body;
     data.user_status = ACTIVE_STATUS;
     userHelpers.updateUsers(userId, data).then(() => {
-        res.status(200).json({ status: true, message: "User approved" });
+        res.status(200).json({ status: true, message: "User approved", redirect: '/admin/employee-requests' });
     })
 
 }

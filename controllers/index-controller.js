@@ -2,6 +2,7 @@ const commonHelpers = require("../helpers/common-helpers");
 const User = require('../models/user-model');
 const { validationResult } = require('express-validator');
 const { PENDING_STATUS } = require("../config/strings");
+const bcrypt = require('bcryptjs');
 
 module.exports.loadIndexPage = (req, res, next) => {
     const routes = ["admin", "user", "manager"]
